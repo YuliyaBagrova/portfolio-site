@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказать работу — Мои баннеры</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="banners-order.css">
+</head>
+<body class="banners-order-page">
+  <div class="app banners-order-app">
+    <header class="site-header banners-order-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="/#banners" class="logo">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </a>
+          <nav class="top-nav" aria-label="Заказ работы">
+            <a href="/#banners" class="nav-link">Мои Баннеры</a>
+            <span class="nav-link active">Заказать работу</span>
+          </nav>
+        </div>
+        <div class="header-actions">
+          <a href="/#banners" class="banners-order-back-btn">← К коллекции</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="banners-order-main">
+      <div class="banners-order-hero-accent" aria-hidden="true"></div>
+      <div class="banners-order-canvas-grid" aria-hidden="true"></div>
+
+      <div class="banners-order-content">
+        <div class="banners-order-masthead">
+          <header class="banners-order-masthead-main">
+            <div class="banners-order-index">
+              <span class="banners-order-index-num">02</span>
+              <span class="banners-order-index-line" aria-hidden="true"></span>
+              <span class="banners-order-index-tag">Commission Brief</span>
+            </div>
+            <h1 class="banners-order-title">
+              <span class="banners-order-title-line">Заказать</span>
+              <span class="banners-order-title-line banners-order-title-accent">Работу</span>
+            </h1>
+            <p class="banners-order-desc">Опишите идею, формат и настроение — подготовим визуал под ваш проект: баннеры, иллюстрации, логотипы и графику для digital и print.</p>
+            <div class="banners-order-meta">
+              <span class="banners-order-meta-chip">Бриф онлайн</span>
+              <span class="banners-order-meta-dot" aria-hidden="true"></span>
+              <span class="banners-order-meta-chip">Ответ 1–2 дня</span>
+            </div>
+          </header>
+
+          <aside class="banners-order-steps" aria-label="Как это работает">
+            <span class="banners-order-steps-caption">Процесс</span>
+            <ol class="banners-order-steps-list">
+              <li class="banners-order-step">
+                <span class="banners-order-step-num">01</span>
+                <span class="banners-order-step-text">Заполните форму и отправьте бриф</span>
+              </li>
+              <li class="banners-order-step">
+                <span class="banners-order-step-num">02</span>
+                <span class="banners-order-step-text">Мы свяжемся с вами по email</span>
+              </li>
+              <li class="banners-order-step">
+                <span class="banners-order-step-num">03</span>
+                <span class="banners-order-step-text">Согласуем детали, сроки и формат</span>
+              </li>
+            </ol>
+          </aside>
+        </div>
+
+        <form class="banners-order-form" id="bannerOrderForm">
+          <div class="banners-order-form-head">
+            <div class="banners-order-form-head-text">
+              <h2 class="banners-order-form-title">Заявка на работу</h2>
+              <p class="banners-order-form-note">Оставьте контакты и опишите задачу. Категорию можно выбрать по желанию — это поможет быстрее понять контекст.</p>
+            </div>
+            <span class="banners-order-form-badge">Visual Collection</span>
+          </div>
+
+          <div class="banners-order-form-section">
+            <h3 class="banners-order-section-label">Контакты</h3>
+            <div class="banners-order-form-grid">
+              <label class="banners-order-field">
+                <span>Имя</span>
+                <input type="text" name="customer_name" required maxlength="128" autocomplete="name" placeholder="Как к вам обращаться">
+              </label>
+              <label class="banners-order-field">
+                <span>Email</span>
+                <input type="email" name="email" required maxlength="255" autocomplete="email" placeholder="Для ответа на заявку">
+              </label>
+              <label class="banners-order-field">
+                <span>Телефон <span class="banners-order-optional">необязательно</span></span>
+                <input type="tel" name="phone" maxlength="32" autocomplete="tel" placeholder="+7 …">
+              </label>
+            </div>
+          </div>
+
+          <fieldset class="banners-order-form-section banners-order-category-fieldset">
+            <legend class="banners-order-section-label">Категория работы <span class="banners-order-optional">необязательно</span></legend>
+            <div class="banners-order-category-rail" role="radiogroup" aria-label="Категория работы">
+              <label class="banners-order-rail-option">
+                <input type="radio" name="category" value="" checked>
+                <span class="banners-order-rail-inner">
+                  <span class="banners-order-rail-num">00</span>
+                  <span class="banners-order-rail-label">Без категории</span>
+                  <span class="banners-order-rail-arrow" aria-hidden="true">→</span>
+                </span>
+              </label>
+              <label class="banners-order-rail-option">
+                <input type="radio" name="category" value="preview">
+                <span class="banners-order-rail-inner">
+                  <span class="banners-order-rail-num">01</span>
+                  <span class="banners-order-rail-label">Превью</span>
+                  <span class="banners-order-rail-arrow" aria-hidden="true">→</span>
+                </span>
+              </label>
+              <label class="banners-order-rail-option">
+                <input type="radio" name="category" value="illustrations">
+                <span class="banners-order-rail-inner">
+                  <span class="banners-order-rail-num">02</span>
+                  <span class="banners-order-rail-label">Иллюстрации</span>
+                  <span class="banners-order-rail-arrow" aria-hidden="true">→</span>
+                </span>
+              </label>
+              <label class="banners-order-rail-option">
+                <input type="radio" name="category" value="logos">
+                <span class="banners-order-rail-inner">
+                  <span class="banners-order-rail-num">03</span>
+                  <span class="banners-order-rail-label">Логотипы</span>
+                  <span class="banners-order-rail-arrow" aria-hidden="true">→</span>
+                </span>
+              </label>
+              <label class="banners-order-rail-option">
+                <input type="radio" name="category" value="pictures">
+                <span class="banners-order-rail-inner">
+                  <span class="banners-order-rail-num">04</span>
+                  <span class="banners-order-rail-label">Картинки</span>
+                  <span class="banners-order-rail-arrow" aria-hidden="true">→</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="banners-order-form-section banners-order-form-section--message">
+            <label class="banners-order-field banners-order-field-full">
+              <span class="banners-order-section-label">Что вы хотите видеть в работе</span>
+              <textarea name="message" rows="6" maxlength="1500" required placeholder="Формат, стиль, цвета, референсы, текст на баннере, площадка размещения…"></textarea>
+            </label>
+          </div>
+
+          <div class="banners-order-form-footer">
+            <button type="submit" class="banners-order-submit">Отправить заявку</button>
+            <p class="banners-order-status" id="bannerOrderStatus" hidden></p>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="site-footer banners-order-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="/#home" class="logo footer-logo">
+              <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+            </a>
+            <p class="footer-desc">Коллекция креативных работ: баннеры, дизайн для фитнес-добавок и fashion-проектов.</p>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Разделы</h3>
+            <ul class="footer-links">
+              <li><a href="/#home">Главная</a></li>
+              <li><a href="/#supplements">Фитнес-индустрия</a></li>
+              <li><a href="/#banners">Мои Баннеры</a></li>
+              <li><a href="/#clothing">Одежда</a></li>
+              <li><a href="/#about">О сайте</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Пользователю</h3>
+            <ul class="footer-links">
+              <li><a href="/#about">О сайте</a></li>
+              <li><a href="/#order">Как заказать работу</a></li>
+              <li><a href="/#faq">Частые вопросы</a></li>
+              <li><a href="/#privacy">Политика конфиденциальности</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Контакты</h3>
+            <ul class="footer-links">
+              <li><a href="https://t.me/" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+              <li><a href="https://instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="footer-copy">&copy; 2026 Портфолио. Все права защищены.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="order-confirm.js"></script>
+  <script src="banners-order.js"></script>
+</body>
+</html>

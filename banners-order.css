@@ -1,0 +1,793 @@
+/* ===== Banners order page — стиль раздела «Мои Баннеры» ===== */
+.banners-order-page {
+  --banners-accent: #ff4d9d;
+  --banners-accent-deep: #e11d8f;
+  --banners-accent-soft: rgba(255, 77, 157, 0.14);
+  --banners-line: rgba(255, 255, 255, 0.09);
+  --banners-panel: rgba(12, 13, 20, 0.72);
+}
+
+.banners-order-app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 77, 157, 0.22) 0%, transparent 38%),
+    radial-gradient(circle at 100% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 42%),
+    linear-gradient(165deg, #0b0c12 0%, #11131c 48%, #0a0b10 100%);
+}
+
+.banners-order-header {
+  border-bottom-color: var(--banners-line);
+  background: rgba(11, 12, 18, 0.88);
+  backdrop-filter: blur(12px);
+}
+
+.banners-order-header .nav-link.active {
+  color: #ffb8da;
+}
+
+.banners-order-header .nav-link.active::after {
+  background: var(--banners-accent);
+}
+
+.banners-order-back-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 77, 157, 0.28);
+  border-radius: 2px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 77, 157, 0.06);
+  transition:
+    color 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease;
+}
+
+.banners-order-back-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 77, 157, 0.55);
+  background: rgba(255, 77, 157, 0.14);
+  transform: translateY(-1px);
+}
+
+.banners-order-main {
+  position: relative;
+  isolation: isolate;
+  flex: 1;
+  overflow: hidden;
+}
+
+.banners-order-hero-accent {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 55% 40% at 18% 8%, rgba(255, 77, 157, 0.12) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.banners-order-canvas-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, transparent 85%);
+  z-index: 0;
+}
+
+.banners-order-content {
+  position: relative;
+  z-index: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 48px 24px 88px;
+}
+
+/* Masthead */
+.banners-order-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+  gap: 32px 40px;
+  align-items: stretch;
+  margin-bottom: 32px;
+  padding: 32px 32px 28px;
+  border: 1px solid var(--banners-line);
+  border-radius: 4px;
+  background: var(--banners-panel);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 64px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.banners-order-masthead::before,
+.banners-order-masthead::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(255, 77, 157, 0.55);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.banners-order-masthead::before {
+  top: 14px;
+  left: 14px;
+  border-width: 1px 0 0 1px;
+}
+
+.banners-order-masthead::after {
+  bottom: 14px;
+  right: 14px;
+  border-width: 0 1px 1px 0;
+}
+
+.banners-order-masthead-main {
+  min-width: 0;
+  padding-top: 8px;
+}
+
+.banners-order-index {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.banners-order-index-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.12em;
+  color: var(--banners-accent);
+}
+
+.banners-order-index-line {
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 77, 157, 0.65), transparent);
+}
+
+.banners-order-index-tag {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.banners-order-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0 0 18px;
+  line-height: 0.92;
+}
+
+.banners-order-title-line {
+  display: block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.75rem, 8vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.banners-order-title-accent {
+  background: linear-gradient(92deg, #fff 0%, #ff9ecd 42%, var(--banners-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.banners-order-desc {
+  max-width: 520px;
+  margin: 0 0 22px;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.banners-order-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.banners-order-meta-chip {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 77, 157, 0.22);
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffb8da;
+  background: rgba(255, 77, 157, 0.06);
+}
+
+.banners-order-meta-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--banners-accent);
+  opacity: 0.7;
+}
+
+/* Steps rail */
+.banners-order-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 16px 16px;
+  border-left: 1px solid var(--banners-line);
+  background: linear-gradient(180deg, rgba(255, 77, 157, 0.06) 0%, transparent 38%);
+}
+
+.banners-order-steps-caption {
+  margin-bottom: 8px;
+  padding: 0 4px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.banners-order-steps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.banners-order-step {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 12px 10px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: border-color 0.22s ease, background 0.22s ease;
+}
+
+.banners-order-step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 77, 157, 0.55);
+  line-height: 1.4;
+}
+
+.banners-order-step-text {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* Form panel */
+.banners-order-form {
+  padding: 28px 28px 24px;
+  border: 1px solid var(--banners-line);
+  border-radius: 4px;
+  background: var(--banners-panel);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 20px 48px rgba(0, 0, 0, 0.28);
+  position: relative;
+}
+
+.banners-order-form::before,
+.banners-order-form::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(255, 77, 157, 0.4);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.banners-order-form::before {
+  top: 12px;
+  left: 12px;
+  border-width: 1px 0 0 1px;
+}
+
+.banners-order-form::after {
+  bottom: 12px;
+  right: 12px;
+  border-width: 0 1px 1px 0;
+}
+
+.banners-order-form-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--banners-line);
+}
+
+.banners-order-form-title {
+  margin: 0 0 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.banners-order-form-note {
+  margin: 0;
+  max-width: 520px;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.banners-order-form-badge {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 77, 157, 0.22);
+  border-radius: 2px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ffb8da;
+  background: rgba(255, 77, 157, 0.08);
+}
+
+.banners-order-form-section {
+  margin-bottom: 28px;
+}
+
+.banners-order-form-section--message {
+  margin-bottom: 36px;
+}
+
+.banners-order-section-label {
+  display: block;
+  margin: 0 0 14px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.banners-order-category-fieldset {
+  margin: 0 0 28px;
+  padding: 0;
+  border: none;
+}
+
+.banners-order-category-fieldset .banners-order-section-label {
+  margin-bottom: 12px;
+}
+
+.banners-order-optional {
+  margin-left: 0.85em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.banners-order-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.banners-order-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banners-order-field-full {
+  grid-column: 1 / -1;
+}
+
+.banners-order-field > span:first-child {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.banners-order-field input,
+.banners-order-field textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--banners-line);
+  border-radius: 2px;
+  font: inherit;
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.28);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.banners-order-field input::placeholder,
+.banners-order-field textarea::placeholder {
+  color: rgba(148, 163, 184, 0.55);
+}
+
+.banners-order-field input:focus,
+.banners-order-field textarea:focus {
+  outline: none;
+  border-color: rgba(255, 77, 157, 0.55);
+  background: rgba(255, 77, 157, 0.04);
+  box-shadow: 0 0 0 3px rgba(255, 77, 157, 0.12);
+}
+
+.banners-order-field textarea {
+  resize: vertical;
+  min-height: 148px;
+  line-height: 1.65;
+}
+
+/* Category rail options */
+.banners-order-category-rail {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+  width: max-content;
+  max-width: 100%;
+  gap: 4px;
+}
+
+.banners-order-rail-option {
+  cursor: pointer;
+  width: 100%;
+}
+
+.banners-order-rail-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.banners-order-rail-inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease;
+}
+
+.banners-order-rail-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 77, 157, 0.55);
+  transition: color 0.22s ease;
+}
+
+.banners-order-rail-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: color 0.22s ease;
+}
+
+.banners-order-rail-arrow {
+  font-size: 0.875rem;
+  color: rgba(255, 77, 157, 0.35);
+  transition: color 0.22s ease, transform 0.22s ease;
+}
+
+.banners-order-rail-option:hover .banners-order-rail-inner {
+  border-color: rgba(255, 77, 157, 0.22);
+  background: rgba(255, 77, 157, 0.05);
+}
+
+.banners-order-rail-option:hover .banners-order-rail-num,
+.banners-order-rail-option:hover .banners-order-rail-arrow {
+  color: var(--banners-accent);
+}
+
+.banners-order-rail-option:hover .banners-order-rail-label {
+  color: var(--text-primary);
+}
+
+.banners-order-rail-option:hover .banners-order-rail-arrow {
+  transform: translateX(3px);
+}
+
+.banners-order-rail-option input:checked + .banners-order-rail-inner {
+  border-color: rgba(255, 77, 157, 0.45);
+  background: rgba(255, 77, 157, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.banners-order-rail-option input:checked + .banners-order-rail-inner .banners-order-rail-num {
+  color: var(--banners-accent);
+}
+
+.banners-order-rail-option input:checked + .banners-order-rail-inner .banners-order-rail-label {
+  color: #fff;
+}
+
+.banners-order-rail-option input:checked + .banners-order-rail-inner .banners-order-rail-arrow {
+  color: #ffb8da;
+}
+
+.banners-order-form-footer {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--banners-line);
+}
+
+.banners-order-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 15px 20px;
+  border: 1px solid rgba(255, 77, 157, 0.42);
+  border-radius: 2px;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(255, 77, 157, 0.32) 0%, rgba(255, 77, 157, 0.12) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    border-color 0.22s ease,
+    background 0.22s ease,
+    transform 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.banners-order-submit:hover {
+  border-color: rgba(255, 77, 157, 0.72);
+  background: linear-gradient(135deg, rgba(255, 77, 157, 0.48) 0%, rgba(255, 77, 157, 0.2) 100%);
+  box-shadow: 0 12px 32px rgba(255, 77, 157, 0.24);
+  transform: translateY(-1px);
+}
+
+.banners-order-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.banners-order-status {
+  margin: 14px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.banners-order-status.is-success {
+  color: #6ee7b7;
+}
+
+.banners-order-status.is-error {
+  color: #fca5a5;
+}
+
+.banners-order-footer {
+  position: relative;
+  z-index: 1;
+  border-top-color: var(--banners-line);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255, 77, 157, 0.08) 0%, transparent 62%),
+    rgba(11, 12, 18, 0.95);
+}
+
+@media (max-width: 900px) {
+  .banners-order-masthead {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .banners-order-steps {
+    border-left: none;
+    border-top: 1px solid var(--banners-line);
+    padding-top: 20px;
+  }
+
+  .banners-order-steps-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .banners-order-step {
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid var(--banners-line);
+    background: rgba(0, 0, 0, 0.18);
+  }
+}
+
+@media (max-width: 640px) {
+  .banners-order-content {
+    padding: 32px 16px 64px;
+  }
+
+  .banners-order-masthead,
+  .banners-order-form {
+    padding: 22px 18px 20px;
+  }
+
+  .banners-order-form-head {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .banners-order-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banners-order-steps-list {
+    grid-template-columns: 1fr;
+  }
+
+  .banners-order-header .top-nav .nav-link:not(.active) {
+    display: none;
+  }
+}
+
+/* Order confirm — мои баннеры */
+.order-confirm-overlay--banners .order-confirm-backdrop {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 77, 157, 0.2) 0%, transparent 38%),
+    rgba(8, 10, 18, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.order-confirm-overlay--banners .order-confirm-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, #000 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.order-confirm-overlay--banners .order-confirm-modal {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 4px;
+  background: rgba(12, 13, 20, 0.88);
+  backdrop-filter: blur(16px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.order-confirm-overlay--banners .order-confirm-modal-frame::before,
+.order-confirm-overlay--banners .order-confirm-modal-frame::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: rgba(255, 77, 157, 0.55);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.order-confirm-overlay--banners .order-confirm-modal-frame::before {
+  top: 10px;
+  left: 10px;
+  border-width: 1px 0 0 1px;
+}
+
+.order-confirm-overlay--banners .order-confirm-modal-frame::after {
+  right: 10px;
+  bottom: 10px;
+  border-width: 0 1px 1px 0;
+}
+
+.order-confirm-overlay--banners .order-confirm-eyebrow {
+  color: #ff4d9d;
+  letter-spacing: 0.28em;
+}
+
+.order-confirm-overlay--banners .order-confirm-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: linear-gradient(92deg, #fff 0%, #ff9ecd 42%, #ff4d9d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.order-confirm-overlay--banners .order-confirm-desc {
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.order-confirm-overlay--banners .order-confirm-summary {
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.order-confirm-overlay--banners .order-confirm-row + .order-confirm-row {
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+.order-confirm-overlay--banners .order-confirm-row dt {
+  color: #ff4d9d;
+}
+
+.order-confirm-overlay--banners .order-confirm-row dd {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.order-confirm-overlay--banners .order-confirm-question {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.order-confirm-overlay--banners .order-confirm-btn--ghost {
+  color: rgba(226, 232, 240, 0.78);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: transparent;
+}
+
+.order-confirm-overlay--banners .order-confirm-btn--ghost:hover {
+  color: #fff;
+  border-color: rgba(255, 77, 157, 0.35);
+  background: rgba(255, 77, 157, 0.08);
+}
+
+.order-confirm-overlay--banners .order-confirm-btn--primary {
+  color: #fff;
+  border-color: rgba(255, 77, 157, 0.42);
+  background: linear-gradient(135deg, rgba(255, 77, 157, 0.38) 0%, rgba(255, 77, 157, 0.16) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.order-confirm-overlay--banners .order-confirm-btn--primary:hover {
+  border-color: rgba(255, 77, 157, 0.72);
+  background: linear-gradient(135deg, rgba(255, 77, 157, 0.48) 0%, rgba(255, 77, 157, 0.22) 100%);
+  box-shadow: 0 12px 32px rgba(255, 77, 157, 0.24);
+}

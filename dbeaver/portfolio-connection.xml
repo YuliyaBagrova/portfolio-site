@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connections>
+  <connection
+    name="Portfolio MySQL"
+    host="127.0.0.1"
+    port="3011"
+    database="portfolio"
+    url="jdbc:mysql://127.0.0.1:3011/portfolio?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8"
+    user="root"
+    password="rootpassword"
+    type="dev"/>
+</connections>

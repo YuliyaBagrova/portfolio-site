@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Товар — Фитнес-индустрия</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="product.css">
+</head>
+<body class="product-page">
+  <header class="product-header">
+    <div class="product-header-inner">
+      <a href="/#supplements" class="product-back">← К каталогу</a>
+      <span class="product-header-label">Фитнес-индустрия</span>
+    </div>
+  </header>
+
+  <main class="product-main" id="productMain">
+    <div class="product-loading" id="productLoading">Загрузка товара…</div>
+    <div class="product-error" id="productError" hidden></div>
+
+    <article class="product-layout" id="productLayout" hidden>
+      <div class="product-gallery">
+        <div class="product-image" id="productImage"></div>
+      </div>
+
+      <div class="product-info">
+        <div class="product-meta">
+          <span class="product-category" id="productCategory"></span>
+          <div class="product-rating-summary" id="productRatingSummary"></div>
+        </div>
+        <h1 class="product-title" id="productTitle"></h1>
+        <p class="product-description" id="productDescription"></p>
+        <div class="product-tags" id="productTags"></div>
+        <p class="product-price" id="productPrice"></p>
+
+        <form class="product-form product-order-form" id="orderForm">
+          <h2>Оформить покупку</h2>
+          <p class="product-form-hint">Оставьте заявку — мы свяжемся с вами для подтверждения заказа.</p>
+          <div class="product-form-grid">
+            <label class="product-field">
+              <span>Имя</span>
+              <input type="text" name="customer_name" required maxlength="128" autocomplete="name">
+            </label>
+            <label class="product-field">
+              <span>Email</span>
+              <input type="email" name="email" required maxlength="255" autocomplete="email">
+            </label>
+            <label class="product-field">
+              <span>Телефон</span>
+              <input type="tel" name="phone" maxlength="32" autocomplete="tel">
+            </label>
+            <label class="product-field">
+              <span>Количество</span>
+              <input type="number" name="quantity" min="1" max="99" value="1" required>
+            </label>
+          </div>
+          <label class="product-field product-field-full">
+            <span>Комментарий</span>
+            <textarea name="message" rows="3" maxlength="500" placeholder="Доставка, вариант оплаты…"></textarea>
+          </label>
+          <button type="submit" class="product-btn product-btn-primary">Купить</button>
+          <p class="product-form-status" id="orderStatus" hidden></p>
+        </form>
+      </div>
+    </article>
+
+    <section class="product-reviews" id="productReviews" hidden>
+      <div class="product-reviews-header">
+        <h2>Отзывы</h2>
+        <p class="product-reviews-count" id="reviewsCount"></p>
+      </div>
+
+      <form class="product-form product-review-form" id="reviewForm">
+        <h3>Оставить отзыв</h3>
+        <label class="product-field">
+          <span>Ваша оценка</span>
+          <div class="star-picker" id="starPicker" role="radiogroup" aria-label="Оценка от 1 до 5">
+            <button type="button" class="star-picker-btn" data-value="1" aria-label="1 звезда">★</button>
+            <button type="button" class="star-picker-btn" data-value="2" aria-label="2 звезды">★</button>
+            <button type="button" class="star-picker-btn" data-value="3" aria-label="3 звезды">★</button>
+            <button type="button" class="star-picker-btn" data-value="4" aria-label="4 звезды">★</button>
+            <button type="button" class="star-picker-btn" data-value="5" aria-label="5 звёзд">★</button>
+          </div>
+          <input type="hidden" name="rating" id="reviewRating" value="5" required>
+        </label>
+        <label class="product-field">
+          <span>Имя</span>
+          <input type="text" name="author_name" required maxlength="128" autocomplete="name">
+        </label>
+        <label class="product-field product-field-full">
+          <span>Отзыв</span>
+          <textarea name="review_text" rows="4" maxlength="1000" placeholder="Поделитесь впечатлениями о товаре…"></textarea>
+        </label>
+        <button type="submit" class="product-btn product-btn-secondary">Отправить отзыв</button>
+        <p class="product-form-status" id="reviewStatus" hidden></p>
+      </form>
+
+      <div class="product-reviews-list" id="reviewsList"></div>
+      <p class="product-reviews-empty" id="reviewsEmpty" hidden>Пока нет отзывов — будьте первым!</p>
+    </section>
+  </main>
+
+  <script src="order-confirm.js"></script>
+  <script src="product.js"></script>
+</body>
+</html>

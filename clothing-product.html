@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Товар — Одежда</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="clothing-product.css">
+</head>
+<body class="clothing-product-page">
+  <header class="clothing-product-header">
+    <div class="clothing-product-header-inner">
+      <a href="/#clothing" class="clothing-product-back">← К коллекции</a>
+      <span class="clothing-product-header-label">Fashion · Одежда</span>
+    </div>
+  </header>
+
+  <main class="clothing-product-main" id="clothingProductMain">
+    <div class="clothing-product-loading" id="clothingProductLoading">Загрузка товара…</div>
+    <div class="clothing-product-error" id="clothingProductError" hidden></div>
+
+    <article class="clothing-product-layout" id="clothingProductLayout" hidden>
+      <div class="clothing-product-gallery">
+        <div class="clothing-product-image" id="clothingProductImage"></div>
+      </div>
+
+      <div class="clothing-product-info">
+        <div class="clothing-product-meta">
+          <span class="clothing-product-category" id="clothingProductCategory"></span>
+          <div class="clothing-product-rating-summary" id="clothingProductRatingSummary"></div>
+        </div>
+        <h1 class="clothing-product-title" id="clothingProductTitle"></h1>
+        <p class="clothing-product-description" id="clothingProductDescription"></p>
+        <div class="clothing-product-tags" id="clothingProductTags"></div>
+        <div class="clothing-product-price-block" id="clothingProductPriceBlock">
+          <span class="clothing-catalog-promo-sticker clothing-product-promo-sticker" id="clothingProductPromoBadge" hidden></span>
+          <div class="clothing-product-price-row">
+            <p class="clothing-product-price-compare" id="clothingProductComparePrice" hidden></p>
+            <p class="clothing-product-price" id="clothingProductPrice"></p>
+            <span class="clothing-product-discount" id="clothingProductDiscount" hidden></span>
+          </div>
+        </div>
+
+        <form class="clothing-product-form clothing-product-order-form" id="clothingOrderForm">
+          <h2>Оформить заказ</h2>
+          <p class="clothing-product-form-hint">Оставьте заявку — мы свяжемся с вами для подтверждения размера и доставки.</p>
+          <div class="clothing-product-form-grid">
+            <label class="clothing-product-field">
+              <span>Имя</span>
+              <input type="text" name="customer_name" required maxlength="128" autocomplete="name">
+            </label>
+            <label class="clothing-product-field">
+              <span>Email</span>
+              <input type="email" name="email" required maxlength="255" autocomplete="email">
+            </label>
+            <label class="clothing-product-field">
+              <span>Телефон</span>
+              <input type="tel" name="phone" maxlength="32" autocomplete="tel">
+            </label>
+            <label class="clothing-product-field">
+              <span>Количество</span>
+              <input type="number" name="quantity" min="1" max="99" value="1" required>
+            </label>
+          </div>
+          <label class="clothing-product-field clothing-product-field-full">
+            <span>Комментарий</span>
+            <textarea name="message" rows="3" maxlength="500" placeholder="Размер, цвет, адрес доставки…"></textarea>
+          </label>
+          <button type="submit" class="clothing-product-btn clothing-product-btn-primary">Отправить заявку</button>
+          <p class="clothing-product-form-status" id="clothingOrderStatus" hidden></p>
+        </form>
+      </div>
+    </article>
+
+    <section class="clothing-product-reviews" id="clothingProductReviews" hidden>
+      <div class="clothing-product-reviews-header">
+        <h2>Отзывы покупателей</h2>
+        <p class="clothing-product-reviews-count" id="clothingReviewsCount"></p>
+      </div>
+
+      <form class="clothing-product-form clothing-product-review-form" id="clothingReviewForm">
+        <h3>Оставить отзыв</h3>
+        <label class="clothing-product-field">
+          <span>Ваша оценка</span>
+          <div class="clothing-star-picker" id="clothingStarPicker" role="radiogroup" aria-label="Оценка от 1 до 5">
+            <button type="button" class="clothing-star-picker-btn" data-value="1" aria-label="1 звезда">★</button>
+            <button type="button" class="clothing-star-picker-btn" data-value="2" aria-label="2 звезды">★</button>
+            <button type="button" class="clothing-star-picker-btn" data-value="3" aria-label="3 звезды">★</button>
+            <button type="button" class="clothing-star-picker-btn" data-value="4" aria-label="4 звезды">★</button>
+            <button type="button" class="clothing-star-picker-btn" data-value="5" aria-label="5 звёзд">★</button>
+          </div>
+          <input type="hidden" name="rating" id="clothingReviewRating" value="5" required>
+        </label>
+        <label class="clothing-product-field">
+          <span>Имя</span>
+          <input type="text" name="author_name" required maxlength="128" autocomplete="name">
+        </label>
+        <label class="clothing-product-field clothing-product-field-full">
+          <span>Отзыв</span>
+          <textarea name="review_text" rows="4" maxlength="1000" placeholder="Поделитесь впечатлениями о товаре…"></textarea>
+        </label>
+        <button type="submit" class="clothing-product-btn clothing-product-btn-secondary">Отправить отзыв</button>
+        <p class="clothing-product-form-status" id="clothingReviewStatus" hidden></p>
+      </form>
+
+      <div class="clothing-product-reviews-list" id="clothingReviewsList"></div>
+      <p class="clothing-product-reviews-empty" id="clothingReviewsEmpty" hidden>Пока нет отзывов — будьте первым!</p>
+    </section>
+  </main>
+
+  <script src="order-confirm.js"></script>
+  <script src="clothing-product.js"></script>
+</body>
+</html>

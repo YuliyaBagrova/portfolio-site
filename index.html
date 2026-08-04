@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Портфолио — Главная</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Top Header -->
+    <header class="site-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="#home" class="logo" data-section="home">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </a>
+
+          <nav class="top-nav" id="topNav">
+            <a href="#home" class="nav-link active" data-section="home">Главная</a>
+            <a href="#supplements" class="nav-link" data-section="supplements">Фитнес-индустрия</a>
+            <a href="#banners" class="nav-link" data-section="banners">Мои Баннеры</a>
+            <a href="#clothing" class="nav-link" data-section="clothing">Одежда</a>
+            <a href="#about" class="nav-link" data-section="about">О сайте</a>
+          </nav>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">☰</button>
+
+        <div class="header-actions">
+          <div class="search-box" id="siteSearchBox">
+            <input type="search" class="search-input" id="siteSearchInput" placeholder="Поиск по сайту..." aria-label="Поиск по сайту" autocomplete="off" aria-expanded="false" aria-controls="siteSearchResults" aria-autocomplete="list">
+            <button type="button" class="btn-search" id="siteSearchBtn">
+              <svg class="btn-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M20 20l-4-4"/>
+              </svg>
+              Найти
+            </button>
+            <div class="search-dropdown" id="siteSearchResults" hidden role="listbox" aria-label="Результаты поиска"></div>
+          </div>
+          <button class="admin-btn" id="adminBtn" aria-label="Панель администратора" title="Панель администратора">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <main class="main">
+      <!-- Home Section -->
+      <section class="section active" id="section-home">
+        <div class="hero" id="hero">
+          <div class="hero-slides" id="heroSlides">
+            <div class="hero-slide active" data-index="0" style="--slide-bg: linear-gradient(135deg, #4338ca 0%, #1e1b4b 50%, #0f1117 100%)"></div>
+            <div class="hero-slide" data-index="1" style="--slide-bg: linear-gradient(135deg, #db2777 0%, #7c3aed 50%, #1e1b4b 100%)"></div>
+            <div class="hero-slide" data-index="2" style="--slide-bg: linear-gradient(135deg, #059669 0%, #0d9488 50%, #0f1117 100%)"></div>
+            <div class="hero-slide" data-index="3" style="--slide-bg: linear-gradient(135deg, #ea580c 0%, #dc2626 50%, #1e1b4b 100%)"></div>
+          </div>
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <h1 class="hero-title">Портфолио креативных работ и дизайна</h1>
+            <p class="hero-desc">Коллекция баннеров, креативов для фитнес-добавок и fashion-проектов. Все работы собраны в удобных разделах для быстрого просмотра.</p>
+            <button class="btn btn-hero" data-section="supplements">Смотреть работы</button>
+          </div>
+          <div class="hero-dots" id="heroDots">
+            <button type="button" class="hero-dot active" data-slide="0" aria-label="Баннер 1"></button>
+            <button type="button" class="hero-dot" data-slide="1" aria-label="Баннер 2"></button>
+            <button type="button" class="hero-dot" data-slide="2" aria-label="Баннер 3"></button>
+            <button type="button" class="hero-dot" data-slide="3" aria-label="Баннер 4"></button>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <button type="button" class="stat-icon supplements zoomable-icon" data-section-icon-trigger="supplements" data-lightbox-src="assets/icons/fitness-industry.png" aria-label="Увеличить изображение">
+                <img src="assets/icons/fitness-industry.png" alt="Фитнес-индустрия" width="64" height="64" decoding="async" data-section-icon-img="supplements">
+              </button>
+              <div class="stat-info">
+                <span class="stat-value" data-stat="supplements">—</span>
+                <span class="stat-label">Фитнес-индустрия</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <button type="button" class="stat-icon banners zoomable-icon" data-section-icon-trigger="banners" data-lightbox-src="assets/icons/banners.png" aria-label="Увеличить изображение">
+                <img src="assets/icons/banners.png" alt="Мои Баннеры" width="64" height="64" decoding="async" data-section-icon-img="banners">
+              </button>
+              <div class="stat-info">
+                <span class="stat-value" data-stat="banners">—</span>
+                <span class="stat-label">Баннеры</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <button type="button" class="stat-icon clothing zoomable-icon" data-section-icon-trigger="clothing" data-lightbox-src="assets/icons/clothing.png" aria-label="Увеличить изображение">
+                <img src="assets/icons/clothing.png" alt="Одежда" width="64" height="64" decoding="async" data-section-icon-img="clothing">
+              </button>
+              <div class="stat-info">
+                <span class="stat-value" data-stat="clothing">—</span>
+                <span class="stat-label">Одежда</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon total">📈</div>
+              <div class="stat-info">
+                <span class="stat-value" data-stat="total">—</span>
+                <span class="stat-label">Всего работ</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Разделы портфолио</h2>
+              </div>
+              <div class="quick-links">
+                <a href="#supplements" class="quick-link" data-section="supplements">
+                  <span class="quick-link-icon zoomable-icon" role="button" tabindex="0" data-lightbox-src="assets/icons/fitness-industry.png" data-section-icon-trigger="supplements" aria-label="Увеличить изображение">
+                    <img src="assets/icons/fitness-industry.png" alt="Фитнес-индустрия" width="44" height="44" decoding="async" data-section-icon-img="supplements">
+                  </span>
+                  <div>
+                    <strong>Фитнес-индустрия</strong>
+                    <small>Креативы для спортивного питания</small>
+                  </div>
+                </a>
+                <a href="#banners" class="quick-link" data-section="banners">
+                  <span class="quick-link-icon quick-link-icon--banners zoomable-icon" role="button" tabindex="0" data-lightbox-src="assets/icons/banners.png" data-section-icon-trigger="banners" aria-label="Увеличить изображение">
+                    <img src="assets/icons/banners.png" alt="Мои Баннеры" width="44" height="44" decoding="async" data-section-icon-img="banners">
+                  </span>
+                  <div>
+                    <strong>Мои Баннеры</strong>
+                    <small>Рекламные и промо-баннеры</small>
+                  </div>
+                </a>
+                <a href="#clothing" class="quick-link" data-section="clothing">
+                  <span class="quick-link-icon quick-link-icon--clothing zoomable-icon" role="button" tabindex="0" data-lightbox-src="assets/icons/clothing.png" data-section-icon-trigger="clothing" aria-label="Увеличить изображение">
+                    <img src="assets/icons/clothing.png" alt="Одежда" width="44" height="44" decoding="async" data-section-icon-img="clothing">
+                  </span>
+                  <div>
+                    <strong>Одежда</strong>
+                    <small>Дизайн для брендов одежды</small>
+                  </div>
+                </a>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <h2>Последние работы</h2>
+              </div>
+              <ul class="recent-list" data-recent-list="works">
+                <li class="recent-loading">Загрузка…</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Supplements Section -->
+      <section class="section" id="section-supplements">
+        <div class="hero fitness-hero" id="fitnessHero">
+          <div class="hero-slides" id="fitnessHeroSlides">
+            <div class="hero-slide active" data-index="0" style="--slide-bg: linear-gradient(135deg, #ea580c 0%, #9a3412 45%, #0f1117 100%)"></div>
+            <div class="hero-slide" data-index="1" style="--slide-bg: linear-gradient(135deg, #f97316 0%, #c2410c 40%, #1a120b 100%)"></div>
+            <div class="hero-slide" data-index="2" style="--slide-bg: linear-gradient(135deg, #fb923c 0%, #ea580c 35%, #0f1117 100%)"></div>
+            <div class="hero-slide" data-index="3" style="--slide-bg: linear-gradient(135deg, #fdba74 0%, #ea580c 40%, #1c1410 100%)"></div>
+          </div>
+          <div class="hero-overlay fitness-hero-overlay"></div>
+          <div class="hero-content fitness-hero-content">
+            <p class="fitness-hero-eyebrow">Sports Nutrition</p>
+            <h1 class="hero-title fitness-hero-title">Фитнес-индустрия</h1>
+            <p class="hero-desc fitness-hero-desc">Креативы для спортивного питания, добавок и фитнес-брендов — от карточек маркетплейсов до рекламных кампаний.</p>
+            <a href="#fitnessWorks" class="btn btn-hero fitness-hero-btn">Смотреть коллекцию</a>
+          </div>
+          <div class="hero-dots" id="fitnessHeroDots">
+            <button type="button" class="hero-dot active" data-slide="0" aria-label="Баннер 1"></button>
+            <button type="button" class="hero-dot" data-slide="1" aria-label="Баннер 2"></button>
+            <button type="button" class="hero-dot" data-slide="2" aria-label="Баннер 3"></button>
+            <button type="button" class="hero-dot" data-slide="3" aria-label="Баннер 4"></button>
+          </div>
+        </div>
+
+        <div class="content fitness-content" id="fitnessWorks">
+          <div class="section-header fitness-section-header">
+            <div>
+              <h2>Коллекция работ</h2>
+              <p class="section-desc">Протеин, креатин, витамины и спорт-инвентарь — готовые креативы для продвижения</p>
+            </div>
+          </div>
+
+          <div class="filter-bar fitness-filter-bar">
+            <button type="button" class="filter-btn active" data-filter="all">Все</button>
+            <button type="button" class="filter-btn" data-filter="protein">Протеин</button>
+            <button type="button" class="filter-btn" data-filter="creatine">Креатин</button>
+            <button type="button" class="filter-btn" data-filter="vitamins">Витамины</button>
+            <button type="button" class="filter-btn" data-filter="equipment">Спорт-инвентарь</button>
+          </div>
+
+          <div class="portfolio-grid fitness-portfolio-grid" id="fitnessCatalogGrid">
+            <p class="fitness-empty" id="fitnessEmpty">Ждите поступления новых товаров</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Banners Section -->
+      <section class="section section-banners" id="section-banners">
+        <div class="banners-hero-accent" aria-hidden="true"></div>
+        <div class="banners-canvas-grid" aria-hidden="true"></div>
+        <div class="content banners-content">
+          <div class="banners-masthead">
+            <header class="banners-masthead-main">
+              <div class="banners-masthead-index">
+                <span class="banners-index-num">01</span>
+                <span class="banners-index-line" aria-hidden="true"></span>
+                <span class="banners-index-tag">Visual Collection</span>
+              </div>
+              <h2 class="banners-masthead-title">
+                <span class="banners-title-line">Мои</span>
+                <span class="banners-title-line banners-title-accent">Баннеры</span>
+              </h2>
+              <p class="banners-masthead-desc">Превью, иллюстрации, логотипы и графика — собраны в одной визуальной коллекции</p>
+              <div class="banners-masthead-meta">
+                <span class="banners-meta-chip">4 категории</span>
+                <span class="banners-meta-dot" aria-hidden="true"></span>
+                <span class="banners-meta-chip">Digital &amp; Print</span>
+              </div>
+            </header>
+
+            <nav class="banners-category-rail banners-filter-bar" role="tablist" aria-label="Категории работ">
+              <span class="banners-rail-caption">Каталог</span>
+              <button type="button" class="banners-rail-btn banners-filter-btn active" data-filter="all">
+                <span class="banners-rail-num">00</span>
+                <span class="banners-rail-label">Все работы</span>
+                <span class="banners-rail-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="banners-rail-btn banners-filter-btn" data-filter="preview">
+                <span class="banners-rail-num">01</span>
+                <span class="banners-rail-label">Превью</span>
+                <span class="banners-rail-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="banners-rail-btn banners-filter-btn" data-filter="illustrations">
+                <span class="banners-rail-num">02</span>
+                <span class="banners-rail-label">Иллюстрации</span>
+                <span class="banners-rail-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="banners-rail-btn banners-filter-btn" data-filter="logos">
+                <span class="banners-rail-num">03</span>
+                <span class="banners-rail-label">Логотипы</span>
+                <span class="banners-rail-arrow" aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="banners-rail-btn banners-filter-btn" data-filter="pictures">
+                <span class="banners-rail-num">04</span>
+                <span class="banners-rail-label">Картинки</span>
+                <span class="banners-rail-arrow" aria-hidden="true">→</span>
+              </button>
+              <div class="banners-rail-divider" aria-hidden="true"></div>
+              <a href="banners-order.html" class="banners-order-btn">Заказать работу</a>
+            </nav>
+          </div>
+
+          <div class="portfolio-grid banners-grid" id="bannersGrid">
+            <p class="banners-empty" id="bannersEmpty" hidden>В коллекции пока нет работ</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Clothing Section -->
+      <section class="section section-clothing" id="section-clothing">
+        <div class="clothing-hero" id="clothingHero">
+          <div class="clothing-hero-inner">
+            <div class="clothing-hero-copy">
+              <p class="clothing-hero-eyebrow">Fashion Portfolio</p>
+              <h1 class="clothing-hero-title">Одежда</h1>
+              <p class="clothing-hero-desc">Lookbook, каталоги и кампании для fashion-брендов — от streetwear до premium-коллекций.</p>
+              <a href="#clothingWorks" class="clothing-hero-cta">Смотреть коллекцию</a>
+            </div>
+
+            <div class="clothing-hero-aside">
+              <div class="clothing-hero-banner" id="clothingHeroBanner">
+                <div class="clothing-hero-slides-viewport" id="clothingHeroSlidesViewport">
+                  <div class="clothing-hero-slides" id="clothingHeroSlides">
+                    <div class="clothing-hero-slide active" data-index="0" style="--slide-bg: linear-gradient(145deg, #f5f1eb 0%, #ddd5c8 55%, #ebe6df 100%)"></div>
+                    <div class="clothing-hero-slide" data-index="1" style="--slide-bg: linear-gradient(145deg, #efe8e0 0%, #c8bdb0 50%, #f7f4ef 100%)"></div>
+                    <div class="clothing-hero-slide" data-index="2" style="--slide-bg: linear-gradient(145deg, #ece6de 0%, #b8afa3 45%, #f3efe9 100%)"></div>
+                    <div class="clothing-hero-slide" data-index="3" style="--slide-bg: linear-gradient(145deg, #f0ebe4 0%, #d1c4b5 50%, #faf8f5 100%)"></div>
+                  </div>
+                </div>
+                <div class="clothing-hero-progress" id="clothingHeroProgress" role="tablist" aria-label="Баннеры раздела">
+                  <button type="button" class="clothing-hero-line active" data-slide="0" role="tab" aria-selected="true" aria-label="Баннер 1"></button>
+                  <button type="button" class="clothing-hero-line" data-slide="1" role="tab" aria-selected="false" aria-label="Баннер 2"></button>
+                  <button type="button" class="clothing-hero-line" data-slide="2" role="tab" aria-selected="false" aria-label="Баннер 3"></button>
+                  <button type="button" class="clothing-hero-line" data-slide="3" role="tab" aria-selected="false" aria-label="Баннер 4"></button>
+                </div>
+              </div>
+
+              <aside class="clothing-hero-alerts" aria-label="Акции и новинки">
+                <div class="clothing-alerts-header">
+                  <span class="clothing-alerts-label">Обновления</span>
+                  <h2 class="clothing-alerts-title">Акции и товары</h2>
+                </div>
+                <ul class="clothing-alerts-list" id="clothingAlertsList"></ul>
+              </aside>
+            </div>
+          </div>
+        </div>
+
+        <div class="clothing-content" id="clothingWorks">
+          <header class="clothing-section-header">
+            <span class="clothing-section-label">Коллекция</span>
+            <h2>Избранные проекты</h2>
+            <p class="clothing-section-desc">Спорт, casual и популярные коллекции — визуальные решения для брендов одежды</p>
+          </header>
+
+          <div class="clothing-filter-bar" role="tablist" aria-label="Фильтр проектов">
+            <button type="button" class="clothing-filter-btn active" data-filter="all">Все</button>
+            <button type="button" class="clothing-filter-btn" data-filter="sport">Спорт</button>
+            <button type="button" class="clothing-filter-btn" data-filter="casual">Casual</button>
+            <button type="button" class="clothing-filter-btn" data-filter="popular">Популярные</button>
+            <button type="button" class="clothing-filter-btn" data-filter="catalog">Каталог</button>
+          </div>
+
+          <div class="clothing-catalog-panel" id="clothingCatalogPanel" hidden>
+            <div class="clothing-catalog-layout">
+              <div class="clothing-catalog-main">
+                <header class="clothing-catalog-header">
+                  <span class="clothing-catalog-eyebrow">Каталог</span>
+                  <h3 class="clothing-catalog-title">Направления коллекции</h3>
+                  <p class="clothing-catalog-desc">Выберите категорию для просмотра подборки</p>
+                </header>
+                <ul class="clothing-catalog-list" role="list">
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="men">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="men" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="men">M</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Мужчинам</span>
+                    <span class="clothing-catalog-item-hint">Коллекции для него</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="women">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="women" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="women">W</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Женщинам</span>
+                    <span class="clothing-catalog-item-hint">Коллекции для неё</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="shirts">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="shirts" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="shirts">S</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Рубашки</span>
+                    <span class="clothing-catalog-item-hint">Классика и casual</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="pants">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="pants" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="pants">P</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Брюки</span>
+                    <span class="clothing-catalog-item-hint">Посадка и силуэт</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="jeans">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="jeans" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="jeans">J</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Джинсы</span>
+                    <span class="clothing-catalog-item-hint">Denim &amp; wash</span>
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="clothing-catalog-item" data-catalog="accessories">
+                  <span class="clothing-catalog-icon" aria-hidden="true">
+                    <img class="clothing-catalog-icon-img" data-catalog-icon-img="accessories" alt="" width="64" height="64" hidden>
+                    <span class="clothing-catalog-icon-glyph" data-catalog-icon-glyph="accessories">A</span>
+                  </span>
+                  <span class="clothing-catalog-item-copy">
+                    <span class="clothing-catalog-item-label">Аксессуары</span>
+                    <span class="clothing-catalog-item-hint">Детали образа</span>
+                  </span>
+                </button>
+              </li>
+                </ul>
+              </div>
+
+              <aside class="clothing-catalog-promo" id="clothingCatalogPromo" aria-label="Рекламное предложение">
+                <a class="clothing-catalog-promo-card" id="clothingCatalogPromoCard" href="#">
+                  <div class="clothing-catalog-promo-media">
+                    <img class="clothing-catalog-promo-image" id="clothingCatalogPromoImage" alt="" width="480" height="640" hidden>
+                    <div class="clothing-catalog-promo-fallback" id="clothingCatalogPromoFallback" aria-hidden="true"></div>
+                    <span class="clothing-catalog-promo-sticker" id="clothingCatalogPromoSticker">Горячие предложения</span>
+                    <div class="clothing-catalog-promo-overlay" id="clothingCatalogPromoOverlay">
+                      <strong class="clothing-catalog-promo-title" id="clothingCatalogPromoTitle">Sale до −40%</strong>
+                      <p class="clothing-catalog-promo-subtitle" id="clothingCatalogPromoSubtitle">Лимитированная подборка сезона</p>
+                    </div>
+                  </div>
+                </a>
+              </aside>
+            </div>
+          </div>
+
+          <div class="clothing-lookbook-grid" id="clothingLookbookGrid">
+            <p class="clothing-empty" id="clothingEmpty">Ждите поступления новых товаров</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="section" id="section-about">
+        <div class="content about-content" id="aboutPageContainer">
+          <p class="about-page-loading" id="aboutPageLoading">Загрузка…</p>
+          <div id="aboutPageRoot" hidden></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="#home" class="logo footer-logo" data-section="home">
+              <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+            </a>
+            <p class="footer-desc">Коллекция креативных работ: баннеры, дизайн для фитнес-добавок и fashion-проектов.</p>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Разделы</h3>
+            <ul class="footer-links">
+              <li><a href="#home" data-section="home">Главная</a></li>
+              <li><a href="#supplements" data-section="supplements">Фитнес-индустрия</a></li>
+              <li><a href="#banners" data-section="banners">Мои Баннеры</a></li>
+              <li><a href="#clothing" data-section="clothing">Одежда</a></li>
+              <li><a href="#about" data-section="about">О сайте</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Пользователю</h3>
+            <ul class="footer-links">
+              <li><a href="#about" data-section="about">О сайте</a></li>
+              <li><a href="#order">Как заказать работу</a></li>
+              <li><a href="#faq">Частые вопросы</a></li>
+              <li><a href="#privacy">Политика конфиденциальности</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h3 class="footer-title">Контакты</h3>
+            <ul class="footer-links">
+              <li><a href="https://t.me/" target="_blank" rel="noopener noreferrer">Telegram</a></li>
+              <li><a href="https://instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p class="footer-copy">&copy; 2026 Портфолио. Все права защищены.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Admin: выбор входа -->
+    <div class="admin-overlay" id="adminGate" hidden>
+      <div class="admin-modal admin-modal-gate" role="dialog" aria-labelledby="adminGateTitle">
+        <button type="button" class="admin-modal-close" id="adminGateClose" aria-label="Закрыть">✕</button>
+        <div class="admin-modal-heading">
+          <span class="admin-modal-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <circle cx="12" cy="10" r="3"/>
+              <path d="M12 13v3"/>
+            </svg>
+          </span>
+          <h2 class="admin-modal-title" id="adminGateTitle">Панель администратора</h2>
+        </div>
+        <p class="admin-modal-desc">Выберите способ входа. Оба варианта открывают одну панель с одинаковыми правами.</p>
+        <div class="admin-choice-grid">
+          <button type="button" class="admin-choice-card" id="adminChooseRegister">
+            <span class="admin-choice-emoji" aria-hidden="true">📝</span>
+            <strong>Регистрация</strong>
+            <small>Демо-форма регистрации для заказчика</small>
+          </button>
+          <button type="button" class="admin-choice-card" id="adminChoosePreview">
+            <span class="admin-choice-emoji" aria-hidden="true">👁️</span>
+            <strong>Предварительный просмотр</strong>
+            <small>Сразу перейти в панель управления</small>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: регистрация (опционально) -->
+    <div class="admin-overlay" id="adminRegister" hidden>
+      <div class="admin-modal admin-modal-wide" role="dialog" aria-labelledby="adminRegisterTitle">
+        <button type="button" class="admin-modal-close" id="adminRegisterClose" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <h2 class="admin-modal-title" id="adminRegisterTitle">Регистрация</h2>
+        <p class="admin-modal-desc">Необязательный шаг — можно зарегистрироваться или сразу перейти в панель.</p>
+        <form class="admin-form" id="adminRegisterForm">
+          <label class="admin-field">
+            <span>Имя</span>
+            <input type="text" name="name" placeholder="Ваше имя" autocomplete="name">
+          </label>
+          <label class="admin-field">
+            <span>Email</span>
+            <input type="email" name="email" placeholder="email@example.com" autocomplete="email">
+          </label>
+          <label class="admin-field">
+            <span>Пароль</span>
+            <input type="password" name="password" placeholder="••••••••" autocomplete="new-password">
+          </label>
+          <div class="admin-form-actions">
+            <button type="button" class="btn btn-ghost" id="adminRegisterSkip">Пропустить и войти</button>
+            <button type="submit" class="btn btn-primary">Зарегистрироваться и войти</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin: панель управления (полноэкранная) -->
+  <div class="admin-page" id="adminPanel" hidden>
+    <header class="site-header admin-page-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <span class="logo">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </span>
+
+          <nav class="top-nav admin-top-nav" aria-label="Панель администратора">
+            <button type="button" class="nav-link active" data-admin-section="dashboard" id="adminPanelTitle">Панель администратора</button>
+            <button type="button" class="nav-link" data-admin-section="reviews">Отзывы покупателей</button>
+            <button type="button" class="nav-link" data-admin-section="orders">Заказы</button>
+            <button type="button" class="nav-link" data-admin-section="about">О панели администратора</button>
+          </nav>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="admin-btn" id="adminPanelClose" aria-label="Выйти на сайт" title="Выйти на сайт">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-page-main">
+      <div class="content admin-page-content">
+        <section class="admin-section active" id="adminSectionDashboard">
+        <div class="admin-panel-badge" id="adminEntryBadge">Вход: предварительный просмотр</div>
+
+        <div class="stats-grid admin-dashboard-stats">
+          <div class="stat-card">
+            <button type="button" class="stat-icon supplements" aria-label="Фитнес-индустрия">
+              <img src="assets/icons/fitness-industry.png" alt="Фитнес-индустрия" width="64" height="64" decoding="async" data-section-icon-img="supplements">
+            </button>
+            <div class="stat-info">
+              <span class="stat-value" data-stat="supplements">—</span>
+              <span class="stat-label">Фитнес-индустрия</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <button type="button" class="stat-icon banners" aria-label="Мои Баннеры">
+              <img src="assets/icons/banners.png" alt="Мои Баннеры" width="64" height="64" decoding="async" data-section-icon-img="banners">
+            </button>
+            <div class="stat-info">
+              <span class="stat-value" data-stat="banners">—</span>
+              <span class="stat-label">Баннеры</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <button type="button" class="stat-icon clothing" aria-label="Одежда">
+              <img src="assets/icons/clothing.png" alt="Одежда" width="64" height="64" decoding="async" data-section-icon-img="clothing">
+            </button>
+            <div class="stat-info">
+              <span class="stat-value" data-stat="clothing">—</span>
+              <span class="stat-label">Одежда</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon total">📈</div>
+            <div class="stat-info">
+              <span class="stat-value" data-stat="total">—</span>
+              <span class="stat-label">Всего работ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card admin-content-card">
+            <div class="card-header">
+              <h2>Управление контентом</h2>
+            </div>
+            <div class="quick-links admin-content-links">
+              <button type="button" class="quick-link admin-content-link" id="adminAppearanceManage">
+                <span class="quick-link-icon quick-link-icon--appearance" aria-hidden="true">
+                  <span class="quick-link-icon-glyph">🎨</span>
+                </span>
+                <div>
+                  <strong>Внешний вид сайта</strong>
+                  <small>Баннер главной и иконки разделов</small>
+                </div>
+              </button>
+              <button type="button" class="quick-link admin-content-link" id="adminFitnessManage">
+                <span class="quick-link-icon" data-section-icon-trigger="supplements">
+                  <img src="assets/icons/fitness-industry.png" alt="" width="44" height="44" decoding="async" data-section-icon-img="supplements">
+                </span>
+                <div>
+                  <strong>Фитнес-индустрия</strong>
+                  <small>Баннер раздела и каталог товаров</small>
+                </div>
+              </button>
+              <button type="button" class="quick-link admin-content-link" id="adminBannersManage">
+                <span class="quick-link-icon quick-link-icon--banners" data-section-icon-trigger="banners">
+                  <img src="assets/icons/banners.png" alt="" width="44" height="44" decoding="async" data-section-icon-img="banners">
+                </span>
+                <div>
+                  <strong>Мои Баннеры</strong>
+                  <small>Загрузка и управление коллекцией работ</small>
+                </div>
+              </button>
+              <button type="button" class="quick-link admin-content-link" id="adminClothingManage">
+                <span class="quick-link-icon quick-link-icon--clothing" data-section-icon-trigger="clothing">
+                  <img src="assets/icons/clothing.png" alt="" width="44" height="44" decoding="async" data-section-icon-img="clothing">
+                </span>
+                <div>
+                  <strong>Одежда</strong>
+                  <small>Баннер раздела и иконки каталога</small>
+                </div>
+              </button>
+              <button type="button" class="quick-link admin-content-link" id="adminSiteAboutManage">
+                <span class="quick-link-icon quick-link-icon--about" aria-hidden="true">
+                  <span class="quick-link-icon-glyph">ℹ️</span>
+                </span>
+                <div>
+                  <strong>О сайте</strong>
+                  <small>Редактирование страницы «О сайте»</small>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="card admin-recent-card">
+            <div class="card-header">
+              <h2>Последние действия</h2>
+            </div>
+            <ul class="recent-list admin-recent-list" data-recent-list="works">
+              <li class="recent-loading">Загрузка…</li>
+            </ul>
+          </div>
+        </div>
+        </section>
+
+        <section class="admin-section admin-section-appearance" id="adminSectionAppearance" aria-labelledby="adminAppearanceSectionTitle">
+          <div class="admin-panel-badge">Внешний вид сайта</div>
+
+          <div class="dashboard-grid admin-appearance-grid">
+            <div class="card admin-content-card">
+              <div class="card-header">
+                <h2 id="adminAppearanceSectionTitle">Управление внешним видом</h2>
+              </div>
+              <div class="quick-links admin-content-links">
+                <button type="button" class="quick-link admin-content-link" id="adminAppearanceChooseBanner">
+                  <span class="quick-link-icon quick-link-icon--home" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🏠</span>
+                  </span>
+                  <div>
+                    <strong>Баннер «Главная»</strong>
+                    <small>Загрузка и сохранение hero-баннеров</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminAppearanceChooseIcons">
+                  <span class="quick-link-icon quick-link-icon--settings" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🧩</span>
+                  </span>
+                  <div>
+                    <strong>Иконки разделов</strong>
+                    <small>Фитнес-индустрия, Мои Баннеры, Одежда</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminAppearanceChoosePalette">
+                  <span class="quick-link-icon quick-link-icon--palette" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🎨</span>
+                  </span>
+                  <div>
+                    <strong>Цветовая палитра страниц</strong>
+                    <small>Главная, Фитнес-индустрия, Одежда, Мои Баннеры</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="card admin-recent-card">
+              <div class="card-header">
+                <h2>Последние действия</h2>
+              </div>
+              <ul class="recent-list admin-recent-list" data-recent-list="appearance">
+                <li class="recent-loading">Загрузка…</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="admin-panel-footer">
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminAppearanceBackToDashboard">← К панели администратора</button>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-fitness" id="adminSectionFitness" aria-labelledby="adminFitnessSectionTitle">
+          <div class="admin-panel-badge">Фитнес-индустрия</div>
+
+          <div class="dashboard-grid admin-fitness-grid">
+            <div class="card admin-content-card">
+              <div class="card-header">
+                <h2 id="adminFitnessSectionTitle">Управление разделом</h2>
+              </div>
+              <div class="quick-links admin-content-links">
+                <button type="button" class="quick-link admin-content-link" id="adminFitnessChooseBanner">
+                  <span class="quick-link-icon quick-link-icon--fitness-banner" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🖼️</span>
+                  </span>
+                  <div>
+                    <strong>Баннер раздела</strong>
+                    <small>Загрузка, удаление и настройка hero-баннеров</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminFitnessChooseCatalog">
+                  <span class="quick-link-icon quick-link-icon--fitness-catalog" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">📦</span>
+                  </span>
+                  <div>
+                    <strong>Каталог товаров</strong>
+                    <small>Добавление и редактирование товаров</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="card admin-recent-card">
+              <div class="card-header">
+                <h2>Последние действия</h2>
+              </div>
+              <ul class="recent-list admin-recent-list" data-recent-list="fitness">
+                <li class="recent-loading">Загрузка…</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="admin-panel-footer">
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminFitnessBackToDashboard">← К панели администратора</button>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-banners" id="adminSectionBanners" aria-labelledby="adminBannersSectionTitle">
+          <div class="admin-panel-badge admin-panel-badge--banners">Мои Баннеры</div>
+
+          <div class="dashboard-grid admin-banners-grid">
+            <div class="card admin-content-card">
+              <div class="card-header">
+                <h2 id="adminBannersSectionTitle">Управление разделом</h2>
+              </div>
+              <div class="quick-links admin-content-links">
+                <button type="button" class="quick-link admin-content-link" id="adminBannersChooseWorks">
+                  <span class="quick-link-icon quick-link-icon--banners-works" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🖼️</span>
+                  </span>
+                  <div>
+                    <strong>Коллекция работ</strong>
+                    <small>Добавление, редактирование и удаление работ на сайте</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="card admin-recent-card">
+              <div class="card-header">
+                <h2>Последние работы</h2>
+              </div>
+              <ul class="recent-list admin-recent-list" data-recent-list="banners">
+                <li class="recent-loading">Загрузка…</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="admin-panel-footer">
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminBannersBackToDashboard">← К панели администратора</button>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing" id="adminSectionClothing" aria-labelledby="adminClothingSectionTitle">
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="dashboard-grid admin-clothing-grid">
+            <div class="card admin-content-card">
+              <div class="card-header">
+                <h2 id="adminClothingSectionTitle">Управление разделом</h2>
+              </div>
+              <div class="quick-links admin-content-links">
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseCatalog">
+                  <span class="quick-link-icon quick-link-icon--clothing-catalog" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">👗</span>
+                  </span>
+                  <div>
+                    <strong>Каталог товаров</strong>
+                    <small>Добавление, редактирование и удаление товаров раздела</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseBanner">
+                  <span class="quick-link-icon quick-link-icon--clothing-banner" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🖼️</span>
+                  </span>
+                  <div>
+                    <strong>Баннер раздела</strong>
+                    <small>Загрузка, удаление и настройка hero-баннеров</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseCatalogIcons">
+                  <span class="quick-link-icon quick-link-icon--clothing-catalog" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🏷️</span>
+                  </span>
+                  <div>
+                    <strong>Иконки каталога</strong>
+                    <small>Иконки категорий в списке «Каталог»</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseAlerts">
+                  <span class="quick-link-icon quick-link-icon--clothing-alerts" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">🏷</span>
+                  </span>
+                  <div>
+                    <strong>Акции и товары</strong>
+                    <small>Блок предложений рядом с баннером раздела</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseCatalogPromo">
+                  <span class="quick-link-icon quick-link-icon--clothing-promo" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">📣</span>
+                  </span>
+                  <div>
+                    <strong>Реклама каталога</strong>
+                    <small>Баннер и стикер «Горячие предложения» в каталоге</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div class="card admin-recent-card">
+              <div class="card-header">
+                <h2>Последние действия</h2>
+              </div>
+              <ul class="recent-list admin-recent-list" data-recent-list="clothing">
+                <li class="recent-loading">Загрузка…</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="admin-panel-footer">
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminClothingBackToDashboard">← К панели администратора</button>
+          </div>
+        </section>
+
+        <section class="admin-section" id="adminSectionReviews" aria-labelledby="adminReviewsTitle">
+          <h2 id="adminReviewsTitle" class="visually-hidden">Отзывы покупателей</h2>
+          <div class="admin-panel-badge">Отзывы покупателей</div>
+
+          <div class="dashboard-grid admin-reviews-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Ответить покупателю</h2>
+              </div>
+              <div class="admin-reviews-reply-panel" id="adminReviewsReplyPanel">
+                <p class="admin-reviews-placeholder" id="adminReviewsReplyPlaceholder">Выберите отзыв в разделе «Отзывы» справа, чтобы написать ответ покупателю.</p>
+                <div class="admin-reviews-reply-content" id="adminReviewsReplyContent" hidden></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header admin-reviews-list-header">
+                <h2>Отзывы</h2>
+                <button type="button" class="btn btn-ghost" id="adminReviewsRefresh">Обновить</button>
+              </div>
+              <ul class="recent-list admin-reviews-recent" id="adminReviewsList"></ul>
+              <div class="admin-reviews-list-footer">
+                <button type="button" class="btn btn-ghost admin-reviews-show-all" id="adminReviewsShowAll" hidden>Все отзывы</button>
+              </div>
+              <p class="admin-reviews-empty" id="adminReviewsEmpty" hidden>Отзывов пока нет. Они появятся, когда посетители оставят их на страницах товаров и работ.</p>
+              <p class="admin-reviews-loading" id="adminReviewsLoading">Загрузка отзывов…</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section" id="adminSectionOrders" aria-labelledby="adminOrdersTitle">
+          <h2 id="adminOrdersTitle" class="visually-hidden">Заказы</h2>
+          <div class="admin-panel-badge">Заказы</div>
+
+          <div class="dashboard-grid admin-orders-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Детали заказа</h2>
+              </div>
+              <div class="admin-orders-detail-panel" id="adminOrdersDetailPanel">
+                <p class="admin-orders-placeholder" id="adminOrdersDetailPlaceholder">Выберите заказ в разделе «Заказы» справа, чтобы просмотреть детали.</p>
+                <div class="admin-orders-detail-content" id="adminOrdersDetailContent" hidden></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header admin-orders-list-header">
+                <h2>Заказы</h2>
+                <button type="button" class="btn btn-ghost" id="adminOrdersRefresh">Обновить</button>
+              </div>
+              <ul class="recent-list admin-orders-recent" id="adminOrdersList"></ul>
+              <div class="admin-orders-list-footer">
+                <button type="button" class="btn btn-ghost admin-orders-show-all" id="adminOrdersShowAll" hidden>Все заказы</button>
+              </div>
+              <p class="admin-orders-empty" id="adminOrdersEmpty" hidden>Заказов пока нет. Они появятся, когда покупатели оформят заявки на страницах товаров.</p>
+              <p class="admin-orders-loading" id="adminOrdersLoading">Загрузка заказов…</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-site-about" id="adminSectionSiteAbout" aria-labelledby="adminSiteAboutTitle">
+          <div class="admin-panel-badge">О сайте</div>
+
+          <div class="site-about-toolbar card">
+            <div class="site-about-toolbar-main">
+              <button type="button" class="site-about-back-btn" id="adminSiteAboutBack" aria-label="Назад на главный экран">← Главный экран</button>
+              <div>
+                <h2 id="adminSiteAboutTitle">Редактирование страницы «О сайте»</h2>
+                <p class="site-about-toolbar-desc">Меняйте текст, добавляйте блоки и выбирайте стили — абзацы, подзаголовки, списки и FAQ как на публичной странице.</p>
+              </div>
+            </div>
+            <div class="site-about-toolbar-actions">
+              <a href="/#about" class="site-about-preview-link" target="_blank" rel="noopener">Открыть на сайте</a>
+              <button type="button" class="site-about-secondary-btn" id="adminSiteAboutPreviewToggle" aria-pressed="true">Скрыть превью</button>
+              <button type="button" class="site-about-secondary-btn" id="adminSiteAboutReset">Сбросить</button>
+              <button type="button" class="site-about-primary-btn" id="adminSiteAboutSave">Сохранить</button>
+            </div>
+            <p class="site-about-status" id="adminSiteAboutStatus" aria-live="polite"></p>
+          </div>
+
+          <div class="site-about-layout">
+            <div class="site-about-editor-col" id="adminSiteAboutEditor">
+              <p class="site-about-loading">Загрузка редактора…</p>
+            </div>
+            <aside class="site-about-preview-col" id="adminSiteAboutPreviewPanel" aria-label="Предпросмотр">
+              <div class="site-about-preview-head">
+                <h3>Предпросмотр</h3>
+                <span class="site-about-preview-note">Как на публичной странице</span>
+              </div>
+              <div class="site-about-preview-scroll">
+                <div class="about-content site-about-preview-content" id="adminSiteAboutPreview"></div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-about" id="adminSectionAbout" aria-labelledby="adminAboutTitle">
+          <div class="admin-about-content about-content">
+            <div class="about-page-intro">
+              <div class="section-header">
+                <div>
+                  <h2 id="adminAboutTitle">О панели администратора</h2>
+                  <p class="section-desc">Подробно о входе, разделах управления, заказах, отзывах и возможностях панели</p>
+                </div>
+              </div>
+
+              <nav class="about-page-nav admin-about-page-nav" aria-label="Разделы справки">
+                <a href="#admin-about-overview" class="about-page-nav-link">Обзор</a>
+                <a href="#admin-about-entry" class="about-page-nav-link">Вход</a>
+                <a href="#admin-about-sections" class="about-page-nav-link">Разделы</a>
+                <a href="#admin-about-orders-reviews" class="about-page-nav-link">Заказы и отзывы</a>
+                <a href="#admin-about-faq" class="about-page-nav-link">Вопросы</a>
+              </nav>
+            </div>
+
+            <article class="card about-block" id="admin-about-overview">
+              <div class="card-header">
+                <h2>Что такое панель администратора</h2>
+              </div>
+              <div class="about-block-body">
+                <p class="about-text">Панель администратора — рабочее пространство для управления портфолио-сайтом. Здесь собраны инструменты для обновления контента публичных разделов, приёма заявок от посетителей и ответов на отзывы — без правки кода и без отдельных сервисов.</p>
+                <p class="about-text">Панель связана с публичной частью сайта через backend: изменения баннеров, товаров, палитр и иконок сразу отражаются на страницах «Главная», «Фитнес-индустрия», «Одежда» и «Мои Баннеры». Заявки с форм заказа и отзывы покупателей попадают сюда автоматически.</p>
+
+                <h3 class="about-subtitle">Главный экран</h3>
+                <ul class="about-list">
+                  <li><strong>Статистика</strong> — количество работ в каждом разделе и общий итог по портфолио</li>
+                  <li><strong>Управление контентом</strong> — быстрые переходы во «Внешний вид», «Фитнес-индустрия», «Мои Баннеры», «Одежда» и «О сайте»</li>
+                  <li><strong>Последние действия</strong> — недавно добавленные или изменённые работы с метками раздела</li>
+                </ul>
+
+                <h3 class="about-subtitle">Навигация</h3>
+                <p class="about-text">В шапке панели доступны разделы: главный экран, «Внешний вид сайта», «Фитнес-индустрия», «Мои Баннеры», «Одежда», «Отзывы покупателей», «Заказы» и эта справка — «О панели администратора».</p>
+              </div>
+            </article>
+
+            <article class="card about-block" id="admin-about-entry">
+              <div class="card-header">
+                <h2>Способы входа</h2>
+              </div>
+              <div class="about-block-body">
+                <p class="about-text">На публичном сайте кнопка в шапке открывает окно выбора сценария входа. Оба варианта ведут в одну панель с одинаковым функционалом — это демонстрация разных UX-подходов к onboarding.</p>
+
+                <h3 class="about-subtitle">Регистрация</h3>
+                <p class="about-text">Демо-форма для заказчика: имя, email и пароль. Поля можно заполнить или пропустить — после отправки или нажатия «Пропустить» открывается панель. На главном экране отображается метка «Вход: регистрация».</p>
+
+                <h3 class="about-subtitle">Предварительный просмотр</h3>
+                <p class="about-text">Мгновенный переход в админку без заполнения формы — аналог demo-режима в продуктах. На главном экране отображается метка «Вход: предварительный просмотр».</p>
+
+                <h3 class="about-subtitle">Важно</h3>
+                <ul class="about-list">
+                  <li>Панель администратора использует <strong>фиксированную палитру</strong> и не меняется при настройке цветов публичных страниц</li>
+                  <li>Цветовые темы разделов применяются только к публичному сайту после сохранения палитры</li>
+                  <li>Для выхода закройте панель кнопкой в шапке — вы вернётесь на публичную часть сайта</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card about-block" id="admin-about-sections">
+              <div class="card-header">
+                <h2>Разделы управления</h2>
+              </div>
+              <div class="about-block-body">
+                <p class="about-text">Каждый раздел панели отвечает за свою коллекцию на сайте. Внутри — карточки быстрых действий и блок «Последние действия» с цветными метками по типу операции.</p>
+
+                <h3 class="about-subtitle">Внешний вид сайта</h3>
+                <ul class="about-list">
+                  <li><strong>Баннер «Главная»</strong> — загрузка и замена до четырёх hero-слайдов на главной странице (JPG, PNG, WebP)</li>
+                  <li><strong>Иконки разделов</strong> — картинки для карточек «Фитнес-индустрия», «Мои Баннеры» и «Одежда» на главной и в навигации</li>
+                  <li><strong>Цветовая палитра страниц</strong> — фон, акцент, цвет навигации и градиент для «Главной», «Фитнес-индустрии», «Одежды» и «Мои Баннеры»; контраст текста подбирается автоматически</li>
+                </ul>
+
+                <h3 class="about-subtitle">Фитнес-индустрия</h3>
+                <ul class="about-list">
+                  <li><strong>Каталог товаров</strong> — добавление, редактирование и удаление карточек добавок: название, описание, категория, цена, изображение</li>
+                  <li><strong>Баннер раздела</strong> — hero-баннеры на странице «Фитнес-индустрия»</li>
+                </ul>
+
+                <h3 class="about-subtitle">Мои Баннеры</h3>
+                <ul class="about-list">
+                  <li><strong>Коллекция работ</strong> — загрузка баннеров и креативов с категорией, тегами и просмотрщиком на сайте</li>
+                  <li><strong>Отзывы в просмотрщике</strong> — посетители могут оставлять комментарии к работам; они отображаются в разделе «Отзывы покупателей»</li>
+                </ul>
+
+                <h3 class="about-subtitle">Одежда</h3>
+                <ul class="about-list">
+                  <li><strong>Каталог товаров</strong> — fashion-карточки с ценой, промо-метками и страницей товара</li>
+                  <li><strong>Баннер раздела</strong> — hero-баннеры editorial-стиля</li>
+                  <li><strong>Иконки каталога</strong> — визуальные метки категорий в списке «Каталог»</li>
+                  <li><strong>Акции и товары</strong> — блок предложений рядом с баннером раздела</li>
+                  <li><strong>Реклама каталога</strong> — промо-баннер и стикер «Горячие предложения»</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card about-block" id="admin-about-orders-reviews">
+              <div class="card-header">
+                <h2>Заказы и отзывы</h2>
+              </div>
+              <div class="about-block-body">
+                <h3 class="about-subtitle">Отзывы покупателей</h3>
+                <p class="about-text">Слева — форма ответа администратора на выбранный отзыв. Справа — список отзывов с метками раздела (Добавки, Баннер, Одежда) в цветах соответствующих панелей.</p>
+                <ul class="about-list">
+                  <li><strong>Новый</strong> — отзыв без ответа, оставленный не более 3 дней назад</li>
+                  <li><strong>Ответ</strong> — отзыв, на который уже дан ответ администратора</li>
+                  <li>В списке по умолчанию до 4 отзывов; при большем количестве доступна кнопка «Все отзывы»</li>
+                  <li>Отзывы приходят со страниц товаров (фитнес, одежда) и из просмотрщика баннеров</li>
+                </ul>
+
+                <h3 class="about-subtitle">Заказы</h3>
+                <p class="about-text">Объединяет заявки на покупку товаров и заявки на работу из раздела «Мои Баннеры». Слева — детали заказа, справа — список с метками раздела.</p>
+                <ul class="about-list">
+                  <li><strong>Новый</strong> — заказ не старше 3 дней</li>
+                  <li>Метки <strong>Добавки</strong>, <strong>Одежда</strong> или <strong>Баннеры</strong> показывают, из какого раздела поступила заявка</li>
+                  <li>В списке по умолчанию до 4 заказов; кнопка «Все заказы» при большем количестве</li>
+                  <li><strong>Отметить как выполненный</strong> — в деталях заказа; запускается 5-секундный отсчёт, за который можно нажать «Отмена»; после удаления заказ исчезает из системы</li>
+                </ul>
+
+                <h3 class="about-subtitle">На стороне покупателя</h3>
+                <p class="about-text">Перед отправкой заявки на страницах «Фитнес-индустрия», «Одежда» и «Мои Баннеры» показывается окно подтверждения с сводкой введённых данных — пользователь может проверить контакты и вернуться к форме.</p>
+              </div>
+            </article>
+
+            <article class="card about-block about-faq-block" id="admin-about-faq">
+              <div class="card-header">
+                <h2>Частые вопросы</h2>
+              </div>
+              <div class="about-block-body about-faq">
+                <details class="about-faq-item">
+                  <summary>Чем отличаются «Регистрация» и «Предварительный просмотр»?</summary>
+                  <p>Функционал панели одинаковый. Регистрация демонстрирует сценарий с формой onboarding; предварительный просмотр — быстрый вход без лишних шагов.</p>
+                </details>
+                <details class="about-faq-item">
+                  <summary>Изменения палитры влияют на админку?</summary>
+                  <p>Нет. Настройки «Цветовой палитры страниц» применяются только к публичным разделам сайта. Интерфейс панели администратора остаётся в едином стиле.</p>
+                </details>
+                <details class="about-faq-item">
+                  <summary>Куда попадают заявки с сайта?</summary>
+                  <p>Заказы товаров и заявки на баннеры сохраняются в базе данных и отображаются в разделе «Заказы». Отзывы — в «Отзывы покупателей». Активность по баннерам, иконкам и палитрам фиксируется в «Последних действиях» соответствующих разделов.</p>
+                </details>
+                <details class="about-faq-item">
+                  <summary>Можно ли восстановить удалённый заказ?</summary>
+                  <p>Нет. После подтверждения «Отметить как выполненный» и истечения 5-секундного отсчёта заказ удаляется из базы без возможности отмены — используйте «Отмена» во время отсчёта, если передумали.</p>
+                </details>
+                <details class="about-faq-item">
+                  <summary>Где редактировать текст страницы «О сайте»?</summary>
+                  <p>На главном экране панели нажмите «О сайте» в блоке «Управление контентом». Там можно менять заголовки, абзацы, списки и FAQ, добавлять блоки и сразу видеть предпросмотр. После сохранения изменения появляются на публичной странице «О сайте».</p>
+                </details>
+              </div>
+            </article>
+
+            <article class="card about-block about-block--author" id="admin-about-demo">
+              <div class="card-header">
+                <h2>Демонстрация навыков</h2>
+              </div>
+              <div class="about-block-body">
+                <p class="about-text">Панель администратора — часть портфолио-проекта: она показывает умение проектировать UX, структурировать контент, связывать frontend с API и MySQL, обрабатывать заявки и отзывы в едином интерфейсе.</p>
+                <p class="about-text">Отдельные визуальные стили разделов (оранжевый фитнес, розовые баннеры, editorial-одежда, indigo-главная) согласованы между публичным сайтом и метками в списках «Последние действия», «Отзывы» и «Заказы» — чтобы администратор сразу видел, к какой коллекции относится каждое действие.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Admin: редактирование баннеров главной -->
+    <div class="admin-banner-overlay" id="adminBannerModal" hidden>
+      <div class="admin-modal admin-modal-banners" id="adminBannerModalDialog" role="dialog" aria-labelledby="adminBannerModalTitle">
+        <div class="admin-banner-modal-drag-handle" id="adminBannerModalDrag" title="Перетащите окно">
+          <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
+          <span class="admin-banner-modal-drag-label">Перетащите окно</span>
+        </div>
+        <button type="button" class="admin-modal-close" id="adminBannerModalClose" aria-label="Закрыть">✕</button>
+
+        <div class="admin-banner-step" id="adminBannerPickStep">
+          <header class="admin-banner-edit-header">
+            <h2 class="admin-modal-title" id="adminBannerModalTitle">Изменить баннер «Главная»</h2>
+            <p class="admin-modal-desc admin-banner-edit-desc">Выберите баннер для изменения</p>
+          </header>
+          <div class="admin-banner-pick-list">
+            <button type="button" class="admin-banner-pick-btn" data-pick="0">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 1</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="1">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 2</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="2">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 3</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="3">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 4</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-banner-step admin-banner-step--edit" id="adminBannerEditStep" hidden>
+          <header class="admin-banner-edit-header">
+            <h2 class="admin-modal-title">Баннер <span id="adminBannerEditNum">1</span></h2>
+            <p class="admin-modal-desc admin-banner-edit-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP</p>
+          </header>
+
+          <div class="admin-banner-image-field admin-fitness-image-field">
+            <span class="admin-field-label">Изображение баннера</span>
+            <div class="admin-fitness-image-upload">
+              <input type="file" id="adminBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminBannerPickImage">Выбрать файл</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminBannerRemoveImage" hidden>Убрать</button>
+            </div>
+            <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
+            <img class="admin-fitness-product-preview admin-banner-image-preview" id="adminBannerImagePreview" alt="Предпросмотр баннера" hidden>
+          </div>
+
+          <div class="admin-banner-edit-messages">
+            <div class="admin-hero-success" id="adminHeroSuccess" hidden></div>
+            <div class="admin-hero-warning" id="adminHeroWarning" hidden></div>
+          </div>
+
+          <div class="admin-banner-edit-actions">
+            <button type="button" class="btn btn-primary" id="adminBannerSaveBtn">Сохранить баннер</button>
+            <button type="button" class="btn btn-ghost" id="adminBannerCancelBtn">Отмена</button>
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminBannerBack">← Выбрать другой баннер</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: иконки разделов -->
+    <div class="admin-overlay admin-section-icons-overlay" id="adminSectionIconsModal" hidden>
+      <div class="admin-modal admin-modal-wide admin-section-icons-panel" role="dialog" aria-labelledby="adminSectionIconsTitle">
+        <button type="button" class="admin-modal-close" id="adminSectionIconsClose" aria-label="Закрыть">✕</button>
+        <header class="admin-section-icons-header">
+          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminSectionIconsBack">← Назад</button>
+          <div class="admin-section-icons-heading">
+            <h2 class="admin-section-icons-title" id="adminSectionIconsTitle">Иконки разделов</h2>
+            <p class="admin-section-icons-subtitle">Иконки в блоке «Разделы портфолио» на главной странице</p>
+            <p class="admin-section-icons-meta">Рекомендуемый размер 88×88 px · PNG, JPG, WebP</p>
+          </div>
+        </header>
+        <div class="admin-section-icons-list" id="adminSectionIconsList"></div>
+      </div>
+    </div>
+
+    <!-- Admin: цветовая палитра страниц -->
+    <div class="admin-overlay admin-section-icons-overlay" id="adminSectionPaletteModal" hidden>
+      <div class="admin-modal admin-modal-wide admin-section-palette-panel" role="dialog" aria-labelledby="adminSectionPaletteTitle">
+        <button type="button" class="admin-modal-close" id="adminSectionPaletteClose" aria-label="Закрыть">✕</button>
+        <header class="admin-section-icons-header">
+          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminSectionPaletteBack">← Назад</button>
+          <div class="admin-section-icons-heading">
+            <h2 class="admin-section-icons-title" id="adminSectionPaletteTitle">Цветовая палитра страниц</h2>
+            <p class="admin-section-icons-subtitle">Настройка фона, акцента и цвета кнопок навигации для каждого раздела сайта</p>
+            <p class="admin-section-icons-meta">Остальной текст подбирается автоматически по контрасту с фоном</p>
+          </div>
+        </header>
+        <div class="admin-palette-tabs" id="adminPaletteTabs"></div>
+        <div class="admin-palette-layout">
+          <div class="admin-palette-preview" id="adminPalettePreview"></div>
+          <div class="admin-palette-editor-wrap">
+            <div class="admin-palette-editor" id="adminPaletteEditor"></div>
+            <div class="admin-palette-actions">
+              <button type="button" class="btn btn-primary" id="adminPaletteSave">Сохранить палитру</button>
+              <button type="button" class="btn btn-ghost" id="adminPaletteReset">По умолчанию</button>
+            </div>
+            <p class="admin-palette-status" id="adminPaletteStatus" hidden></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: иконки каталога одежды -->
+    <div class="admin-overlay admin-section-icons-overlay" id="adminClothingCatalogIconsModal" hidden>
+      <div class="admin-modal admin-modal-wide admin-section-icons-panel" role="dialog" aria-labelledby="adminClothingCatalogIconsTitle">
+        <button type="button" class="admin-modal-close" id="adminClothingCatalogIconsClose" aria-label="Закрыть">✕</button>
+        <header class="admin-section-icons-header">
+          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminClothingCatalogIconsBack">← Назад</button>
+          <div class="admin-section-icons-heading">
+            <h2 class="admin-section-icons-title" id="adminClothingCatalogIconsTitle">Иконки каталога</h2>
+            <p class="admin-section-icons-subtitle">Иконки категорий в фильтре «Каталог» раздела «Одежда»</p>
+            <p class="admin-section-icons-meta">Рекомендуемый размер 88×88 px · PNG, JPG, WebP</p>
+          </div>
+        </header>
+        <div class="admin-section-icons-list" id="adminClothingCatalogIconsList"></div>
+      </div>
+    </div>
+
+    <!-- Admin: акции и товары (раздел «Одежда») -->
+    <div class="admin-overlay admin-clothing-alerts-overlay" id="adminClothingAlertsModal" hidden>
+      <div class="admin-modal admin-modal-wide admin-clothing-alerts-panel" role="dialog" aria-labelledby="adminClothingAlertsTitle">
+        <button type="button" class="admin-modal-close" id="adminClothingAlertsClose" aria-label="Закрыть">✕</button>
+        <header class="admin-clothing-alerts-header">
+          <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-alerts-back" id="adminClothingAlertsBack">← Назад</button>
+          <div class="admin-clothing-alerts-heading">
+            <span class="admin-modal-icon admin-clothing-alerts-icon" aria-hidden="true">🏷</span>
+            <div>
+              <h2 class="admin-modal-title" id="adminClothingAlertsTitle">Акции и товары</h2>
+              <p class="admin-modal-desc">Предложения в боковом блоке hero-раздела «Одежда»</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="admin-clothing-alerts-layout" id="adminClothingAlertsLayout">
+          <section class="admin-clothing-alerts-main">
+            <div class="admin-clothing-alerts-actions">
+              <button type="button" class="btn btn-primary" id="adminClothingAddAlert">+ Добавить предложение</button>
+              <span class="admin-clothing-alerts-count" id="adminClothingAlertsCount">0 предложений</span>
+            </div>
+            <div class="admin-clothing-alerts-list-wrap">
+              <ul class="admin-clothing-alerts-list" id="adminClothingAlertsList"></ul>
+              <p class="admin-clothing-alerts-empty" id="adminClothingAlertsEmpty" hidden>Предложений пока нет. Добавьте первое.</p>
+            </div>
+          </section>
+
+          <form class="admin-clothing-alerts-form" id="adminClothingAlertsForm" hidden>
+            <div class="admin-clothing-alerts-form-header">
+              <h3 id="adminClothingAlertsFormTitle">Новое предложение</h3>
+              <p class="admin-clothing-alerts-form-desc">Отображается в блоке «Акции и товары» на странице раздела</p>
+            </div>
+
+            <label class="admin-field">
+              <span>Тип <em>*</em></span>
+              <select name="alert_type" required>
+                <option value="sale">Скидка</option>
+                <option value="new">Новинка</option>
+                <option value="drop">Drop</option>
+              </select>
+            </label>
+            <label class="admin-field">
+              <span>Бейдж <em>*</em></span>
+              <input type="text" name="badge" required maxlength="32" placeholder="Например: −30%, New, Drop">
+            </label>
+            <label class="admin-field">
+              <span>Заголовок <em>*</em></span>
+              <input type="text" name="title" required maxlength="128" placeholder="Например: Sport Line SS26">
+            </label>
+            <label class="admin-field">
+              <span>Описание</span>
+              <textarea name="description" rows="3" maxlength="500" placeholder="Краткое описание предложения"></textarea>
+            </label>
+
+            <div class="admin-clothing-alerts-form-actions">
+              <button type="submit" class="btn btn-primary" id="adminClothingSaveAlert">Сохранить</button>
+              <button type="button" class="btn btn-ghost" id="adminClothingCancelAlert">Отмена</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingDeleteAlert" hidden>Удалить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: реклама каталога «Одежда» -->
+    <div class="admin-overlay admin-clothing-promo-overlay" id="adminClothingCatalogPromoModal" hidden>
+      <div class="admin-modal admin-modal-wide admin-clothing-promo-panel" role="dialog" aria-labelledby="adminClothingCatalogPromoTitle">
+        <button type="button" class="admin-modal-close" id="adminClothingCatalogPromoClose" aria-label="Закрыть">✕</button>
+        <header class="admin-clothing-promo-header">
+          <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-promo-back" id="adminClothingCatalogPromoBack">← Назад</button>
+          <div class="admin-clothing-promo-heading">
+            <span class="admin-modal-icon admin-clothing-promo-icon" aria-hidden="true">📣</span>
+            <div>
+              <h2 class="admin-modal-title" id="adminClothingCatalogPromoTitle">Реклама каталога</h2>
+              <p class="admin-modal-desc">Баннер справа от списка категорий · рекомендуемый размер <strong>960 × 1280 px</strong> (3:4)</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="admin-clothing-promo-body">
+          <div class="admin-clothing-promo-preview-wrap">
+            <p class="admin-clothing-promo-preview-label">Предпросмотр на сайте</p>
+            <aside class="clothing-catalog-promo admin-clothing-promo-preview" id="adminClothingCatalogPromoPreview">
+              <div class="clothing-catalog-promo-card">
+                <div class="clothing-catalog-promo-media">
+                  <img class="clothing-catalog-promo-image" id="adminClothingCatalogPromoPreviewImage" alt="" hidden>
+                  <div class="clothing-catalog-promo-fallback" id="adminClothingCatalogPromoPreviewFallback" aria-hidden="true"></div>
+                  <span class="clothing-catalog-promo-sticker" id="adminClothingCatalogPromoPreviewSticker">Горячие предложения</span>
+                  <div class="clothing-catalog-promo-overlay" id="adminClothingCatalogPromoPreviewOverlay">
+                    <strong class="clothing-catalog-promo-title" id="adminClothingCatalogPromoPreviewTitle">Sale до −40%</strong>
+                    <p class="clothing-catalog-promo-subtitle" id="adminClothingCatalogPromoPreviewSubtitle">Лимитированная подборка сезона</p>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <form class="admin-clothing-promo-form" id="adminClothingCatalogPromoForm">
+            <label class="admin-field">
+              <span>Надпись на стикере <em>*</em></span>
+              <input type="text" name="promo_label" required maxlength="64" placeholder="Горячие предложения">
+            </label>
+            <label class="admin-field">
+              <span>Заголовок на баннере</span>
+              <input type="text" name="promo_title" maxlength="128" placeholder="Sale до −40%">
+            </label>
+            <label class="admin-field">
+              <span>Подзаголовок</span>
+              <input type="text" name="promo_subtitle" maxlength="255" placeholder="Лимитированная подборка сезона">
+            </label>
+            <label class="admin-field">
+              <span>Ссылка (необязательно)</span>
+              <input type="url" name="promo_link" maxlength="512" placeholder="https://...">
+            </label>
+
+            <div class="admin-clothing-promo-image-field">
+              <span class="admin-field-label">Изображение баннера</span>
+              <div class="admin-clothing-promo-image-upload">
+                <input type="file" id="adminClothingCatalogPromoImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                <button type="button" class="btn btn-ghost" id="adminClothingCatalogPromoPickImage">Выбрать файл</button>
+                <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingCatalogPromoRemoveImage" hidden>Убрать</button>
+              </div>
+              <p class="admin-clothing-promo-image-hint">JPG, PNG или WebP · до 15 МБ · вертикальный формат 3:4</p>
+            </div>
+
+            <div class="admin-clothing-promo-form-actions">
+              <button type="submit" class="btn btn-primary" id="adminClothingCatalogPromoSave">Сохранить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: баннер раздела «Одежда» -->
+    <div class="admin-banner-overlay admin-clothing-banner-overlay" id="adminClothingBannerModal" hidden>
+      <div class="admin-modal admin-modal-banners admin-clothing-banner-panel" id="adminClothingBannerModalDialog" role="dialog" aria-labelledby="adminClothingBannerModalTitle">
+        <div class="admin-banner-modal-drag-handle" id="adminClothingBannerModalDrag" title="Перетащите окно">
+          <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
+          <span class="admin-banner-modal-drag-label">Перетащите окно</span>
+        </div>
+        <button type="button" class="admin-modal-close" id="adminClothingBannerModalClose" aria-label="Закрыть">✕</button>
+
+        <div class="admin-banner-step" id="adminClothingBannerPickStep">
+          <header class="admin-banner-edit-header">
+            <h2 class="admin-modal-title" id="adminClothingBannerModalTitle">Изменить баннер «Одежда»</h2>
+            <p class="admin-modal-desc admin-banner-edit-desc">Компактный баннер в hero-блоке · на сайте <strong>400 × 360 px</strong></p>
+          </header>
+          <div class="admin-banner-pick-list">
+            <button type="button" class="admin-banner-pick-btn" data-pick="0">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 1</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="1">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 2</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="2">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 3</span>
+            </button>
+            <button type="button" class="admin-banner-pick-btn" data-pick="3">
+              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+              <span class="admin-banner-pick-label">Баннер 4</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-banner-step admin-banner-step--edit" id="adminClothingBannerEditStep" hidden>
+          <header class="admin-banner-edit-header">
+            <h2 class="admin-modal-title">Баннер <span id="adminClothingBannerEditNum">1</span></h2>
+            <p class="admin-modal-desc admin-banner-edit-desc">Загрузка <strong>1600 × 1440 px</strong> (или больше) · отображение <strong>400 × 360 px</strong> · JPG, PNG, WebP</p>
+          </header>
+
+          <div class="admin-banner-image-field admin-clothing-image-field">
+            <span class="admin-field-label">Изображение баннера</span>
+            <div class="admin-clothing-image-upload">
+              <input type="file" id="adminClothingBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+              <button type="button" class="btn btn-ghost admin-clothing-image-btn" id="adminClothingBannerPickImage">Выбрать файл</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger admin-clothing-image-remove" id="adminClothingBannerRemoveImage" hidden>Убрать</button>
+            </div>
+            <p class="admin-clothing-image-hint">JPG, PNG или WebP · до 25 МБ · для чёткого качества на Retina загружайте от 1600 × 1440 px</p>
+            <div class="admin-clothing-banner-preview-frame">
+              <img class="admin-clothing-banner-preview admin-banner-image-preview" id="adminClothingBannerImagePreview" alt="Предпросмотр баннера" hidden>
+            </div>
+          </div>
+
+          <div class="admin-banner-edit-messages">
+            <div class="admin-hero-success" id="adminClothingHeroSuccess" hidden></div>
+            <div class="admin-hero-warning" id="adminClothingHeroWarning" hidden></div>
+          </div>
+
+          <div class="admin-banner-edit-actions">
+            <button type="button" class="btn btn-primary" id="adminClothingBannerSaveBtn">Сохранить баннер</button>
+            <button type="button" class="btn btn-ghost" id="adminClothingBannerCancelBtn">Отмена</button>
+            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminClothingBannerBack">← Выбрать другой баннер</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Admin: каталог раздела «Одежда» -->
+  <div class="admin-overlay admin-clothing-catalog-overlay" id="adminClothingCatalogPanel" hidden>
+    <div class="admin-modal admin-modal-wide admin-clothing-catalog-panel" role="dialog" aria-labelledby="adminClothingCatalogTitle">
+      <button type="button" class="admin-modal-close" id="adminClothingCatalogClose" aria-label="Закрыть">✕</button>
+      <header class="admin-clothing-catalog-header">
+        <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-catalog-back" id="adminClothingCatalogBack">← Назад</button>
+        <div class="admin-clothing-catalog-heading">
+          <span class="admin-modal-icon admin-clothing-catalog-icon" aria-hidden="true">👗</span>
+          <div>
+            <span class="admin-clothing-catalog-eyebrow">Fashion · Коллекция</span>
+            <h2 class="admin-modal-title" id="adminClothingCatalogTitle">Каталог товаров</h2>
+            <p class="admin-modal-desc">Добавление, редактирование, скидки и акции товаров раздела «Одежда»</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-clothing-catalog-layout" id="adminClothingCatalogLayout">
+        <section class="admin-clothing-catalog-main">
+          <div class="admin-clothing-catalog-actions">
+            <button type="button" class="btn btn-primary admin-clothing-catalog-add-btn" id="adminClothingAddProduct">+ Добавить товар</button>
+            <span class="admin-clothing-catalog-count" id="adminClothingCatalogCount">0 товаров</span>
+          </div>
+          <div class="admin-clothing-catalog-list-wrap">
+            <ul class="admin-clothing-product-list" id="adminClothingProductList"></ul>
+          </div>
+        </section>
+
+        <form class="admin-clothing-product-form" id="adminClothingProductForm" hidden>
+          <div class="admin-clothing-product-form-header">
+            <h3 id="adminClothingFormTitle">Новый товар</h3>
+            <p class="admin-clothing-product-form-desc">Товар появится в разделе «Одежда» на сайте</p>
+          </div>
+
+          <label class="admin-field">
+            <span>Название <em>*</em></span>
+            <input type="text" name="title" required maxlength="255" placeholder="Например: Sport Line SS26">
+          </label>
+          <label class="admin-field">
+            <span>Описание</span>
+            <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
+          </label>
+          <label class="admin-field">
+            <span>Линейка</span>
+            <select name="category" required>
+              <option value="sport">Спорт</option>
+              <option value="casual">Casual</option>
+            </select>
+          </label>
+
+          <fieldset class="admin-field admin-clothing-catalog-field">
+            <legend>Каталог · публичная страница</legend>
+            <p class="admin-clothing-tags-hint">Выберите категории — товар появится в соответствующих разделах каталога на сайте</p>
+            <div class="admin-clothing-catalog-options">
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="men">
+                <span class="admin-clothing-catalog-option-label">Мужчинам</span>
+              </label>
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="women">
+                <span class="admin-clothing-catalog-option-label">Женщинам</span>
+              </label>
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="shirts">
+                <span class="admin-clothing-catalog-option-label">Рубашки</span>
+              </label>
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="pants">
+                <span class="admin-clothing-catalog-option-label">Брюки</span>
+              </label>
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="jeans">
+                <span class="admin-clothing-catalog-option-label">Джинсы</span>
+              </label>
+              <label class="admin-clothing-catalog-option">
+                <input type="checkbox" name="catalog_categories" value="accessories">
+                <span class="admin-clothing-catalog-option-label">Аксессуары</span>
+              </label>
+            </div>
+          </fieldset>
+          <label class="admin-field">
+            <span>Цена со скидкой (USD)</span>
+            <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="89.00">
+            <small class="admin-clothing-tags-hint">Новая цена — то, что видит покупатель</small>
+          </label>
+          <label class="admin-field">
+            <span>Цена без скидки (USD)</span>
+            <input type="number" name="compare_price_usd" min="0" max="999999.99" step="0.01" placeholder="120.00">
+            <small class="admin-clothing-tags-hint">Старая цена — будет показана перечёркнутой на сайте</small>
+          </label>
+          <label class="admin-field">
+            <span>Скидка (%)</span>
+            <input type="number" name="discount_percent" min="1" max="99" step="1" placeholder="25">
+            <small class="admin-clothing-tags-hint">Можно указать вместо старой цены — она рассчитается автоматически</small>
+          </label>
+          <label class="admin-field">
+            <span>Тип акции</span>
+            <select name="promo_type">
+              <option value="">Без акции</option>
+              <option value="sale">Распродажа</option>
+              <option value="new">Новинка</option>
+              <option value="limited">Лимитированный</option>
+              <option value="hot">Горячее</option>
+            </select>
+          </label>
+          <label class="admin-field">
+            <span>Текст бейджа</span>
+            <input type="text" name="promo_label" maxlength="32" placeholder="−30%, Sale, New drop…">
+            <small class="admin-clothing-tags-hint">Необязательно — если пусто, подставится автоматически</small>
+          </label>
+          <label class="admin-field">
+            <span>Текст на заглушке</span>
+            <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
+          </label>
+          <label class="admin-field">
+            <span>Дополнительные теги</span>
+            <input type="text" name="tags" placeholder="popular">
+            <small class="admin-clothing-tags-hint">Необязательно · popular — отметить как популярный (иначе добавится при 3+ отзывах)</small>
+          </label>
+
+          <div class="admin-clothing-product-image-field">
+            <span class="admin-field-label">Изображение товара</span>
+            <div class="admin-clothing-product-image-upload">
+              <input type="file" id="adminClothingProductImage" accept="image/jpeg,image/png,image/webp" hidden>
+              <button type="button" class="btn btn-ghost admin-clothing-product-image-btn" id="adminClothingPickImage">Выбрать файл</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger admin-clothing-product-image-remove" id="adminClothingRemoveImage" hidden>Убрать</button>
+            </div>
+            <p class="admin-clothing-product-image-hint">JPG, PNG или WebP · до 15 МБ · квадрат 1:1</p>
+            <img class="admin-clothing-product-preview" id="adminClothingProductImagePreview" alt="Предпросмотр товара" hidden>
+          </div>
+
+          <div class="admin-clothing-product-form-actions">
+            <button type="submit" class="btn btn-primary admin-clothing-product-save-btn" id="adminClothingSaveProduct">Сохранить</button>
+            <button type="button" class="btn btn-ghost admin-clothing-product-cancel-btn" id="adminClothingCancelProduct">Отмена</button>
+            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingDeleteProduct" hidden>Удалить товар</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin: каталог фитнес-раздела -->
+  <div class="admin-overlay admin-fitness-catalog-overlay" id="adminBannersCatalogPanel" hidden>
+    <div class="admin-modal admin-fitness-catalog-panel admin-banners-catalog-panel" role="dialog" aria-labelledby="adminBannersCatalogTitle">
+      <button type="button" class="admin-modal-close" id="adminBannersCatalogClose" aria-label="Закрыть">✕</button>
+      <div class="admin-fitness-panel-header">
+        <button type="button" class="btn btn-ghost btn-ghost-back admin-fitness-back" id="adminBannersCatalogBack">← Назад</button>
+        <div class="admin-fitness-panel-heading">
+          <span class="admin-fitness-catalog-icon" aria-hidden="true">🎨</span>
+          <div>
+            <h2 class="admin-modal-title" id="adminBannersCatalogTitle">Коллекция работ</h2>
+            <p class="admin-modal-desc">Работы публикуются в разделе «Мои Баннеры» в исходном разрешении изображения</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-fitness-catalog-layout" id="adminBannersCatalogLayout">
+        <div class="admin-fitness-catalog-main">
+          <div class="admin-fitness-panel-actions">
+            <button type="button" class="btn btn-primary admin-fitness-add-btn" id="adminBannersAddWork">+ Добавить работу</button>
+            <span class="admin-fitness-catalog-count" id="adminBannersCatalogCount">0 работ</span>
+          </div>
+          <div class="admin-fitness-catalog-list-wrap">
+            <ul class="admin-fitness-product-list" id="adminBannersWorkList"></ul>
+          </div>
+        </div>
+
+        <form class="admin-fitness-product-form admin-banners-work-form" id="adminBannersWorkForm" hidden>
+          <div class="admin-fitness-form-head">
+            <h3 id="adminBannersFormTitle">Новая работа</h3>
+          </div>
+
+          <label class="admin-fitness-field">
+            <span>Название</span>
+            <input type="text" name="title" required maxlength="128" autocomplete="off">
+          </label>
+
+          <label class="admin-fitness-field">
+            <span>Категория</span>
+            <select name="category" required>
+              <option value="preview">Превью</option>
+              <option value="illustrations">Иллюстрации</option>
+              <option value="logos">Логотипы</option>
+              <option value="pictures">Картинки</option>
+            </select>
+          </label>
+
+          <label class="admin-fitness-field">
+            <span>Описание</span>
+            <textarea name="description" rows="4" maxlength="1000" placeholder="Комментарий к работе — виден на сайте"></textarea>
+          </label>
+
+          <div class="admin-fitness-image-field">
+            <span class="admin-fitness-field-label">Изображение</span>
+            <p class="admin-banners-image-hint">JPG, PNG или WebP · на сайте отображается в исходном разрешении</p>
+            <div class="admin-fitness-image-actions">
+              <input type="file" id="adminBannersWorkImage" accept="image/jpeg,image/png,image/webp" hidden>
+              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminBannersPickImage">Выбрать файл</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminBannersRemoveImage" hidden>Убрать</button>
+            </div>
+            <p class="admin-banners-image-size" id="adminBannersImageSize" hidden></p>
+            <img class="admin-fitness-product-preview admin-banners-work-preview" id="adminBannersImagePreview" alt="Предпросмотр работы" hidden>
+          </div>
+
+          <div class="admin-fitness-form-actions">
+            <button type="submit" class="btn btn-primary admin-fitness-save-btn" id="adminBannersSaveWork">Сохранить</button>
+            <button type="button" class="btn btn-ghost" id="adminBannersCancelWork">Отмена</button>
+            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminBannersDeleteWork" hidden>Удалить работу</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-overlay admin-fitness-catalog-overlay" id="adminFitnessCatalogPanel" hidden>
+    <div class="admin-modal admin-modal-wide admin-fitness-catalog-panel" role="dialog" aria-labelledby="adminFitnessCatalogTitle">
+      <button type="button" class="admin-modal-close" id="adminFitnessCatalogClose" aria-label="Закрыть">✕</button>
+      <header class="admin-fitness-panel-header">
+        <button type="button" class="btn btn-ghost btn-ghost-back admin-fitness-back" id="adminFitnessCatalogBack">← Назад</button>
+        <div class="admin-fitness-panel-heading">
+          <span class="admin-modal-icon admin-fitness-catalog-icon" aria-hidden="true">📦</span>
+          <div>
+            <h2 class="admin-modal-title" id="adminFitnessCatalogTitle">Каталог товаров</h2>
+            <p class="admin-modal-desc">Добавление, редактирование и удаление товаров раздела «Фитнес-индустрия»</p>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-fitness-catalog-layout" id="adminFitnessCatalogLayout">
+        <section class="admin-fitness-catalog-main">
+          <div class="admin-fitness-panel-actions">
+            <button type="button" class="btn btn-primary admin-fitness-add-btn" id="adminFitnessAddProduct">+ Добавить товар</button>
+            <span class="admin-fitness-catalog-count" id="adminFitnessCatalogCount">0 товаров</span>
+          </div>
+          <div class="admin-fitness-catalog-list-wrap">
+            <ul class="admin-fitness-product-list" id="adminFitnessProductList"></ul>
+          </div>
+        </section>
+
+        <form class="admin-fitness-product-form" id="adminFitnessProductForm" hidden>
+          <div class="admin-fitness-form-header">
+            <h3 id="adminFitnessFormTitle">Новый товар</h3>
+            <p class="admin-fitness-form-desc">Товар появится в разделе «Фитнес-индустрия» на сайте</p>
+          </div>
+
+          <label class="admin-field">
+            <span>Название <em>*</em></span>
+            <input type="text" name="title" required maxlength="255" placeholder="Например: Whey Protein Isolate">
+          </label>
+          <label class="admin-field">
+            <span>Описание</span>
+            <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
+          </label>
+          <label class="admin-field">
+            <span>Категория</span>
+            <select name="category" required>
+              <option value="protein">Протеин</option>
+              <option value="creatine">Креатин</option>
+              <option value="vitamins">Витамины</option>
+              <option value="equipment">Спорт-инвентарь</option>
+            </select>
+          </label>
+          <label class="admin-field">
+            <span>Цена (USD)</span>
+            <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="29.99">
+          </label>
+          <label class="admin-field">
+            <span>Текст на заглушке</span>
+            <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
+          </label>
+          <label class="admin-field">
+            <span>Теги через запятую</span>
+            <input type="text" name="tags" placeholder="1200×628, Протеин">
+          </label>
+
+          <div class="admin-fitness-image-field">
+            <span class="admin-field-label">Изображение товара</span>
+            <div class="admin-fitness-image-upload">
+              <input type="file" id="adminFitnessProductImage" accept="image/jpeg,image/png,image/webp" hidden>
+              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessPickImage">Выбрать файл</button>
+              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessRemoveImage" hidden>Убрать</button>
+            </div>
+            <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
+            <img class="admin-fitness-product-preview" id="adminFitnessProductImagePreview" alt="Предпросмотр товара" hidden>
+          </div>
+
+          <div class="admin-fitness-form-actions">
+            <button type="submit" class="btn btn-primary admin-fitness-save-btn" id="adminFitnessSaveProduct">Сохранить</button>
+            <button type="button" class="btn btn-ghost" id="adminFitnessCancelProduct">Отмена</button>
+            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminFitnessDeleteProduct" hidden>Удалить товар</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin: баннер фитнес-раздела -->
+  <div class="admin-banner-overlay" id="adminFitnessBannerModal" hidden>
+    <div class="admin-modal admin-modal-banners" id="adminFitnessBannerModalDialog" role="dialog" aria-labelledby="adminFitnessBannerModalTitle">
+      <div class="admin-banner-modal-drag-handle" id="adminFitnessBannerModalDrag" title="Перетащите окно">
+        <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
+        <span class="admin-banner-modal-drag-label">Перетащите окно</span>
+      </div>
+      <button type="button" class="admin-modal-close" id="adminFitnessBannerModalClose" aria-label="Закрыть">✕</button>
+
+      <div class="admin-banner-step" id="adminFitnessBannerPickStep">
+        <header class="admin-banner-edit-header">
+          <h2 class="admin-modal-title" id="adminFitnessBannerModalTitle">Изменить баннер «Фитнес-индустрия»</h2>
+          <p class="admin-modal-desc admin-banner-edit-desc">Выберите баннер для изменения</p>
+        </header>
+        <div class="admin-banner-pick-list">
+          <button type="button" class="admin-banner-pick-btn" data-pick="0">
+            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+            <span class="admin-banner-pick-label">Баннер 1</span>
+          </button>
+          <button type="button" class="admin-banner-pick-btn" data-pick="1">
+            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+            <span class="admin-banner-pick-label">Баннер 2</span>
+          </button>
+          <button type="button" class="admin-banner-pick-btn" data-pick="2">
+            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+            <span class="admin-banner-pick-label">Баннер 3</span>
+          </button>
+          <button type="button" class="admin-banner-pick-btn" data-pick="3">
+            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
+            <span class="admin-banner-pick-label">Баннер 4</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-banner-step admin-banner-step--edit" id="adminFitnessBannerEditStep" hidden>
+        <header class="admin-banner-edit-header">
+          <h2 class="admin-modal-title">Баннер <span id="adminFitnessBannerEditNum">1</span></h2>
+          <p class="admin-modal-desc admin-banner-edit-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP</p>
+        </header>
+
+        <div class="admin-banner-image-field admin-fitness-image-field">
+          <span class="admin-field-label">Изображение баннера</span>
+          <div class="admin-fitness-image-upload">
+            <input type="file" id="adminFitnessBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+            <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessBannerPickImage">Выбрать файл</button>
+            <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessBannerRemoveImage" hidden>Убрать</button>
+          </div>
+          <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
+          <img class="admin-fitness-product-preview admin-banner-image-preview" id="adminFitnessBannerImagePreview" alt="Предпросмотр баннера" hidden>
+        </div>
+
+        <div class="admin-banner-edit-messages">
+          <div class="admin-hero-success" id="adminFitnessHeroSuccess" hidden></div>
+          <div class="admin-hero-warning" id="adminFitnessHeroWarning" hidden></div>
+        </div>
+
+        <div class="admin-banner-edit-actions">
+          <button type="button" class="btn btn-primary" id="adminFitnessBannerSaveBtn">Сохранить баннер</button>
+          <button type="button" class="btn btn-ghost" id="adminFitnessBannerCancelBtn">Отмена</button>
+          <button type="button" class="btn btn-ghost btn-ghost-back" id="adminFitnessBannerBack">← Выбрать другой баннер</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="adminToast" hidden role="status" aria-live="polite"></div>
+
+  <div class="banners-viewer" id="bannersViewer" hidden>
+    <div class="banners-viewer-backdrop" data-banners-viewer-close aria-hidden="true"></div>
+    <div class="banners-viewer-dialog" role="dialog" aria-modal="true" aria-labelledby="bannersViewerTitle">
+      <button type="button" class="banners-viewer-close" id="bannersViewerClose" aria-label="Закрыть">✕</button>
+      <div class="banners-viewer-layout">
+        <div class="banners-viewer-media-wrap">
+          <div class="banners-viewer-media">
+            <img class="banners-viewer-image" id="bannersViewerImage" alt="">
+            <div class="banners-viewer-like-block">
+              <button type="button" class="banners-like-btn banners-like-btn--viewer" id="bannersViewerLikeBtn" aria-pressed="false" aria-label="Поставить лайк">
+                <span class="banners-like-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path>
+                  </svg>
+                </span>
+                <span class="banners-like-count" id="bannersViewerLikeCount">0</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <aside class="banners-viewer-info">
+          <div class="banners-viewer-info-main">
+            <span class="banners-viewer-eyebrow">Visual Collection</span>
+            <h2 class="banners-viewer-title" id="bannersViewerTitle"></h2>
+            <time class="banners-viewer-date" id="bannersViewerDate"></time>
+            <div class="banners-viewer-tags" id="bannersViewerTags"></div>
+            <div class="banners-viewer-desc-block" id="bannersViewerDescBlock" hidden>
+              <span class="banners-viewer-desc-label">Описание</span>
+              <p class="banners-viewer-desc" id="bannersViewerDesc"></p>
+            </div>
+          </div>
+          <section class="banners-viewer-comments" id="bannersViewerComments" aria-label="Отзывы">
+            <div class="banners-viewer-comments-head">
+              <span class="banners-viewer-comments-label">Отзывы</span>
+              <span class="banners-viewer-comments-count" id="bannersViewerCommentsCount">0</span>
+            </div>
+            <div class="banners-viewer-comments-list" id="bannersViewerCommentsList">
+              <p class="banners-viewer-comments-empty" id="bannersViewerCommentsEmpty" hidden>Пока нет отзывов. Будьте первым!</p>
+            </div>
+            <form class="banners-viewer-comment-compose" id="bannersViewerCommentForm">
+              <div class="banners-viewer-comment-compose-row">
+                <span class="banners-viewer-comment-avatar" id="bannersViewerCommentAvatar" aria-hidden="true">?</span>
+                <div class="banners-viewer-comment-input-wrap">
+                  <input type="text" class="banners-viewer-comment-name" id="bannersViewerCommentName" placeholder="Ваше имя" maxlength="128" autocomplete="name">
+                  <div class="banners-viewer-comment-field">
+                    <textarea class="banners-viewer-comment-text" id="bannersViewerCommentText" placeholder="Напишите отзыв…" rows="1" maxlength="1000"></textarea>
+                    <button type="submit" class="banners-viewer-comment-send" id="bannersViewerCommentSend" aria-label="Отправить" disabled>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M22 2 11 13"></path>
+                        <path d="M22 2 15 22 11 13 2 9 22 2z"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <p class="banners-viewer-comment-status" id="bannersViewerCommentStatus" hidden></p>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div class="image-lightbox" id="imageLightbox" hidden>
+    <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Закрыть">✕</button>
+    <img class="image-lightbox-img" id="imageLightboxImg" alt="">
+  </div>
+
+  <script src="hero-banners.js"></script>
+  <script src="fitness-banners.js"></script>
+  <script src="clothing-banners.js"></script>
+  <script src="app.js"></script>
+  <script src="hero.js"></script>
+  <script src="fitness-hero.js"></script>
+  <script src="clothing-hero.js"></script>
+  <script src="clothing-filter.js"></script>
+  <script src="clothing-catalog.js"></script>
+  <script src="fitness-catalog.js"></script>
+  <script src="fitness-filter.js"></script>
+  <script src="banners-filter.js"></script>
+  <script src="banners-catalog.js"></script>
+  <script src="api.js"></script>
+  <script src="search.js"></script>
+  <script src="theme-utils.js"></script>
+  <script src="theme-applier.js"></script>
+  <script src="section-icons.js"></script>
+  <script src="clothing-catalog-icons.js"></script>
+  <script src="clothing-catalog-promo.js"></script>
+  <script src="clothing-alerts.js"></script>
+  <script src="admin-banner-editor.js"></script>
+  <script src="admin-appearance.js"></script>
+  <script src="admin-appearance-palette.js"></script>
+  <script src="admin-fitness.js"></script>
+  <script src="admin-banners.js"></script>
+  <script src="admin-clothing.js"></script>
+  <script src="admin-clothing-products.js"></script>
+  <script src="admin-reviews.js"></script>
+  <script src="admin-orders.js"></script>
+  <script src="about-page.js"></script>
+  <script src="admin-site-about.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

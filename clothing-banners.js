@@ -44,18 +44,33 @@ function normalizeSlides(raw) {
   return emptySlides().map((_, index) => normalizeSlide(raw[index]));
 }
 
-function applyFitToImg(img) {
-  if (!img) return;
-  img.style.objectFit = 'cover';
-  img.style.objectPosition = 'center center';
-  img.style.transform = '';
-  img.style.transformOrigin = '';
+function getFilledSlideEntries(slides) {
+  return slides
+    .map((slide, index) => (slide ? { index, slide } : null))
+    .filter(Boolean);
 }
 
-function applyFitToBackground(el) {
+function getNextFreeIndex(slides) {
+  for (let index = 0; index < CLOTHING_SLIDE_COUNT; index += 1) {
+    if (!slides[index]) return index;
+  }
+  return -1;
+}
+
+function applyFitToImg(img, fit) {
+  if (!img) return;
+  const f = normalizeFit(fit);
+  img.style.objectFit = 'cover';
+  img.style.objectPosition = `${f.x}% ${f.y}%`;
+  img.style.transform = `scale(${f.scale})`;
+  img.style.transformOrigin = `${f.x}% ${f.y}%`;
+}
+
+function applyFitToBackground(el, fit) {
   if (!el) return;
-  el.style.backgroundSize = 'cover';
-  el.style.backgroundPosition = 'center center';
+  const f = normalizeFit(fit);
+  el.style.backgroundSize = f.scale === 1 ? 'cover' : `${f.scale * 100}%`;
+  el.style.backgroundPosition = `${f.x}% ${f.y}%`;
 }
 
 async function loadSlideData() {
@@ -203,11 +218,29 @@ async function commitSlide(slideData, index, slide) {
   return slideData[index];
 }
 
+async function appendSlide(slideData, slide) {
+  const index = getNextFreeIndex(slideData);
+  if (index < 0) {
+    throw new Error(`Максимум ${CLOTHING_SLIDE_COUNT} баннеров`);
+  }
+
+  slideData[index] = slide;
+  await saveSlide(slideData, index);
+  return index;
+}
+
+async function createSlide(slide) {
+  const slideData = await loadSlideData();
+  const index = await appendSlide(slideData, slide);
+  return { ok: true, index, slide: slideData[index] };
+}
+
 window.ClothingBanners = {
   CLOTHING_STORAGE_KEY,
   CLOTHING_DISPLAY,
   CLOTHING_RECOMMENDED,
   CLOTHING_SLIDE_COUNT,
+  CLOTHING_MAX_SLIDES: CLOTHING_SLIDE_COUNT,
   MAX_FILE_SIZE,
   SLIDE_GRADIENTS,
   DEFAULT_FIT,
@@ -218,6 +251,10 @@ window.ClothingBanners = {
   saveFit: saveSlideFit,
   remove: removeSlide,
   commitSlide,
+  appendSlide,
+  createSlide,
+  getFilledSlideEntries,
+  getNextFreeIndex,
   normalizeFit,
   applyFitToImg,
   applyFitToBackground,

@@ -8,22 +8,15 @@ function countPortfolioCards(sectionId) {
   return document.querySelectorAll(`#${sectionId} .portfolio-card`).length;
 }
 
-function countHeroBanners() {
-  return document.querySelectorAll('.hero-slide.has-image').length;
-}
-
 function countStatsFromDom() {
   const supplements = countPortfolioCards('section-supplements');
   const clothing = countPortfolioCards('section-clothing');
-  const bannerCards = countPortfolioCards('section-banners');
-  const heroBanners = countHeroBanners();
-  const banners = bannerCards + heroBanners;
+  const banners = countPortfolioCards('section-banners');
 
   return {
     supplements,
     banners,
     clothing,
-    heroBanners,
     total: supplements + banners + clothing
   };
 }
@@ -95,20 +88,15 @@ function buildRecentFromDom(limit = 5) {
 }
 
 async function loadPortfolioStats() {
-  const domStats = countStatsFromDom();
-
   try {
     const response = await fetch('/api/stats');
     if (response.ok) {
-      const apiStats = await response.json();
-      const bannerCards = countPortfolioCards('section-banners');
-      const heroBanners = Math.max(domStats.heroBanners, apiStats.heroBanners || 0);
-
+      const stats = await response.json();
       applyStats({
-        supplements: domStats.supplements,
-        clothing: domStats.clothing,
-        banners: bannerCards + heroBanners,
-        total: domStats.supplements + domStats.clothing + bannerCards + heroBanners
+        supplements: Number(stats.supplements) || 0,
+        clothing: Number(stats.clothing) || 0,
+        banners: Number(stats.banners) || 0,
+        total: Number(stats.total) || 0
       });
       return;
     }
@@ -116,7 +104,7 @@ async function loadPortfolioStats() {
     /* fallback ниже */
   }
 
-  applyStats(domStats);
+  applyStats(countStatsFromDom());
 }
 
 function renderAppearanceActivityList(container, items) {

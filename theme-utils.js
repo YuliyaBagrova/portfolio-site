@@ -150,6 +150,7 @@
     const accentGlow = alphaHex(accent, 0.25);
     const accentLight = alphaHex(accent, 0.25);
     const navActiveBg = alphaHex(navText, 0.18);
+    const accentBtnText = contrastText(accent);
 
     const cssVars = {
       '--theme-section-bg': background,
@@ -158,7 +159,8 @@
       '--theme-text-muted': textMuted,
       '--theme-nav-text': navText,
       '--theme-nav-hover-bg': alphaHex(textPrimary, isLight ? 0.06 : 0.08),
-      '--theme-nav-active-bg': navActiveBg
+      '--theme-nav-active-bg': navActiveBg,
+      '--theme-accent-btn-text': accentBtnText
     };
 
     if (sectionId === 'home') {
@@ -191,6 +193,7 @@
         '--fitness-orange': accent,
         '--fitness-orange-hot': adjustHex(accent, -28),
         '--fitness-orange-soft': mixHex(accent, textPrimary, 0.35),
+        '--fitness-orange-glow': alphaHex(accent, 0.45),
         '--fitness-white': textPrimary,
         '--fitness-white-muted': alphaHex(textPrimary, 0.72)
       });

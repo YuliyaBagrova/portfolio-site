@@ -47,11 +47,15 @@
       openFnName,
       onClose,
       hideGateOnOpen,
-      maxFileSize: configMaxFileSize
+      maxFileSize: configMaxFileSize,
+      draggable = true,
+      pageMode = false,
+      sectionKey = 'homeBanner',
+      pageBackBtnId
     } = config;
 
     const modal = document.getElementById(modalId);
-    const modalDialog = document.getElementById(modalDialogId);
+    const modalDialog = modalDialogId ? document.getElementById(modalDialogId) : null;
     const pickStep = document.getElementById(pickStepId);
     const editStep = document.getElementById(editStepId);
     const editNum = document.getElementById(editNumId);
@@ -62,13 +66,18 @@
     const saveBtn = document.getElementById(saveBtnId);
     const cancelBtn = document.getElementById(cancelBtnId);
     const backBtn = document.getElementById(backBtnId);
-    const modalClose = document.getElementById(modalCloseId);
-    const modalDragHandle = document.getElementById(modalDragHandleId);
+    const modalClose = modalCloseId ? document.getElementById(modalCloseId) : null;
+    const pageBackBtn = pageBackBtnId ? document.getElementById(pageBackBtnId) : null;
+    const modalDragHandle = modalDragHandleId ? document.getElementById(modalDragHandleId) : null;
     const success = document.getElementById(successId);
     const warning = document.getElementById(warningId);
-    const toast = document.getElementById('adminToast');
 
-    if (!modal || !modalDialog || !pickStep || !editStep || !bannersModule) return null;
+    if (!modal || !pickStep || !editStep || !bannersModule) return null;
+    if (!pageMode && (!modalDialog || !modalClose)) return null;
+
+    if (!pageMode && !draggable && modalDialog) {
+      modalDialog.classList.add('admin-modal-banners--static');
+    }
 
     const maxFileSize = configMaxFileSize
       || bannersModule.MAX_FILE_SIZE
@@ -109,14 +118,7 @@
     }
 
     function showToast(message, type = 'success') {
-      if (!toast) return;
-      toast.textContent = message;
-      toast.className = `admin-toast admin-toast--${type}`;
-      toast.hidden = false;
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(() => {
-        toast.hidden = true;
-      }, 4500);
+      window.showAdminToast(message, type);
     }
 
     function showWarning(message) {
@@ -132,19 +134,21 @@
     }
 
     function resetModalPosition() {
+      if (!draggable || !modalDialog) return;
       modalOffset = { x: 0, y: 0 };
       modalDialog.style.transform = '';
       modalDialog.classList.remove('is-dragging-window');
     }
 
     function applyModalTransform() {
+      if (!draggable || !modalDialog) return;
       modalDialog.style.transform = `translate(${modalOffset.x}px, ${modalOffset.y}px)`;
     }
 
     function stopModalDragging() {
       if (!isDraggingModal) return;
       isDraggingModal = false;
-      modalDialog.classList.remove('is-dragging-window');
+      modalDialog?.classList.remove('is-dragging-window');
       window.removeEventListener('mousemove', onModalMouseMove);
       window.removeEventListener('mouseup', onModalMouseUp);
       window.removeEventListener('touchmove', onModalTouchMove);
@@ -181,6 +185,7 @@
     }
 
     function startModalDragging(clientX, clientY) {
+      if (!modalDialog) return;
       isDraggingModal = true;
       modalWasMoved = false;
       modalDragStart = {
@@ -275,20 +280,53 @@
         if (gate) gate.hidden = true;
       }
 
-      slideData = await loadSlideData();
+      if (pageMode) {
+        if (typeof window.showAdminSection === 'function') {
+          window.showAdminSection(sectionKey);
+        }
+      } else {
+        modal.hidden = false;
+      }
+
       resetModalPosition();
       modalWasMoved = false;
-      modal.hidden = false;
+      slideData = await loadSlideData();
       updatePickList();
       showPickStep();
     }
 
     function closeModal() {
-      modal.hidden = true;
+      if (pageMode) {
+        if (typeof window.showAdminSection === 'function') {
+          window.showAdminSection('appearance');
+        }
+      } else {
+        modal.hidden = true;
+      }
+
       resetEditState();
       stopModalDragging();
       resetModalPosition();
       if (typeof onClose === 'function') onClose();
+    }
+
+    function syncPanelChrome() {
+      if (!pageMode && !modalDialog?.classList.contains('admin-home-banner-panel')) return;
+      if (pageMode && !modal.classList.contains('admin-section-home-banner')) return;
+
+      const modalDesc = document.getElementById('adminBannerModalDesc');
+      const layout = document.getElementById('adminBannerLayout');
+      const isEdit = !editStep.hidden;
+
+      if (backBtn) backBtn.hidden = !isEdit;
+
+      if (modalDesc) {
+        modalDesc.textContent = isEdit
+          ? `Баннер ${selectedSlide + 1} · рекомендуемый размер 3840 × 1200 px`
+          : 'Выберите слайд hero-баннера для замены изображения';
+      }
+
+      layout?.classList.toggle('is-editing', isEdit);
     }
 
     function showPickStep() {
@@ -296,6 +334,7 @@
       editStep.hidden = true;
       resetEditState();
       updatePickList();
+      syncPanelChrome();
     }
 
     function showEditStep(index) {
@@ -305,6 +344,7 @@
       if (editNum) editNum.textContent = String(index + 1);
       resetEditState();
       updateImageUi();
+      syncPanelChrome();
     }
 
     async function saveBanner() {
@@ -363,40 +403,45 @@
     }
 
     modalClose?.addEventListener('click', closeModal);
+    pageBackBtn?.addEventListener('click', closeModal);
 
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal && !modalWasMoved) closeModal();
-    });
-
-    modalDialog.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
-
-    if (modalDragHandle) {
-      modalDragHandle.addEventListener('mousedown', (e) => {
-        if (e.button !== 0) return;
-        e.preventDefault();
-        startModalDragging(e.clientX, e.clientY);
+    if (!pageMode) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal && (!draggable || !modalWasMoved)) closeModal();
       });
 
-      modalDragHandle.addEventListener('touchstart', (e) => {
-        if (!e.touches[0]) return;
-        startModalDragging(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
+      modalDialog?.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
     }
 
-    modalDialog.querySelectorAll('.admin-banner-edit-header').forEach((header) => {
-      header.addEventListener('mousedown', (e) => {
-        if (e.button !== 0 || e.target.closest('button, input, label, a')) return;
-        e.preventDefault();
-        startModalDragging(e.clientX, e.clientY);
-      });
+    if (draggable) {
+      if (modalDragHandle) {
+        modalDragHandle.addEventListener('mousedown', (e) => {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          startModalDragging(e.clientX, e.clientY);
+        });
 
-      header.addEventListener('touchstart', (e) => {
-        if (!e.touches[0] || e.target.closest('button, input, label, a')) return;
-        startModalDragging(e.touches[0].clientX, e.touches[0].clientY);
-      }, { passive: true });
-    });
+        modalDragHandle.addEventListener('touchstart', (e) => {
+          if (!e.touches[0]) return;
+          startModalDragging(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+      }
+
+      modalDialog?.querySelectorAll('.admin-banner-edit-header').forEach((header) => {
+        header.addEventListener('mousedown', (e) => {
+          if (e.button !== 0 || e.target.closest('button, input, label, a')) return;
+          e.preventDefault();
+          startModalDragging(e.clientX, e.clientY);
+        });
+
+        header.addEventListener('touchstart', (e) => {
+          if (!e.touches[0] || e.target.closest('button, input, label, a')) return;
+          startModalDragging(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+      });
+    }
 
     pickStep.addEventListener('click', (e) => {
       const pickBtn = e.target.closest('[data-pick]');
@@ -457,106 +502,18 @@
       window[openFnName] = openModal;
     }
 
-    return { openModal, closeModal };
+    if (pageMode) {
+      window.adminHomeBannerGoBack = () => {
+        if (!editStep.hidden) {
+          showPickStep();
+          return;
+        }
+        closeModal();
+      };
+    }
+
+    return { openModal, closeModal, showPickStep };
   }
 
-  if (window.HeroBanners) {
-    createBannerEditor({
-      bannersModule: window.HeroBanners,
-      modalId: 'adminBannerModal',
-      modalDialogId: 'adminBannerModalDialog',
-      pickStepId: 'adminBannerPickStep',
-      editStepId: 'adminBannerEditStep',
-      editNumId: 'adminBannerEditNum',
-      pickImageBtnId: 'adminBannerPickImage',
-      removeImageBtnId: 'adminBannerRemoveImage',
-      imageInputId: 'adminBannerImageInput',
-      imagePreviewId: 'adminBannerImagePreview',
-      saveBtnId: 'adminBannerSaveBtn',
-      cancelBtnId: 'adminBannerCancelBtn',
-      backBtnId: 'adminBannerBack',
-      modalCloseId: 'adminBannerModalClose',
-      modalDragHandleId: 'adminBannerModalDrag',
-      successId: 'adminHeroSuccess',
-      warningId: 'adminHeroWarning',
-      openFnName: 'openAdminHomeBannerModal',
-      onClose() {
-        if (window._bannerOpenedFromAppearance) {
-          window._bannerOpenedFromAppearance = false;
-          if (typeof window.openAdminAppearanceGate === 'function') {
-            window.openAdminAppearanceGate();
-          }
-        }
-      }
-    });
-  }
-
-  if (window.FitnessBanners) {
-    const fitnessEditor = createBannerEditor({
-      bannersModule: window.FitnessBanners,
-      modalId: 'adminFitnessBannerModal',
-      modalDialogId: 'adminFitnessBannerModalDialog',
-      pickStepId: 'adminFitnessBannerPickStep',
-      editStepId: 'adminFitnessBannerEditStep',
-      editNumId: 'adminFitnessBannerEditNum',
-      pickImageBtnId: 'adminFitnessBannerPickImage',
-      removeImageBtnId: 'adminFitnessBannerRemoveImage',
-      imageInputId: 'adminFitnessBannerImageInput',
-      imagePreviewId: 'adminFitnessBannerImagePreview',
-      saveBtnId: 'adminFitnessBannerSaveBtn',
-      cancelBtnId: 'adminFitnessBannerCancelBtn',
-      backBtnId: 'adminFitnessBannerBack',
-      modalCloseId: 'adminFitnessBannerModalClose',
-      modalDragHandleId: 'adminFitnessBannerModalDrag',
-      successId: 'adminFitnessHeroSuccess',
-      warningId: 'adminFitnessHeroWarning',
-      onClose() {
-        if (typeof window.openAdminFitnessGate === 'function') {
-          window.openAdminFitnessGate();
-        }
-      }
-    });
-
-    const chooseBannerBtn = document.getElementById('adminFitnessChooseBanner');
-    chooseBannerBtn?.addEventListener('click', () => fitnessEditor?.openModal());
-    window.openFitnessBannerEditor = () => fitnessEditor?.openModal();
-  }
-
-  if (window.ClothingBanners) {
-    const clothingEditor = createBannerEditor({
-      bannersModule: window.ClothingBanners,
-      recommendedSize: window.ClothingBanners.CLOTHING_RECOMMENDED,
-      maxFileSize: window.ClothingBanners.MAX_FILE_SIZE,
-      modalId: 'adminClothingBannerModal',
-      modalDialogId: 'adminClothingBannerModalDialog',
-      pickStepId: 'adminClothingBannerPickStep',
-      editStepId: 'adminClothingBannerEditStep',
-      editNumId: 'adminClothingBannerEditNum',
-      pickImageBtnId: 'adminClothingBannerPickImage',
-      removeImageBtnId: 'adminClothingBannerRemoveImage',
-      imageInputId: 'adminClothingBannerImageInput',
-      imagePreviewId: 'adminClothingBannerImagePreview',
-      saveBtnId: 'adminClothingBannerSaveBtn',
-      cancelBtnId: 'adminClothingBannerCancelBtn',
-      backBtnId: 'adminClothingBannerBack',
-      modalCloseId: 'adminClothingBannerModalClose',
-      modalDragHandleId: 'adminClothingBannerModalDrag',
-      successId: 'adminClothingHeroSuccess',
-      warningId: 'adminClothingHeroWarning',
-      onClose() {
-        if (typeof window.openAdminClothingGate === 'function') {
-          window.openAdminClothingGate();
-        }
-      }
-    });
-
-    const chooseClothingBannerBtn = document.getElementById('adminClothingChooseBanner');
-    const openClothingBannerModal = () => {
-      const iconsModal = document.getElementById('adminClothingCatalogIconsModal');
-      if (iconsModal) iconsModal.hidden = true;
-      clothingEditor?.openModal();
-    };
-    chooseClothingBannerBtn?.addEventListener('click', openClothingBannerModal);
-    window.openClothingBannerEditor = openClothingBannerModal;
   }
 })();

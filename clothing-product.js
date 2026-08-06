@@ -296,6 +296,57 @@ function setFormStatus(el, message, isError) {
   el.classList.toggle('is-success', Boolean(message && !isError));
 }
 
+function buildCartItemFromProduct(product, quantity) {
+  const gradient = product.gradient || DEFAULT_GRADIENTS[product.category] || DEFAULT_GRADIENTS.casual;
+
+  return {
+    workId: product.id,
+    sectionId: 'clothing',
+    title: product.title,
+    price_usd: product.price_usd,
+    compare_price_usd: product.compare_price_usd,
+    image: product.image,
+    gradient,
+    placeholder_text: product.placeholder_text || product.title,
+    category: product.category,
+    quantity
+  };
+}
+
+function initAddToCart(product) {
+  const btn = document.getElementById('clothingAddToCartBtn');
+  const form = document.getElementById('clothingOrderForm');
+  const status = document.getElementById('clothingOrderStatus');
+  if (!btn || !form || typeof window.SiteCart?.addItem !== 'function') return;
+
+  btn.addEventListener('click', () => {
+    const qtyInput = form.querySelector('[name="quantity"]');
+    const quantity = Math.max(1, Math.min(99, Number(qtyInput?.value) || 1));
+
+    window.SiteCart.addItem(buildCartItemFromProduct(product, quantity), quantity);
+    btn.classList.add('is-added');
+    setFormStatus(status, 'Товар добавлен в корзину', false);
+    window.setTimeout(() => btn.classList.remove('is-added'), 700);
+  });
+}
+
+function recordProductOrder(product, formData, payload) {
+  if (typeof window.SiteOrders?.addOrder !== 'function') return;
+
+  window.SiteOrders.addOrder({
+    type: 'work',
+    sectionId: 'clothing',
+    workId: product.id,
+    title: product.title,
+    customer_name: formData.get('customer_name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    quantity: Number(formData.get('quantity')),
+    message: formData.get('message'),
+    serverOrderId: payload.id
+  });
+}
+
 async function loadClothingProductPage() {
   const productId = getProductId();
   if (!productId) {
@@ -320,6 +371,7 @@ async function loadClothingProductPage() {
     renderProduct(product);
     renderReviews(reviews, product);
     initStarPicker();
+    initAddToCart(product);
 
     const orderForm = document.getElementById('clothingOrderForm');
     const reviewForm = document.getElementById('clothingReviewForm');
@@ -361,6 +413,10 @@ async function loadClothingProductPage() {
         if (!response.ok) throw new Error(payload.error || 'Не удалось оформить заказ');
 
         setFormStatus(status, payload.message, false);
+        recordProductOrder(product, formData, payload);
+        if (typeof window.SiteCart?.removeItem === 'function') {
+          window.SiteCart.removeItem(`clothing:${product.id}`);
+        }
         orderForm.reset();
         orderForm.querySelector('[name="quantity"]').value = '1';
       } catch (error) {

@@ -1,12 +1,10 @@
-(function initAdminClothingProducts() {
-  const chooseCatalogBtn = document.getElementById('adminClothingChooseCatalog');
-  const catalogPanel = document.getElementById('adminClothingCatalogPanel');
-  const catalogLayout = document.getElementById('adminClothingCatalogLayout');
-  const catalogClose = document.getElementById('adminClothingCatalogClose');
-  const catalogBack = document.getElementById('adminClothingCatalogBack');
-  const catalogCount = document.getElementById('adminClothingCatalogCount');
-  const productList = document.getElementById('adminClothingProductList');
-  const productForm = document.getElementById('adminClothingProductForm');
+(function initAdminClothingCatalogPage() {
+  const section = document.getElementById('adminSectionClothingCatalog');
+  const layout = document.getElementById('adminClothingCatalogLayout');
+  const pageBackBtn = document.getElementById('adminClothingCatalogPageBack');
+  const countEl = document.getElementById('adminClothingCatalogCount');
+  const listEl = document.getElementById('adminClothingProductList');
+  const formEl = document.getElementById('adminClothingProductForm');
   const formTitle = document.getElementById('adminClothingFormTitle');
   const addBtn = document.getElementById('adminClothingAddProduct');
   const cancelBtn = document.getElementById('adminClothingCancelProduct');
@@ -16,9 +14,8 @@
   const removeImageBtn = document.getElementById('adminClothingRemoveImage');
   const imageInput = document.getElementById('adminClothingProductImage');
   const imagePreview = document.getElementById('adminClothingProductImagePreview');
-  const toast = document.getElementById('adminToast');
 
-  if (!chooseCatalogBtn || !catalogPanel || !productList || !productForm) return;
+  if (!section || !layout || !listEl || !formEl) return;
 
   const LINE_LABELS = { sport: 'Спорт', casual: 'Casual' };
   const PROMO_LABELS = { sale: 'Распродажа', new: 'Новинка', limited: 'Лимитированный', hot: 'Горячее' };
@@ -38,13 +35,6 @@
     casual: 'linear-gradient(160deg, #6b5b73 0%, #a8929f 100%)'
   };
 
-  const siblingModalIds = [
-    'adminClothingBannerModal',
-    'adminClothingCatalogIconsModal',
-    'adminClothingAlertsModal',
-    'adminClothingCatalogPromoModal'
-  ];
-
   let products = [];
   let editingId = null;
   let pendingImageData = null;
@@ -52,7 +42,7 @@
   let isSaving = false;
 
   function field(name) {
-    return productForm.elements.namedItem(name);
+    return formEl.elements.namedItem(name);
   }
 
   function normalizeTagKey(tag) {
@@ -87,7 +77,7 @@
   }
 
   function getSelectedCatalogCategories() {
-    return Array.from(productForm.querySelectorAll('input[name="catalog_categories"]:checked'))
+    return Array.from(formEl.querySelectorAll('input[name="catalog_categories"]:checked'))
       .map((input) => input.value)
       .filter((value) => CATALOG_CATEGORY_IDS.has(value));
   }
@@ -99,7 +89,7 @@
         .filter((tag) => CATALOG_CATEGORY_IDS.has(tag))
     );
 
-    productForm.querySelectorAll('input[name="catalog_categories"]').forEach((input) => {
+    formEl.querySelectorAll('input[name="catalog_categories"]').forEach((input) => {
       input.checked = selected.has(input.value);
     });
   }
@@ -131,14 +121,7 @@
   }
 
   function showToast(message, type = 'success') {
-    if (!toast) return;
-    toast.textContent = message;
-    toast.className = `admin-toast admin-toast--${type}`;
-    toast.hidden = false;
-    clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(() => {
-      toast.hidden = true;
-    }, 4500);
+    window.showAdminToast(message, type);
   }
 
   function escapeHtml(value) {
@@ -157,23 +140,53 @@
     return `${count} товаров`;
   }
 
-  function updateCatalogCount() {
-    if (catalogCount) catalogCount.textContent = formatCount(products.length);
-  }
-
   function setSavingState(saving) {
     isSaving = saving;
-    productForm.classList.toggle('is-saving', saving);
+    formEl.classList.toggle('is-saving', saving);
     if (saveBtn) {
       saveBtn.disabled = saving;
-      saveBtn.textContent = saving ? 'Сохранение…' : 'Сохранить';
+      saveBtn.textContent = saving ? 'Сохранение…' : 'Сохранить товар';
     }
     if (addBtn) addBtn.disabled = saving;
+    if (deleteBtn) deleteBtn.disabled = saving;
+    if (cancelBtn) cancelBtn.disabled = saving;
   }
 
-  function updateImageUi(hasImage) {
+  function openPreviewLightbox(src, alt = '') {
+    if (!src || typeof window.openImageLightbox !== 'function') return;
+    window.openImageLightbox(src.split('?')[0], alt);
+  }
+
+  function getFormPreviewUrl() {
+    if (pendingImageData) return pendingImageData;
+    if (editingId && !removeImage) {
+      const item = products.find((product) => product.id === editingId);
+      if (item?.image) return item.image.split('?')[0];
+    }
+    return '';
+  }
+
+  function updateImageUi(hasImage, previewUrl = '') {
+    const url = hasImage ? (previewUrl || getFormPreviewUrl()) : '';
+
     if (removeImageBtn) removeImageBtn.hidden = !hasImage;
-    if (imagePreview) imagePreview.hidden = !hasImage;
+    if (imagePreview) {
+      if (hasImage && url) {
+        imagePreview.src = url;
+        imagePreview.hidden = false;
+        imagePreview.removeAttribute('hidden');
+        imagePreview.classList.add('is-zoomable');
+        imagePreview.dataset.zoomSrc = url.startsWith('data:') ? '' : url.split('?')[0];
+        imagePreview.alt = formTitle.textContent || 'Предпросмотр товара';
+        imagePreview.title = 'Нажмите, чтобы увеличить';
+      } else {
+        imagePreview.removeAttribute('src');
+        imagePreview.hidden = true;
+        imagePreview.classList.remove('is-zoomable');
+        delete imagePreview.dataset.zoomSrc;
+        imagePreview.removeAttribute('title');
+      }
+    }
   }
 
   function parseOptionalNumber(value) {
@@ -208,10 +221,9 @@
   function syncDiscountPreview() {
     const resolved = resolveDiscountPrices();
     const compareField = field('compare_price_usd');
-    const priceField = field('price_usd');
     const discountField = field('discount_percent');
 
-    if (!compareField || !priceField || !discountField) return;
+    if (!compareField || !discountField) return;
 
     if (resolved.discount != null && resolved.price != null && !String(compareField.value ?? '').trim()) {
       compareField.placeholder = String(resolved.compare ?? '');
@@ -229,62 +241,49 @@
     editingId = null;
     pendingImageData = null;
     removeImage = false;
-    productForm.reset();
-    productForm.hidden = true;
-    catalogLayout?.classList.remove('is-editing');
+    formEl.reset();
+    formEl.hidden = true;
+    layout.classList.remove('is-editing');
     formTitle.textContent = 'Новый товар';
     deleteBtn.hidden = true;
     imagePreview?.removeAttribute('src');
     updateImageUi(false);
     if (imageInput) imageInput.value = '';
     setSavingState(false);
+    renderList();
   }
-
-  function hideSiblingModals() {
-    siblingModalIds.forEach((id) => {
-      const modal = document.getElementById(id);
-      if (modal) modal.hidden = true;
-    });
-  }
-
-  function closeCatalogPanel() {
-    catalogPanel.hidden = true;
-    resetForm();
-    document.body.style.overflow = '';
-  }
-
-  const prevCloseAll = window.closeAllClothingAdmin;
-  window.closeAllClothingAdmin = function closeAllClothingAdminWithCatalog() {
-    closeCatalogPanel();
-    if (typeof prevCloseAll === 'function') prevCloseAll();
-  };
 
   function renderProductThumb(item) {
     if (item.image) {
-      return `<img class="admin-clothing-product-thumb" src="${escapeHtml(item.image.split('?')[0])}" alt="">`;
+      const imageUrl = item.image.split('?')[0];
+      const title = escapeHtml(item.title || 'Товар');
+      return `<button type="button" class="admin-clothing-catalog-thumb-btn" data-zoom-src="${escapeHtml(imageUrl)}" data-zoom-label="${title}" aria-label="Увеличить «${title}»">
+        <img class="admin-fitness-product-thumb admin-clothing-catalog-thumb" src="${escapeHtml(imageUrl)}" alt="">
+      </button>`;
     }
+
     const gradient = item.gradient || DEFAULT_GRADIENTS[item.category] || DEFAULT_GRADIENTS.casual;
     const label = escapeHtml(item.placeholder_text || item.title || '?');
-    return `<div class="admin-clothing-product-thumb admin-clothing-product-thumb--placeholder" style="background:${gradient}"><span>${label}</span></div>`;
+    return `<div class="admin-fitness-product-thumb admin-fitness-product-thumb--placeholder admin-clothing-catalog-thumb" style="background:${gradient}"><span>${label}</span></div>`;
   }
 
-  function renderProductList() {
-    updateCatalogCount();
+  function renderList() {
+    if (countEl) countEl.textContent = formatCount(products.length);
 
     if (!products.length) {
-      productList.innerHTML = `
-        <li class="admin-clothing-product-empty">
-          <span class="admin-clothing-product-empty-icon" aria-hidden="true">👗</span>
+      listEl.innerHTML = `
+        <li class="admin-fitness-empty admin-clothing-catalog-empty">
+          <span class="admin-fitness-empty-icon" aria-hidden="true">👗</span>
           <strong>Каталог пуст</strong>
           <p>Добавьте первый товар — он появится в разделе «Одежда» на сайте</p>
         </li>`;
       return;
     }
 
-    productList.innerHTML = products.map((item) => `
-      <li class="admin-clothing-product-item${editingId === item.id ? ' is-active' : ''}">
+    listEl.innerHTML = products.map((item) => `
+      <li class="admin-fitness-product-item admin-clothing-catalog-item${editingId === item.id ? ' is-active' : ''}" data-select-id="${item.id}" role="button" tabindex="0" aria-label="Редактировать «${escapeHtml(item.title)}»">
         ${renderProductThumb(item)}
-        <div class="admin-clothing-product-info">
+        <div class="admin-fitness-product-info">
           <strong>${escapeHtml(item.title)}</strong>
           <p>${escapeHtml(item.description || 'Без описания')}</p>
           <div class="admin-clothing-product-meta">
@@ -294,8 +293,7 @@
             ${item.price_usd != null ? `<span class="admin-clothing-product-price">${item.compare_price_usd != null && item.compare_price_usd > item.price_usd ? `<s>$${Number(item.compare_price_usd).toFixed(2)}</s> ` : ''}$${Number(item.price_usd).toFixed(2)}</span>` : ''}
           </div>
         </div>
-        <div class="admin-clothing-product-actions">
-          <button type="button" class="btn btn-ghost" data-edit-id="${item.id}">Изменить</button>
+        <div class="admin-fitness-product-actions">
           <button type="button" class="btn btn-ghost btn-ghost-danger" data-delete-id="${item.id}">Удалить</button>
         </div>
       </li>
@@ -303,27 +301,38 @@
   }
 
   async function fetchProducts() {
-    productList.classList.add('is-loading');
+    listEl.classList.add('is-loading');
     try {
       const response = await fetch('/api/works?section=clothing');
       if (!response.ok) throw new Error('Не удалось загрузить каталог');
       products = await response.json();
-      renderProductList();
+      renderList();
     } catch (error) {
-      showToast(error.message, 'error');
-      throw error;
+      listEl.innerHTML = `
+        <li class="admin-fitness-empty admin-clothing-catalog-empty">
+          <strong>Не удалось загрузить каталог</strong>
+          <p>${escapeHtml(error.message)}</p>
+        </li>`;
     } finally {
-      productList.classList.remove('is-loading');
+      listEl.classList.remove('is-loading');
     }
   }
 
   function openCreateForm() {
-    resetForm();
-    productForm.hidden = false;
-    catalogLayout?.classList.add('is-editing');
+    editingId = null;
+    pendingImageData = null;
+    removeImage = false;
+    formEl.reset();
+    formEl.hidden = false;
+    layout.classList.add('is-editing');
     formTitle.textContent = 'Новый товар';
+    deleteBtn.hidden = true;
+    imagePreview?.removeAttribute('src');
+    updateImageUi(false);
+    if (imageInput) imageInput.value = '';
     field('category').value = 'sport';
     setCatalogCategories([]);
+    renderList();
     field('title')?.focus();
   }
 
@@ -334,9 +343,9 @@
     editingId = id;
     pendingImageData = null;
     removeImage = false;
-    productForm.hidden = false;
-    catalogLayout?.classList.add('is-editing');
-    formTitle.textContent = 'Редактирование товара';
+    formEl.hidden = false;
+    layout.classList.add('is-editing');
+    formTitle.textContent = item.title || 'Редактирование товара';
     deleteBtn.hidden = false;
 
     field('title').value = item.title || '';
@@ -357,14 +366,14 @@
     field('discount_percent').value = discount != null ? discount : '';
 
     if (item.image) {
-      imagePreview.src = item.image;
-      updateImageUi(true);
+      updateImageUi(true, item.image);
     } else {
       imagePreview.removeAttribute('src');
       updateImageUi(false);
     }
 
-    renderProductList();
+    syncDiscountPreview();
+    renderList();
     field('title')?.focus();
   }
 
@@ -441,7 +450,10 @@
 
   async function deleteProduct(id) {
     if (isSaving) return;
-    if (!window.confirm('Удалить этот товар из каталога?')) return;
+
+    const item = products.find((product) => product.id === id);
+    const name = item?.title || 'этот товар';
+    if (!window.confirm(`Удалить «${name}»?`)) return;
 
     setSavingState(true);
 
@@ -462,89 +474,118 @@
     }
   }
 
-  function openCatalogPanel() {
-    hideSiblingModals();
+  async function openPage() {
+    if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothingCatalog');
+    }
     resetForm();
-    catalogPanel.hidden = false;
-    document.body.style.overflow = 'hidden';
-    fetchProducts().catch(() => {});
+    await fetchProducts();
   }
 
-  function readFileAsDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
-      reader.readAsDataURL(file);
-    });
+  function closePage() {
+    resetForm();
+    if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
   }
-
-  chooseCatalogBtn.addEventListener('click', openCatalogPanel);
-
-  catalogClose?.addEventListener('click', () => {
-    closeCatalogPanel();
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
-  });
-
-  catalogBack?.addEventListener('click', () => {
-    closeCatalogPanel();
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
-  });
 
   addBtn?.addEventListener('click', openCreateForm);
   cancelBtn?.addEventListener('click', resetForm);
-  deleteBtn?.addEventListener('click', () => {
-    if (editingId) deleteProduct(editingId);
+  pageBackBtn?.addEventListener('click', closePage);
+  pickImageBtn?.addEventListener('click', () => imageInput?.click());
+
+  imagePreview?.addEventListener('click', () => {
+    const src = imagePreview.dataset.zoomSrc || imagePreview.src;
+    if (imagePreview.hidden || !src) return;
+    openPreviewLightbox(src, imagePreview.alt || 'Товар');
   });
 
-  productForm.addEventListener('submit', (event) => {
+  formEl.addEventListener('submit', async (event) => {
     event.preventDefault();
-    saveProduct();
+    await saveProduct();
   });
 
-  productList.addEventListener('click', (event) => {
-    const editBtn = event.target.closest('[data-edit-id]');
-    const deleteBtnEl = event.target.closest('[data-delete-id]');
-    if (editBtn) openEditForm(Number(editBtn.dataset.editId));
-    if (deleteBtnEl) deleteProduct(Number(deleteBtnEl.dataset.deleteId));
-  });
-
-  pickImageBtn?.addEventListener('click', () => {
-    if (isSaving) return;
-    imageInput?.click();
-  });
-
-  imageInput?.addEventListener('change', async () => {
-    const file = imageInput.files?.[0];
-    imageInput.value = '';
-    if (!file || isSaving) return;
-
-    try {
-      pendingImageData = await readFileAsDataUrl(file);
-      removeImage = false;
-      imagePreview.src = pendingImageData;
-      updateImageUi(true);
-    } catch (error) {
-      showToast(error.message, 'error');
-    }
+  deleteBtn?.addEventListener('click', async () => {
+    if (!editingId || isSaving) return;
+    await deleteProduct(editingId);
   });
 
   removeImageBtn?.addEventListener('click', () => {
-    if (isSaving) return;
     pendingImageData = null;
     removeImage = true;
-    imagePreview.removeAttribute('src');
+    imagePreview?.removeAttribute('src');
     updateImageUi(false);
+    if (imageInput) imageInput.value = '';
   });
 
-  catalogPanel.addEventListener('click', (event) => {
-    if (event.target === catalogPanel) {
-      closeCatalogPanel();
-      if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  imageInput?.addEventListener('change', () => {
+    const file = imageInput.files?.[0];
+    if (!file) return;
+
+    if (!/^image\/(jpeg|png|webp)$/i.test(file.type || '')) {
+      showToast('Поддерживаются только JPG, PNG и WebP', 'error');
+      imageInput.value = '';
+      return;
     }
+
+    if (file.size > 15 * 1024 * 1024) {
+      showToast('Файл слишком большой. Максимум — 15 МБ', 'error');
+      imageInput.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      pendingImageData = reader.result;
+      removeImage = false;
+      updateImageUi(true, pendingImageData);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  listEl.addEventListener('click', async (event) => {
+    const deleteButton = event.target.closest('[data-delete-id]');
+    if (deleteButton) {
+      event.preventDefault();
+      event.stopPropagation();
+      await deleteProduct(Number(deleteButton.dataset.deleteId));
+      return;
+    }
+
+    const zoomBtn = event.target.closest('[data-zoom-src]');
+    if (zoomBtn) {
+      event.preventDefault();
+      event.stopPropagation();
+      openPreviewLightbox(zoomBtn.dataset.zoomSrc, zoomBtn.dataset.zoomLabel || 'Товар');
+      return;
+    }
+
+    const row = event.target.closest('[data-select-id]');
+    if (row) {
+      openEditForm(Number(row.dataset.selectId));
+    }
+  });
+
+  listEl.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const row = event.target.closest('[data-select-id]');
+    if (!row) return;
+    event.preventDefault();
+    openEditForm(Number(row.dataset.selectId));
   });
 
   ['price_usd', 'compare_price_usd', 'discount_percent'].forEach((name) => {
     field(name)?.addEventListener('input', syncDiscountPreview);
   });
+
+  window.addEventListener('clothing-catalog-changed', fetchProducts);
+
+  window.openAdminClothingCatalogPage = openPage;
+  window.adminClothingCatalogGoBack = () => {
+    if (!formEl.hidden) {
+      resetForm();
+      return;
+    }
+    closePage();
+  };
 })();

@@ -2,6 +2,7 @@
 const FITNESS_STORAGE_KEY = 'portfolio_fitness_hero_banners';
 const FITNESS_RECOMMENDED = { width: 3840, height: 1200 };
 const FITNESS_SLIDE_COUNT = 4;
+const FITNESS_MAX_SLIDES = 10;
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 const DEFAULT_FIT = { scale: 1, x: 50, y: 50 };
 const MIN_FIT_SCALE = 1;
@@ -35,26 +36,51 @@ function normalizeSlide(slide) {
 }
 
 function emptySlides() {
-  return Array(FITNESS_SLIDE_COUNT).fill(null);
+  return [];
 }
 
 function normalizeSlides(raw) {
   if (!Array.isArray(raw)) return emptySlides();
-  return emptySlides().map((_, index) => normalizeSlide(raw[index]));
+
+  const slides = [];
+  raw.forEach((slide, index) => {
+    slides[index] = normalizeSlide(slide);
+  });
+
+  while (slides.length > 0 && slides[slides.length - 1] == null) {
+    slides.pop();
+  }
+
+  return slides;
 }
 
-function applyFitToImg(img) {
+function getFilledSlideEntries(slides) {
+  return slides
+    .map((slide, index) => (slide ? { index, slide } : null))
+    .filter(Boolean);
+}
+
+function getNextFreeIndex(slides) {
+  for (let index = 0; index < FITNESS_MAX_SLIDES; index += 1) {
+    if (!slides[index]) return index;
+  }
+  return -1;
+}
+
+function applyFitToImg(img, fit) {
   if (!img) return;
+  const f = normalizeFit(fit);
   img.style.objectFit = 'cover';
-  img.style.objectPosition = 'center center';
-  img.style.transform = '';
-  img.style.transformOrigin = '';
+  img.style.objectPosition = `${f.x}% ${f.y}%`;
+  img.style.transform = `scale(${f.scale})`;
+  img.style.transformOrigin = `${f.x}% ${f.y}%`;
 }
 
-function applyFitToBackground(el) {
+function applyFitToBackground(el, fit) {
   if (!el) return;
-  el.style.backgroundSize = 'cover';
-  el.style.backgroundPosition = 'center center';
+  const f = normalizeFit(fit);
+  el.style.backgroundSize = f.scale === 1 ? 'cover' : `${f.scale * 100}%`;
+  el.style.backgroundPosition = `${f.x}% ${f.y}%`;
 }
 
 async function loadSlideData() {
@@ -202,19 +228,46 @@ async function commitSlide(slideData, index, slide) {
   return slideData[index];
 }
 
+async function appendSlide(slideData, slide) {
+  const index = getNextFreeIndex(slideData);
+  if (index < 0) {
+    throw new Error(`Максимум ${FITNESS_MAX_SLIDES} баннеров`);
+  }
+
+  while (slideData.length <= index) {
+    slideData.push(null);
+  }
+
+  slideData[index] = slide;
+  await saveSlide(slideData, index);
+  return index;
+}
+
+async function createSlide(slide) {
+  const slideData = await loadSlideData();
+  const index = await appendSlide(slideData, slide);
+  return { ok: true, index, slide: slideData[index] };
+}
+
 window.FitnessBanners = {
   FITNESS_STORAGE_KEY,
   FITNESS_RECOMMENDED,
   FITNESS_SLIDE_COUNT,
+  FITNESS_MAX_SLIDES,
   SLIDE_GRADIENTS,
   DEFAULT_FIT,
   MIN_FIT_SCALE,
   MAX_FIT_SCALE,
+  MAX_FILE_SIZE,
   load: loadSlideData,
   upload: uploadSlide,
   saveFit: saveSlideFit,
   remove: removeSlide,
   commitSlide,
+  appendSlide,
+  createSlide,
+  getFilledSlideEntries,
+  getNextFreeIndex,
   normalizeFit,
   applyFitToImg,
   applyFitToBackground,

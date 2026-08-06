@@ -154,6 +154,50 @@ function renderPriceBlock(item) {
   `;
 }
 
+const CLOTHING_CART_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>';
+
+let clothingCatalogItems = [];
+
+function buildClothingCartItem(item, quantity = 1) {
+  const gradient = item.gradient || DEFAULT_GRADIENTS[item.category] || DEFAULT_GRADIENTS.casual;
+
+  return {
+    workId: item.id,
+    sectionId: 'clothing',
+    title: item.title,
+    price_usd: item.price_usd,
+    compare_price_usd: item.compare_price_usd,
+    image: item.image,
+    gradient,
+    placeholder_text: item.placeholder_text || item.title,
+    category: item.category,
+    quantity
+  };
+}
+
+function bindClothingCartActions(grid) {
+  if (!grid || grid.dataset.cartBound === 'true') return;
+
+  grid.dataset.cartBound = 'true';
+  grid.addEventListener('click', (event) => {
+    const btn = event.target.closest('.clothing-card-cart-btn');
+    if (!btn) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const workId = Number.parseInt(String(btn.dataset.workId ?? ''), 10);
+    const item = clothingCatalogItems.find((entry) => Number(entry.id) === workId);
+    if (!item || typeof window.SiteCart?.addItem !== 'function') return;
+
+    const added = window.SiteCart.addItem(buildClothingCartItem(item, 1), 1);
+    if (!added) return;
+
+    btn.classList.add('is-added');
+    window.setTimeout(() => btn.classList.remove('is-added'), 700);
+  });
+}
+
 function renderClothingCard(item) {
   const gradient = item.gradient || DEFAULT_GRADIENTS[item.category] || DEFAULT_GRADIENTS.casual;
   const placeholder = item.placeholder_text || item.title;
@@ -165,8 +209,8 @@ function renderClothingCard(item) {
   const lineLabel = getCardTagLabel(item);
 
   return `
-    <a href="/clothing-product.html?id=${item.id}" target="_blank" rel="noopener noreferrer" class="clothing-card-link">
-      <article class="clothing-card${promo ? ' clothing-card--promo' : ''}" data-category="${escapeHtml(dataCategory)}">
+    <article class="clothing-card${promo ? ' clothing-card--promo' : ''}" data-category="${escapeHtml(dataCategory)}">
+      <a href="/clothing-product.html?id=${item.id}" target="_blank" rel="noopener noreferrer" class="clothing-card-link">
         <div class="clothing-card-media" style="${mediaStyle}">
           ${item.image ? '' : `<span class="clothing-card-placeholder">${escapeHtml(placeholder)}</span>`}
           ${promo ? `<span class="clothing-catalog-promo-sticker clothing-card-promo-sticker">${escapeHtml(promo.text)}</span>` : ''}
@@ -184,8 +228,20 @@ function renderClothingCard(item) {
             ${renderStarsCompact(item.avg_rating, item.review_count)}
           </div>
         </div>
-      </article>
-    </a>
+      </a>
+      <div class="clothing-card-actions">
+        <button
+          type="button"
+          class="clothing-card-cart-btn"
+          data-work-id="${item.id}"
+          aria-label="Добавить «${escapeHtml(item.title)}» в корзину"
+          title="Добавить в корзину"
+        >
+          ${CLOTHING_CART_ICON}
+          <span>В корзину</span>
+        </button>
+      </div>
+    </article>
   `;
 }
 
@@ -199,9 +255,11 @@ async function loadClothingCatalog() {
     if (!response.ok) throw new Error('Не удалось загрузить каталог');
 
     const items = await response.json();
-    grid.querySelectorAll('.clothing-card-link').forEach((link) => link.remove());
+    clothingCatalogItems = items;
+    grid.querySelectorAll('.clothing-card').forEach((card) => card.remove());
 
     if (!items.length) {
+      clothingCatalogItems = [];
       if (emptyState) {
         emptyState.hidden = false;
         emptyState.textContent = 'Ждите поступления новых товаров';
@@ -212,9 +270,11 @@ async function loadClothingCatalog() {
 
     if (emptyState) emptyState.hidden = true;
     grid.insertAdjacentHTML('afterbegin', items.map(renderClothingCard).join(''));
+    bindClothingCartActions(grid);
     window.dispatchEvent(new CustomEvent('clothing-catalog-updated', { detail: { items } }));
     return items;
   } catch {
+    clothingCatalogItems = [];
     if (emptyState) {
       emptyState.hidden = false;
       emptyState.textContent = 'Ждите поступления новых товаров';

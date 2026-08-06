@@ -14,9 +14,20 @@ const adminNavLinks = document.querySelectorAll('[data-admin-section]');
 const adminSections = {
   dashboard: document.getElementById('adminSectionDashboard'),
   appearance: document.getElementById('adminSectionAppearance'),
+  homeBanner: document.getElementById('adminSectionHomeBanner'),
+  sectionIcons: document.getElementById('adminSectionIcons'),
+  palette: document.getElementById('adminSectionPalette'),
   fitness: document.getElementById('adminSectionFitness'),
+  fitnessBanner: document.getElementById('adminSectionFitnessBanner'),
+  fitnessCatalog: document.getElementById('adminSectionFitnessCatalog'),
   banners: document.getElementById('adminSectionBanners'),
+  bannersWorks: document.getElementById('adminSectionBannersWorks'),
   clothing: document.getElementById('adminSectionClothing'),
+  clothingBanner: document.getElementById('adminSectionClothingBanner'),
+  clothingCatalogIcons: document.getElementById('adminSectionClothingCatalogIcons'),
+  clothingAlerts: document.getElementById('adminSectionClothingAlerts'),
+  clothingCatalogPromo: document.getElementById('adminSectionClothingCatalogPromo'),
+  clothingCatalog: document.getElementById('adminSectionClothingCatalog'),
   reviews: document.getElementById('adminSectionReviews'),
   orders: document.getElementById('adminSectionOrders'),
   siteAbout: document.getElementById('adminSectionSiteAbout'),
@@ -90,24 +101,6 @@ window.showAdminSection = showAdminSection;
 function hideAllAdmin() {
   modalOverlays.forEach(el => { el.hidden = true; });
   adminPanel.hidden = true;
-  const bannerModal = document.getElementById('adminBannerModal');
-  const fitnessBannerModal = document.getElementById('adminFitnessBannerModal');
-  const fitnessCatalogPanel = document.getElementById('adminFitnessCatalogPanel');
-  const clothingBannerModal = document.getElementById('adminClothingBannerModal');
-  const clothingCatalogIconsModal = document.getElementById('adminClothingCatalogIconsModal');
-  const clothingAlertsModal = document.getElementById('adminClothingAlertsModal');
-  const clothingCatalogPromoModal = document.getElementById('adminClothingCatalogPromoModal');
-  const clothingCatalogPanel = document.getElementById('adminClothingCatalogPanel');
-  if (bannerModal) bannerModal.hidden = true;
-  if (fitnessBannerModal) fitnessBannerModal.hidden = true;
-  if (fitnessCatalogPanel) fitnessCatalogPanel.hidden = true;
-  if (clothingBannerModal) clothingBannerModal.hidden = true;
-  if (clothingCatalogIconsModal) clothingCatalogIconsModal.hidden = true;
-  if (clothingAlertsModal) clothingAlertsModal.hidden = true;
-  if (clothingCatalogPromoModal) clothingCatalogPromoModal.hidden = true;
-  if (clothingCatalogPanel) clothingCatalogPanel.hidden = true;
-  const sectionIconsModal = document.getElementById('adminSectionIconsModal');
-  if (sectionIconsModal) sectionIconsModal.hidden = true;
   if (typeof window.showAdminSection === 'function') {
     window.showAdminSection('dashboard');
   }
@@ -192,35 +185,39 @@ modalOverlays.forEach(overlay => {
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
 
-  const bannerModal = document.getElementById('adminBannerModal');
-  const sectionIconsModal = document.getElementById('adminSectionIconsModal');
-  const paletteModal = document.getElementById('adminSectionPaletteModal');
-  const fitnessBannerModal = document.getElementById('adminFitnessBannerModal');
-  const fitnessCatalogPanel = document.getElementById('adminFitnessCatalogPanel');
-  const clothingBannerModal = document.getElementById('adminClothingBannerModal');
-  const clothingCatalogIconsModal = document.getElementById('adminClothingCatalogIconsModal');
-  const clothingAlertsModal = document.getElementById('adminClothingAlertsModal');
-  const clothingCatalogPromoModal = document.getElementById('adminClothingCatalogPromoModal');
-  const clothingCatalogPanel = document.getElementById('adminClothingCatalogPanel');
   const appearanceSection = document.getElementById('adminSectionAppearance');
+  const homeBannerSection = document.getElementById('adminSectionHomeBanner');
+  const sectionIconsSection = document.getElementById('adminSectionIcons');
+  const paletteSection = document.getElementById('adminSectionPalette');
+  const fitnessBannerSection = document.getElementById('adminSectionFitnessBanner');
+  const fitnessCatalogSection = document.getElementById('adminSectionFitnessCatalog');
   const fitnessSection = document.getElementById('adminSectionFitness');
   const clothingSection = document.getElementById('adminSectionClothing');
 
-  if (paletteModal && !paletteModal.hidden) {
-    paletteModal.hidden = true;
-    if (typeof window.openAdminAppearanceGate === 'function') window.openAdminAppearanceGate();
+  if (homeBannerSection?.classList.contains('active')) {
+    if (typeof window.adminHomeBannerGoBack === 'function') {
+      window.adminHomeBannerGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('appearance');
+    }
     return;
   }
 
-  if (sectionIconsModal && !sectionIconsModal.hidden) {
-    sectionIconsModal.hidden = true;
-    if (typeof window.openAdminAppearanceGate === 'function') window.openAdminAppearanceGate();
+  if (sectionIconsSection?.classList.contains('active')) {
+    if (typeof window.adminSectionIconsGoBack === 'function') {
+      window.adminSectionIconsGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('appearance');
+    }
     return;
   }
 
-  if (bannerModal && !bannerModal.hidden) {
-    bannerModal.hidden = true;
-    if (typeof window.openAdminAppearanceGate === 'function') window.openAdminAppearanceGate();
+  if (paletteSection?.classList.contains('active')) {
+    if (typeof window.adminPaletteGoBack === 'function') {
+      window.adminPaletteGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('appearance');
+    }
     return;
   }
 
@@ -229,29 +226,21 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  if (fitnessBannerModal && !fitnessBannerModal.hidden) {
-    fitnessBannerModal.hidden = true;
-    if (typeof window.openAdminFitnessGate === 'function') window.openAdminFitnessGate();
+  if (fitnessBannerSection?.classList.contains('active')) {
+    if (typeof window.adminFitnessBannerGoBack === 'function') {
+      window.adminFitnessBannerGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('fitness');
+    }
     return;
   }
 
-  if (fitnessCatalogPanel && !fitnessCatalogPanel.hidden) {
-    fitnessCatalogPanel.hidden = true;
-    if (typeof window.openAdminFitnessGate === 'function') window.openAdminFitnessGate();
-    return;
-  }
-
-  const bannersCatalogPanel = document.getElementById('adminBannersCatalogPanel');
-  const bannersSection = document.getElementById('adminSectionBanners');
-
-  if (bannersCatalogPanel && !bannersCatalogPanel.hidden) {
-    bannersCatalogPanel.hidden = true;
-    if (typeof window.openAdminBannersGate === 'function') window.openAdminBannersGate();
-    return;
-  }
-
-  if (bannersSection?.classList.contains('active')) {
-    if (typeof window.showAdminSection === 'function') window.showAdminSection('dashboard');
+  if (fitnessCatalogSection?.classList.contains('active')) {
+    if (typeof window.adminFitnessCatalogGoBack === 'function') {
+      window.adminFitnessCatalogGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('fitness');
+    }
     return;
   }
 
@@ -260,33 +249,71 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  if (clothingBannerModal && !clothingBannerModal.hidden) {
-    clothingBannerModal.hidden = true;
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  const bannersWorksSection = document.getElementById('adminSectionBannersWorks');
+  const bannersSection = document.getElementById('adminSectionBanners');
+
+  if (bannersWorksSection?.classList.contains('active')) {
+    if (typeof window.adminBannersWorksGoBack === 'function') {
+      window.adminBannersWorksGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('banners');
+    }
     return;
   }
 
-  if (clothingCatalogIconsModal && !clothingCatalogIconsModal.hidden) {
-    clothingCatalogIconsModal.hidden = true;
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  if (bannersSection?.classList.contains('active')) {
+    if (typeof window.showAdminSection === 'function') window.showAdminSection('dashboard');
     return;
   }
 
-  if (clothingAlertsModal && !clothingAlertsModal.hidden) {
-    clothingAlertsModal.hidden = true;
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  const clothingBannerSection = document.getElementById('adminSectionClothingBanner');
+  const clothingCatalogIconsSection = document.getElementById('adminSectionClothingCatalogIcons');
+  const clothingAlertsSection = document.getElementById('adminSectionClothingAlerts');
+  const clothingCatalogPromoSection = document.getElementById('adminSectionClothingCatalogPromo');
+  const clothingCatalogSection = document.getElementById('adminSectionClothingCatalog');
+
+  if (clothingBannerSection?.classList.contains('active')) {
+    if (typeof window.adminClothingBannerGoBack === 'function') {
+      window.adminClothingBannerGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
     return;
   }
 
-  if (clothingCatalogPromoModal && !clothingCatalogPromoModal.hidden) {
-    clothingCatalogPromoModal.hidden = true;
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  if (clothingCatalogIconsSection?.classList.contains('active')) {
+    if (typeof window.adminClothingCatalogIconsGoBack === 'function') {
+      window.adminClothingCatalogIconsGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
     return;
   }
 
-  if (clothingCatalogPanel && !clothingCatalogPanel.hidden) {
-    clothingCatalogPanel.hidden = true;
-    if (typeof window.openAdminClothingGate === 'function') window.openAdminClothingGate();
+  if (clothingAlertsSection?.classList.contains('active')) {
+    if (typeof window.adminClothingAlertsGoBack === 'function') {
+      window.adminClothingAlertsGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
+    return;
+  }
+
+  if (clothingCatalogPromoSection?.classList.contains('active')) {
+    if (typeof window.adminClothingCatalogPromoGoBack === 'function') {
+      window.adminClothingCatalogPromoGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
+    return;
+  }
+
+  if (clothingCatalogSection?.classList.contains('active')) {
+    if (typeof window.adminClothingCatalogGoBack === 'function') {
+      window.adminClothingCatalogGoBack();
+    } else if (typeof window.showAdminSection === 'function') {
+      window.showAdminSection('clothing');
+    }
     return;
   }
 

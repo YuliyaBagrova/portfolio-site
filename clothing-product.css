@@ -388,6 +388,36 @@
   background: rgba(26, 24, 22, 0.04);
 }
 
+.clothing-product-order-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.clothing-product-btn-cart {
+  flex-shrink: 0;
+  padding: 12px 14px;
+  background: transparent;
+  border: 1px solid var(--clothing-ink);
+  color: var(--clothing-ink);
+}
+
+.clothing-product-btn-cart svg {
+  width: 22px;
+  height: 22px;
+}
+
+.clothing-product-btn-cart:hover:not(:disabled) {
+  background: rgba(26, 24, 22, 0.04);
+  transform: translateY(-1px);
+}
+
+.clothing-product-btn-cart.is-added {
+  border-color: #047857;
+  color: #047857;
+  background: rgba(4, 120, 87, 0.08);
+}
+
 .clothing-product-form-status {
   margin: 12px 0 0;
   font-size: 0.875rem;

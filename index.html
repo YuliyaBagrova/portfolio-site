@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-float-actions.css">
 </head>
 <body>
   <div class="app">
@@ -286,21 +287,11 @@
             </div>
 
             <div class="clothing-hero-aside">
-              <div class="clothing-hero-banner" id="clothingHeroBanner">
+              <div class="clothing-hero-banner" id="clothingHeroBanner" hidden>
                 <div class="clothing-hero-slides-viewport" id="clothingHeroSlidesViewport">
-                  <div class="clothing-hero-slides" id="clothingHeroSlides">
-                    <div class="clothing-hero-slide active" data-index="0" style="--slide-bg: linear-gradient(145deg, #f5f1eb 0%, #ddd5c8 55%, #ebe6df 100%)"></div>
-                    <div class="clothing-hero-slide" data-index="1" style="--slide-bg: linear-gradient(145deg, #efe8e0 0%, #c8bdb0 50%, #f7f4ef 100%)"></div>
-                    <div class="clothing-hero-slide" data-index="2" style="--slide-bg: linear-gradient(145deg, #ece6de 0%, #b8afa3 45%, #f3efe9 100%)"></div>
-                    <div class="clothing-hero-slide" data-index="3" style="--slide-bg: linear-gradient(145deg, #f0ebe4 0%, #d1c4b5 50%, #faf8f5 100%)"></div>
-                  </div>
+                  <div class="clothing-hero-slides" id="clothingHeroSlides"></div>
                 </div>
-                <div class="clothing-hero-progress" id="clothingHeroProgress" role="tablist" aria-label="Баннеры раздела">
-                  <button type="button" class="clothing-hero-line active" data-slide="0" role="tab" aria-selected="true" aria-label="Баннер 1"></button>
-                  <button type="button" class="clothing-hero-line" data-slide="1" role="tab" aria-selected="false" aria-label="Баннер 2"></button>
-                  <button type="button" class="clothing-hero-line" data-slide="2" role="tab" aria-selected="false" aria-label="Баннер 3"></button>
-                  <button type="button" class="clothing-hero-line" data-slide="3" role="tab" aria-selected="false" aria-label="Баннер 4"></button>
-                </div>
+                <div class="clothing-hero-progress" id="clothingHeroProgress" role="tablist" aria-label="Баннеры раздела" hidden></div>
               </div>
 
               <aside class="clothing-hero-alerts" aria-label="Акции и новинки">
@@ -689,6 +680,7 @@
         </section>
 
         <section class="admin-section admin-section-appearance" id="adminSectionAppearance" aria-labelledby="adminAppearanceSectionTitle">
+          <button type="button" class="admin-section-back-btn admin-section-back-btn--corner" id="adminAppearanceBackToDashboard" aria-label="Назад к панели администратора">← К панели администратора</button>
           <div class="admin-panel-badge">Внешний вид сайта</div>
 
           <div class="dashboard-grid admin-appearance-grid">
@@ -736,13 +728,193 @@
               </ul>
             </div>
           </div>
+        </section>
 
-          <div class="admin-panel-footer">
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminAppearanceBackToDashboard">← К панели администратора</button>
+        <section class="admin-section admin-section-home-banner" id="adminSectionHomeBanner" aria-labelledby="adminHomeBannerTitle">
+          <button type="button" class="admin-home-banner-back-btn admin-home-banner-back-btn--corner" id="adminHomeBannerPageBack" aria-label="Назад во внешний вид">← Внешний вид</button>
+          <div class="admin-panel-badge admin-panel-badge--home">Главная</div>
+
+          <div class="admin-home-banner-page card">
+            <header class="admin-fitness-panel-header admin-home-banner-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-home-banner-icon" aria-hidden="true">🏠</span>
+                <div>
+                  <h2 class="admin-home-banner-page-title" id="adminHomeBannerTitle">Изменить баннер «Главная»</h2>
+                  <p class="admin-home-banner-page-desc" id="adminHomeBannerPageDesc">Hero-баннеры на главной странице · рекомендуемый размер 3840 × 1200 px</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-home-banner-layout" id="adminHomeBannerLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-home-banner-add-btn" id="adminHomeBannerAdd">+ Добавить баннер</button>
+                  <span class="admin-fitness-catalog-count admin-home-banner-count" id="adminHomeBannerCount">0 баннеров</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-home-banner-list" id="adminHomeBannerList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-home-banner-form" id="adminHomeBannerForm" hidden>
+                <div class="admin-home-banner-form-head">
+                  <h3 id="adminHomeBannerFormTitle">Новый баннер</h3>
+                  <p class="admin-home-banner-form-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP · до 15 МБ</p>
+                </div>
+
+                <div class="admin-home-banner-form-field">
+                  <span class="admin-home-banner-form-label">Изображение баннера</span>
+                  <div class="admin-home-banner-form-upload">
+                    <input type="file" id="adminHomeBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminHomeBannerPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminHomeBannerRemoveImage" hidden>Убрать</button>
+                  </div>
+                </div>
+
+                <div class="admin-banner-edit-preview admin-home-banner-edit-preview" id="adminHomeBannerEditPreview">
+                  <img class="admin-banner-edit-preview-img" id="adminHomeBannerEditPreviewImg" alt="Предпросмотр баннера" hidden draggable="false">
+                  <div class="admin-banner-edit-preview-hint" id="adminHomeBannerDragHint" hidden>Перетащите для позиционирования</div>
+                </div>
+
+                <div class="admin-banner-fit-controls admin-home-banner-fit-controls" id="adminHomeBannerFitControls" hidden>
+                  <label class="admin-banner-fit-slider" for="adminHomeBannerScale">
+                    <span class="admin-banner-fit-slider-label">Масштаб</span>
+                    <input type="range" id="adminHomeBannerScale" min="100" max="300" value="100" step="5">
+                    <span class="admin-banner-fit-slider-value" id="adminHomeBannerScaleVal">100%</span>
+                  </label>
+                  <button type="button" class="btn btn-primary btn-save-fit admin-home-banner-save-fit" id="adminHomeBannerSaveFit">Сохранить размещение</button>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminHeroSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminHeroWarning" hidden></div>
+                </div>
+
+                <div class="admin-home-banner-form-actions">
+                  <button type="button" class="btn btn-primary admin-home-banner-save-btn" id="adminHomeBannerSaveBtn">Сохранить баннер</button>
+                  <button type="button" class="btn btn-ghost" id="adminHomeBannerCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminHomeBannerDeleteBtn" hidden>Удалить баннер</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-icons-page" id="adminSectionIcons" aria-labelledby="adminSectionIconsTitle">
+          <button type="button" class="admin-section-icons-back-btn admin-section-icons-back-btn--corner" id="adminSectionIconsPageBack" aria-label="Назад во внешний вид">← Внешний вид</button>
+          <div class="admin-panel-badge admin-panel-badge--appearance">Внешний вид</div>
+
+          <div class="admin-section-icons-page-card card">
+            <header class="admin-fitness-panel-header admin-section-icons-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-section-icons-page-icon" aria-hidden="true">🧩</span>
+                <div>
+                  <h2 class="admin-section-icons-page-title" id="adminSectionIconsTitle">Иконки разделов</h2>
+                  <p class="admin-section-icons-page-desc">Иконки в блоке «Разделы портфолио» на главной странице · рекомендуемый размер 88 × 88 px</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-section-icons-layout" id="adminSectionIconsLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <span class="admin-fitness-catalog-count admin-section-icons-count" id="adminSectionIconsCount">0 своих иконок</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-section-icons-list" id="adminSectionIconsList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-section-icons-form" id="adminSectionIconsForm" hidden>
+                <div class="admin-section-icons-form-head">
+                  <h3 id="adminSectionIconsFormTitle">Иконка раздела</h3>
+                  <p class="admin-section-icons-form-desc">Рекомендуемый размер: <strong>88 × 88 px</strong> · PNG, JPG, WebP · до 5 МБ</p>
+                </div>
+
+                <div class="admin-section-icons-form-field">
+                  <span class="admin-section-icons-form-label">Изображение иконки</span>
+                  <div class="admin-section-icons-form-upload">
+                    <input type="file" id="adminSectionIconsImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminSectionIconsPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminSectionIconsRemoveImage" hidden>Убрать</button>
+                  </div>
+                </div>
+
+                <div class="admin-section-icons-preview-wrap">
+                  <img class="admin-section-icons-preview" id="adminSectionIconsImagePreview" alt="Предпросмотр иконки" hidden>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminSectionIconsSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminSectionIconsWarning" hidden></div>
+                </div>
+
+                <div class="admin-section-icons-form-actions">
+                  <button type="button" class="btn btn-primary admin-section-icons-save-btn" id="adminSectionIconsSaveBtn">Сохранить иконку</button>
+                  <button type="button" class="btn btn-ghost" id="adminSectionIconsCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminSectionIconsResetBtn" hidden>Сбросить к стандартной</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-palette-page" id="adminSectionPalette" aria-labelledby="adminSectionPaletteTitle">
+          <button type="button" class="admin-section-palette-back-btn admin-section-palette-back-btn--corner" id="adminPalettePageBack" aria-label="Назад во внешний вид">← Внешний вид</button>
+          <div class="admin-panel-badge admin-panel-badge--appearance">Внешний вид</div>
+
+          <div class="admin-section-palette-page-card card">
+            <header class="admin-fitness-panel-header admin-section-palette-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-section-palette-page-icon" aria-hidden="true">🎨</span>
+                <div>
+                  <h2 class="admin-section-palette-page-title" id="adminSectionPaletteTitle">Цветовая палитра страниц</h2>
+                  <p class="admin-section-palette-page-desc">Фон, акцент и цвет навигации для каждого раздела · контраст текста подбирается автоматически</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-section-palette-layout" id="adminPaletteLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <span class="admin-fitness-catalog-count admin-section-palette-count" id="adminPaletteCount">0 своих палитр</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-section-palette-list" id="adminPaletteList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-section-palette-form" id="adminPaletteForm" hidden>
+                <div class="admin-section-palette-form-head">
+                  <h3 id="adminPaletteFormTitle">Палитра раздела</h3>
+                  <p class="admin-section-palette-form-desc">Основной и второстепенный текст на странице подбираются по контрасту с фоном</p>
+                </div>
+
+                <div class="admin-palette-layout admin-section-palette-editor-layout">
+                  <div class="admin-palette-preview" id="adminPalettePreview"></div>
+                  <div class="admin-palette-editor-wrap">
+                    <div class="admin-palette-editor" id="adminPaletteEditor"></div>
+                    <p class="admin-palette-meta" id="adminPaletteMeta"></p>
+                  </div>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminPaletteSuccess" hidden></div>
+                  <p class="admin-palette-status" id="adminPaletteStatus" hidden></p>
+                </div>
+
+                <div class="admin-section-palette-form-actions">
+                  <button type="button" class="btn btn-primary admin-section-palette-save-btn" id="adminPaletteSave">Сохранить палитру</button>
+                  <button type="button" class="btn btn-ghost" id="adminPaletteCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminPaletteReset">По умолчанию</button>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <section class="admin-section admin-section-fitness" id="adminSectionFitness" aria-labelledby="adminFitnessSectionTitle">
+          <button type="button" class="admin-section-back-btn admin-section-back-btn--corner" id="adminFitnessBackToDashboard" aria-label="Назад к панели администратора">← К панели администратора</button>
           <div class="admin-panel-badge">Фитнес-индустрия</div>
 
           <div class="dashboard-grid admin-fitness-grid">
@@ -756,8 +928,8 @@
                     <span class="quick-link-icon-glyph">🖼️</span>
                   </span>
                   <div>
-                    <strong>Баннер раздела</strong>
-                    <small>Загрузка, удаление и настройка hero-баннеров</small>
+                    <strong>Баннер «Фитнес-индустрия»</strong>
+                    <small>Hero-баннеры раздела «Фитнес-индустрия»</small>
                   </div>
                 </button>
                 <button type="button" class="quick-link admin-content-link" id="adminFitnessChooseCatalog">
@@ -781,13 +953,163 @@
               </ul>
             </div>
           </div>
+        </section>
 
-          <div class="admin-panel-footer">
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminFitnessBackToDashboard">← К панели администратора</button>
+        <section class="admin-section admin-section-fitness-banner" id="adminSectionFitnessBanner" aria-labelledby="adminFitnessBannerTitle">
+          <button type="button" class="admin-fitness-banner-back-btn admin-fitness-banner-back-btn--corner" id="adminFitnessBannerPageBack" aria-label="Назад в раздел «Фитнес-индустрия»">← Фитнес-индустрия</button>
+          <div class="admin-panel-badge admin-panel-badge--fitness">Фитнес-индустрия</div>
+
+          <div class="admin-fitness-banner-page card">
+            <header class="admin-fitness-panel-header admin-fitness-banner-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-fitness-banner-icon" aria-hidden="true">💪</span>
+                <div>
+                  <h2 class="admin-fitness-banner-page-title" id="adminFitnessBannerTitle">Изменить баннер «Фитнес-индустрия»</h2>
+                  <p class="admin-fitness-banner-page-desc" id="adminFitnessBannerPageDesc">Hero-баннеры в разделе «Фитнес-индустрия» · рекомендуемый размер 3840 × 1200 px</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-fitness-banner-layout" id="adminFitnessBannerLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-fitness-banner-add-btn" id="adminFitnessBannerAdd">+ Добавить баннер</button>
+                  <span class="admin-fitness-catalog-count admin-fitness-banner-count" id="adminFitnessBannerCount">0 баннеров</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-fitness-banner-list" id="adminFitnessBannerList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-fitness-banner-form" id="adminFitnessBannerForm" hidden>
+                <div class="admin-fitness-banner-form-head">
+                  <h3 id="adminFitnessBannerFormTitle">Новый баннер</h3>
+                  <p class="admin-fitness-banner-form-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP · до 15 МБ</p>
+                </div>
+
+                <div class="admin-fitness-banner-form-field">
+                  <span class="admin-fitness-banner-form-label">Изображение баннера</span>
+                  <div class="admin-fitness-banner-form-upload">
+                    <input type="file" id="adminFitnessBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessBannerPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessBannerRemoveImage" hidden>Убрать</button>
+                  </div>
+                </div>
+
+                <div class="admin-banner-edit-preview admin-fitness-banner-edit-preview" id="adminFitnessBannerEditPreview">
+                  <img class="admin-banner-edit-preview-img" id="adminFitnessBannerEditPreviewImg" alt="Предпросмотр баннера" hidden draggable="false">
+                  <div class="admin-banner-edit-preview-hint" id="adminFitnessBannerDragHint" hidden>Перетащите для позиционирования</div>
+                </div>
+
+                <div class="admin-banner-fit-controls admin-fitness-banner-fit-controls" id="adminFitnessBannerFitControls" hidden>
+                  <label class="admin-banner-fit-slider" for="adminFitnessBannerScale">
+                    <span class="admin-banner-fit-slider-label">Масштаб</span>
+                    <input type="range" id="adminFitnessBannerScale" min="100" max="300" value="100" step="5">
+                    <span class="admin-banner-fit-slider-value" id="adminFitnessBannerScaleVal">100%</span>
+                  </label>
+                  <button type="button" class="btn btn-primary btn-save-fit admin-fitness-banner-save-fit" id="adminFitnessBannerSaveFit">Сохранить размещение</button>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminFitnessBannerSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminFitnessBannerWarning" hidden></div>
+                </div>
+
+                <div class="admin-fitness-banner-form-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-banner-save-btn" id="adminFitnessBannerSaveBtn">Сохранить баннер</button>
+                  <button type="button" class="btn btn-ghost" id="adminFitnessBannerCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminFitnessBannerDeleteBtn" hidden>Удалить баннер</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-fitness-catalog-page" id="adminSectionFitnessCatalog" aria-labelledby="adminFitnessCatalogTitle">
+          <button type="button" class="admin-fitness-catalog-back-btn admin-fitness-catalog-back-btn--corner" id="adminFitnessCatalogPageBack" aria-label="Назад в раздел «Фитнес-индустрия»">← Фитнес-индустрия</button>
+          <div class="admin-panel-badge admin-panel-badge--fitness">Фитнес-индустрия</div>
+
+          <div class="admin-fitness-catalog-page-card card">
+            <header class="admin-fitness-panel-header admin-fitness-catalog-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-fitness-catalog-page-icon" aria-hidden="true">📦</span>
+                <div>
+                  <h2 class="admin-fitness-catalog-page-title" id="adminFitnessCatalogTitle">Каталог товаров</h2>
+                  <p class="admin-fitness-catalog-page-desc">Добавление, редактирование и удаление товаров раздела «Фитнес-индустрия»</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-fitness-catalog-page-layout" id="adminFitnessCatalogLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-fitness-catalog-add-btn" id="adminFitnessAddProduct">+ Добавить товар</button>
+                  <span class="admin-fitness-catalog-count admin-fitness-catalog-page-count" id="adminFitnessCatalogCount">0 товаров</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-fitness-catalog-list" id="adminFitnessProductList"></ul>
+                </div>
+              </section>
+
+              <form class="admin-fitness-product-form admin-fitness-catalog-form" id="adminFitnessProductForm" hidden>
+                <div class="admin-fitness-form-header admin-fitness-catalog-form-head">
+                  <h3 id="adminFitnessFormTitle">Новый товар</h3>
+                  <p class="admin-fitness-form-desc admin-fitness-catalog-form-desc">Товар появится в разделе «Фитнес-индустрия» на сайте</p>
+                </div>
+
+                <label class="admin-field">
+                  <span>Название <em>*</em></span>
+                  <input type="text" name="title" required maxlength="255" placeholder="Например: Whey Protein Isolate">
+                </label>
+                <label class="admin-field">
+                  <span>Описание</span>
+                  <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
+                </label>
+                <label class="admin-field">
+                  <span>Категория</span>
+                  <select name="category" required>
+                    <option value="protein">Протеин</option>
+                    <option value="creatine">Креатин</option>
+                    <option value="vitamins">Витамины</option>
+                    <option value="equipment">Спорт-инвентарь</option>
+                  </select>
+                </label>
+                <label class="admin-field">
+                  <span>Цена (USD)</span>
+                  <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="29.99">
+                </label>
+                <label class="admin-field">
+                  <span>Текст на заглушке</span>
+                  <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
+                </label>
+                <label class="admin-field">
+                  <span>Теги через запятую</span>
+                  <input type="text" name="tags" placeholder="1200×628, Протеин">
+                </label>
+
+                <div class="admin-fitness-image-field">
+                  <span class="admin-field-label">Изображение товара</span>
+                  <div class="admin-fitness-image-upload">
+                    <input type="file" id="adminFitnessProductImage" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessRemoveImage" hidden>Убрать</button>
+                  </div>
+                  <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
+                  <img class="admin-fitness-product-preview admin-fitness-catalog-preview" id="adminFitnessProductImagePreview" alt="Предпросмотр товара" hidden>
+                </div>
+
+                <div class="admin-fitness-form-actions admin-fitness-catalog-form-actions">
+                  <button type="submit" class="btn btn-primary admin-fitness-save-btn admin-fitness-catalog-save-btn" id="adminFitnessSaveProduct">Сохранить товар</button>
+                  <button type="button" class="btn btn-ghost" id="adminFitnessCancelProduct">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminFitnessDeleteProduct" hidden>Удалить товар</button>
+                </div>
+              </form>
+            </div>
           </div>
         </section>
 
         <section class="admin-section admin-section-banners" id="adminSectionBanners" aria-labelledby="adminBannersSectionTitle">
+          <button type="button" class="admin-section-back-btn admin-section-back-btn--corner" id="adminBannersBackToDashboard" aria-label="Назад к панели администратора">← К панели администратора</button>
           <div class="admin-panel-badge admin-panel-badge--banners">Мои Баннеры</div>
 
           <div class="dashboard-grid admin-banners-grid">
@@ -817,13 +1139,507 @@
               </ul>
             </div>
           </div>
+        </section>
 
-          <div class="admin-panel-footer">
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminBannersBackToDashboard">← К панели администратора</button>
+        <section class="admin-section admin-section-banners-works-page" id="adminSectionBannersWorks" aria-labelledby="adminBannersWorksTitle">
+          <button type="button" class="admin-banners-works-back-btn admin-banners-works-back-btn--corner" id="adminBannersWorksPageBack" aria-label="Назад в раздел «Мои Баннеры»">← Мои Баннеры</button>
+          <div class="admin-panel-badge admin-panel-badge--banners">Мои Баннеры</div>
+
+          <div class="admin-banners-works-page-card card">
+            <header class="admin-fitness-panel-header admin-banners-works-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-banners-works-page-icon" aria-hidden="true">🖼️</span>
+                <div>
+                  <h2 class="admin-banners-works-page-title" id="adminBannersWorksTitle">Коллекция работ</h2>
+                  <p class="admin-banners-works-page-desc">Работы публикуются в разделе «Мои Баннеры» в исходном разрешении изображения</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-banners-works-layout" id="adminBannersWorksLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-banners-works-add-btn" id="adminBannersAddWork">+ Добавить работу</button>
+                  <span class="admin-fitness-catalog-count admin-banners-works-count" id="adminBannersWorksCount">0 работ</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-banners-works-list" id="adminBannersWorkList"></ul>
+                </div>
+              </section>
+
+              <form class="admin-fitness-product-form admin-banners-work-form admin-banners-works-form" id="adminBannersWorkForm" hidden>
+                <div class="admin-fitness-form-head admin-banners-works-form-head">
+                  <h3 id="adminBannersFormTitle">Новая работа</h3>
+                  <p class="admin-banners-works-form-desc">Работа появится в разделе «Мои Баннеры» на сайте</p>
+                </div>
+
+                <label class="admin-fitness-field admin-field">
+                  <span>Название <em>*</em></span>
+                  <input type="text" name="title" required maxlength="128" autocomplete="off" placeholder="Название работы">
+                </label>
+
+                <label class="admin-fitness-field admin-field">
+                  <span>Категория</span>
+                  <select name="category" required>
+                    <option value="preview">Превью</option>
+                    <option value="illustrations">Иллюстрации</option>
+                    <option value="logos">Логотипы</option>
+                    <option value="pictures">Картинки</option>
+                  </select>
+                </label>
+
+                <label class="admin-fitness-field admin-field">
+                  <span>Описание</span>
+                  <textarea name="description" rows="4" maxlength="1000" placeholder="Комментарий к работе — виден на сайте"></textarea>
+                </label>
+
+                <div class="admin-fitness-image-field">
+                  <span class="admin-fitness-field-label">Изображение</span>
+                  <p class="admin-banners-image-hint">JPG, PNG или WebP · на сайте отображается в исходном разрешении</p>
+                  <div class="admin-fitness-image-actions admin-fitness-image-upload">
+                    <input type="file" id="adminBannersWorkImage" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminBannersPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminBannersRemoveImage" hidden>Убрать</button>
+                  </div>
+                  <p class="admin-banners-image-size" id="adminBannersImageSize" hidden></p>
+                  <img class="admin-fitness-product-preview admin-banners-work-preview admin-banners-works-preview" id="adminBannersImagePreview" alt="Предпросмотр работы" hidden>
+                </div>
+
+                <div class="admin-fitness-form-actions admin-banners-works-form-actions">
+                  <button type="submit" class="btn btn-primary admin-fitness-save-btn admin-banners-works-save-btn" id="adminBannersSaveWork">Сохранить работу</button>
+                  <button type="button" class="btn btn-ghost" id="adminBannersCancelWork">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminBannersDeleteWork" hidden>Удалить работу</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing-banner" id="adminSectionClothingBanner" aria-labelledby="adminClothingBannerTitle">
+          <button type="button" class="admin-clothing-banner-back-btn admin-clothing-banner-back-btn--corner" id="adminClothingBannerPageBack" aria-label="Назад в раздел «Одежда»">← Одежда</button>
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="admin-clothing-banner-page card">
+            <header class="admin-fitness-panel-header admin-clothing-banner-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-clothing-banner-icon" aria-hidden="true">🖼️</span>
+                <div>
+                  <h2 class="admin-clothing-banner-page-title" id="adminClothingBannerTitle">Изменить баннер «Одежда»</h2>
+                  <p class="admin-clothing-banner-page-desc" id="adminClothingBannerPageDesc">Hero-баннеры в разделе «Одежда» · рекомендуемый размер 1600 × 1440 px · на сайте 400 × 360 px</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-clothing-banner-layout" id="adminClothingBannerLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-clothing-banner-add-btn" id="adminClothingBannerAdd">+ Добавить баннер</button>
+                  <span class="admin-fitness-catalog-count admin-clothing-banner-count" id="adminClothingBannerCount">0 баннеров</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-clothing-banner-list" id="adminClothingBannerList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-clothing-banner-form" id="adminClothingBannerForm" hidden>
+                <div class="admin-clothing-banner-form-head">
+                  <h3 id="adminClothingBannerFormTitle">Новый баннер</h3>
+                  <p class="admin-clothing-banner-form-desc">Рекомендуемый размер: <strong>1600 × 1440 px</strong> · отображение <strong>400 × 360 px</strong> · JPG, PNG, WebP · до 25 МБ</p>
+                </div>
+
+                <div class="admin-clothing-banner-form-field">
+                  <span class="admin-clothing-banner-form-label">Изображение баннера</span>
+                  <div class="admin-clothing-banner-form-upload">
+                    <input type="file" id="adminClothingBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminClothingBannerPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminClothingBannerRemoveImage" hidden>Убрать</button>
+                  </div>
+                </div>
+
+                <div class="admin-banner-edit-preview admin-clothing-banner-edit-preview" id="adminClothingBannerEditPreview">
+                  <img class="admin-banner-edit-preview-img" id="adminClothingBannerEditPreviewImg" alt="Предпросмотр баннера" hidden draggable="false">
+                  <div class="admin-banner-edit-preview-hint" id="adminClothingBannerDragHint" hidden>Перетащите для позиционирования</div>
+                </div>
+
+                <div class="admin-banner-fit-controls admin-clothing-banner-fit-controls" id="adminClothingBannerFitControls" hidden>
+                  <label class="admin-banner-fit-slider" for="adminClothingBannerScale">
+                    <span class="admin-banner-fit-slider-label">Масштаб</span>
+                    <input type="range" id="adminClothingBannerScale" min="100" max="300" value="100" step="5">
+                    <span class="admin-banner-fit-slider-value" id="adminClothingBannerScaleVal">100%</span>
+                  </label>
+                  <button type="button" class="btn btn-primary btn-save-fit admin-clothing-banner-save-fit" id="adminClothingBannerSaveFit">Сохранить размещение</button>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminClothingBannerSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminClothingBannerWarning" hidden></div>
+                </div>
+
+                <div class="admin-clothing-banner-form-actions">
+                  <button type="button" class="btn btn-primary admin-clothing-banner-save-btn" id="adminClothingBannerSaveBtn">Сохранить баннер</button>
+                  <button type="button" class="btn btn-ghost" id="adminClothingBannerCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingBannerDeleteBtn" hidden>Удалить баннер</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing-catalog-icons" id="adminSectionClothingCatalogIcons" aria-labelledby="adminClothingCatalogIconsTitle">
+          <button type="button" class="admin-clothing-catalog-icons-back-btn admin-clothing-catalog-icons-back-btn--corner" id="adminClothingCatalogIconsPageBack" aria-label="Назад в раздел «Одежда»">← Одежда</button>
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="admin-clothing-catalog-icons-page card">
+            <header class="admin-fitness-panel-header admin-clothing-catalog-icons-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-clothing-catalog-icons-page-icon" aria-hidden="true">🏷️</span>
+                <div>
+                  <h2 class="admin-clothing-catalog-icons-page-title" id="adminClothingCatalogIconsTitle">Иконки каталога</h2>
+                  <p class="admin-clothing-catalog-icons-page-desc">Иконки категорий в фильтре «Каталог» раздела «Одежда» · рекомендуемый размер 88 × 88 px</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-clothing-catalog-icons-layout" id="adminClothingCatalogIconsLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <span class="admin-fitness-catalog-count admin-clothing-catalog-icons-count" id="adminClothingCatalogIconsCount">0 своих иконок</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-clothing-catalog-icons-list" id="adminClothingCatalogIconsList"></ul>
+                </div>
+              </section>
+
+              <div class="admin-fitness-product-form admin-clothing-catalog-icons-form" id="adminClothingCatalogIconsForm" hidden>
+                <div class="admin-clothing-catalog-icons-form-head">
+                  <h3 id="adminClothingCatalogIconsFormTitle">Иконка категории</h3>
+                  <p class="admin-clothing-catalog-icons-form-desc">Рекомендуемый размер: <strong>88 × 88 px</strong> · PNG, JPG, WebP · до 5 МБ</p>
+                </div>
+
+                <div class="admin-clothing-catalog-icons-form-field">
+                  <span class="admin-clothing-catalog-icons-form-label">Изображение иконки</span>
+                  <div class="admin-clothing-catalog-icons-form-upload">
+                    <input type="file" id="adminClothingCatalogIconsImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminClothingCatalogIconsPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminClothingCatalogIconsRemoveImage" hidden>Убрать</button>
+                  </div>
+                </div>
+
+                <div class="admin-clothing-catalog-icons-preview-wrap">
+                  <img class="admin-clothing-catalog-icons-preview" id="adminClothingCatalogIconsImagePreview" alt="Предпросмотр иконки" hidden>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminClothingCatalogIconsSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminClothingCatalogIconsWarning" hidden></div>
+                </div>
+
+                <div class="admin-clothing-catalog-icons-form-actions">
+                  <button type="button" class="btn btn-primary admin-clothing-catalog-icons-save-btn" id="adminClothingCatalogIconsSaveBtn">Сохранить иконку</button>
+                  <button type="button" class="btn btn-ghost" id="adminClothingCatalogIconsCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingCatalogIconsResetBtn" hidden>Сбросить к стандартной</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing-alerts" id="adminSectionClothingAlerts" aria-labelledby="adminClothingAlertsTitle">
+          <button type="button" class="admin-clothing-alerts-back-btn admin-clothing-alerts-back-btn--corner" id="adminClothingAlertsPageBack" aria-label="Назад в раздел «Одежда»">← Одежда</button>
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="admin-clothing-alerts-page card">
+            <header class="admin-fitness-panel-header admin-clothing-alerts-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-clothing-alerts-page-icon" aria-hidden="true">🏷</span>
+                <div>
+                  <h2 class="admin-clothing-alerts-page-title" id="adminClothingAlertsTitle">Акции и товары</h2>
+                  <p class="admin-clothing-alerts-page-desc">Предложения в боковом блоке hero-раздела «Одежда»</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-clothing-alerts-layout" id="adminClothingAlertsLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-clothing-alerts-add-btn" id="adminClothingAlertsAdd">+ Добавить предложение</button>
+                  <span class="admin-fitness-catalog-count admin-clothing-alerts-count" id="adminClothingAlertsCount">0 предложений</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-clothing-alerts-list" id="adminClothingAlertsList"></ul>
+                </div>
+              </section>
+
+              <form class="admin-fitness-product-form admin-clothing-alerts-form" id="adminClothingAlertsForm" hidden>
+                <div class="admin-clothing-alerts-form-head">
+                  <h3 id="adminClothingAlertsFormTitle">Новое предложение</h3>
+                  <p class="admin-clothing-alerts-form-desc">Отображается в блоке «Акции и товары» на странице раздела</p>
+                </div>
+
+                <label class="admin-clothing-alerts-form-field">
+                  <span class="admin-clothing-alerts-form-label">Тип <em>*</em></span>
+                  <select name="alert_type" required>
+                    <option value="sale">Скидка</option>
+                    <option value="new">Новинка</option>
+                    <option value="drop">Drop</option>
+                  </select>
+                </label>
+                <label class="admin-clothing-alerts-form-field">
+                  <span class="admin-clothing-alerts-form-label">Бейдж <em>*</em></span>
+                  <input type="text" name="badge" id="adminClothingAlertsBadgeInput" required maxlength="32" placeholder="Например: −30%" list="adminClothingAlertsBadgeDatalist" autocomplete="off">
+                  <datalist id="adminClothingAlertsBadgeDatalist"></datalist>
+                  <p class="admin-clothing-alerts-badge-hint" id="adminClothingAlertsBadgeHint"></p>
+                  <div class="admin-clothing-alerts-badge-suggestions" id="adminClothingAlertsBadgeSuggestions" hidden></div>
+                </label>
+                <label class="admin-clothing-alerts-form-field">
+                  <span class="admin-clothing-alerts-form-label">Заголовок <em>*</em></span>
+                  <input type="text" name="title" required maxlength="128" placeholder="Например: Sport Line SS26">
+                </label>
+                <label class="admin-clothing-alerts-form-field">
+                  <span class="admin-clothing-alerts-form-label">Описание</span>
+                  <textarea name="description" rows="3" maxlength="500" placeholder="Краткое описание предложения"></textarea>
+                </label>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminClothingAlertsSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminClothingAlertsWarning" hidden></div>
+                </div>
+
+                <div class="admin-clothing-alerts-form-actions">
+                  <button type="button" class="btn btn-primary admin-clothing-alerts-save-btn" id="adminClothingAlertsSaveBtn">Сохранить предложение</button>
+                  <button type="button" class="btn btn-ghost" id="adminClothingAlertsCancelBtn">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingAlertsDeleteBtn" hidden>Удалить</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing-catalog-promo" id="adminSectionClothingCatalogPromo" aria-labelledby="adminClothingCatalogPromoPageTitle">
+          <button type="button" class="admin-clothing-catalog-promo-back-btn admin-clothing-catalog-promo-back-btn--corner" id="adminClothingCatalogPromoPageBack" aria-label="Назад в раздел «Одежда»">← Одежда</button>
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="admin-clothing-catalog-promo-page card">
+            <header class="admin-fitness-panel-header admin-clothing-catalog-promo-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-clothing-catalog-promo-page-icon" aria-hidden="true">📣</span>
+                <div>
+                  <h2 class="admin-clothing-catalog-promo-page-title" id="adminClothingCatalogPromoPageTitle">Реклама каталога</h2>
+                  <p class="admin-clothing-catalog-promo-page-desc">Баннер справа от списка категорий · рекомендуемый размер <strong>960 × 1280 px</strong> (3:4)</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-clothing-catalog-promo-layout is-editing" id="adminClothingCatalogPromoLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <span class="admin-fitness-catalog-count admin-clothing-catalog-promo-count" id="adminClothingCatalogPromoStatus">Загрузка…</span>
+                </div>
+                <div class="admin-clothing-catalog-promo-preview-wrap">
+                  <p class="admin-clothing-catalog-promo-preview-label">Предпросмотр на сайте</p>
+                  <aside class="clothing-catalog-promo admin-clothing-catalog-promo-preview" id="adminClothingCatalogPromoPreview">
+                    <div class="clothing-catalog-promo-card">
+                      <div class="clothing-catalog-promo-media">
+                        <img class="clothing-catalog-promo-image" id="adminClothingCatalogPromoPreviewImage" alt="Предпросмотр рекламы каталога" hidden>
+                        <div class="clothing-catalog-promo-fallback" id="adminClothingCatalogPromoPreviewFallback" aria-hidden="true"></div>
+                        <span class="clothing-catalog-promo-sticker" id="adminClothingCatalogPromoPreviewSticker">Горячие предложения</span>
+                        <div class="clothing-catalog-promo-overlay" id="adminClothingCatalogPromoPreviewOverlay">
+                          <strong class="clothing-catalog-promo-title" id="adminClothingCatalogPromoPreviewTitle">Sale до −40%</strong>
+                          <p class="clothing-catalog-promo-subtitle" id="adminClothingCatalogPromoPreviewSubtitle">Лимитированная подборка сезона</p>
+                        </div>
+                      </div>
+                    </div>
+                  </aside>
+                </div>
+              </section>
+
+              <form class="admin-fitness-product-form admin-clothing-catalog-promo-form" id="adminClothingCatalogPromoForm">
+                <div class="admin-clothing-catalog-promo-form-head">
+                  <h3>Настройки баннера</h3>
+                  <p class="admin-clothing-catalog-promo-form-desc">Отображается в каталоге раздела «Одежда» справа от списка категорий</p>
+                </div>
+
+                <label class="admin-clothing-catalog-promo-form-field">
+                  <span class="admin-clothing-catalog-promo-form-label">Надпись на стикере <em>*</em></span>
+                  <input type="text" name="promo_label" required maxlength="64" placeholder="Горячие предложения">
+                </label>
+                <label class="admin-clothing-catalog-promo-form-field">
+                  <span class="admin-clothing-catalog-promo-form-label">Заголовок на баннере</span>
+                  <input type="text" name="promo_title" maxlength="128" placeholder="Sale до −40%">
+                </label>
+                <label class="admin-clothing-catalog-promo-form-field">
+                  <span class="admin-clothing-catalog-promo-form-label">Подзаголовок</span>
+                  <input type="text" name="promo_subtitle" maxlength="255" placeholder="Лимитированная подборка сезона">
+                </label>
+                <label class="admin-clothing-catalog-promo-form-field">
+                  <span class="admin-clothing-catalog-promo-form-label">Ссылка (необязательно)</span>
+                  <input type="url" name="promo_link" maxlength="512" placeholder="https://...">
+                </label>
+
+                <div class="admin-clothing-catalog-promo-form-field">
+                  <span class="admin-clothing-catalog-promo-form-label">Изображение баннера</span>
+                  <div class="admin-clothing-catalog-promo-form-upload">
+                    <input type="file" id="adminClothingCatalogPromoImageInput" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminClothingCatalogPromoPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminClothingCatalogPromoRemoveImage" hidden>Убрать</button>
+                  </div>
+                  <p class="admin-clothing-catalog-promo-image-hint">JPG, PNG или WebP · до 15 МБ · вертикальный формат 3:4</p>
+                </div>
+
+                <div class="admin-banner-edit-messages">
+                  <div class="admin-hero-success" id="adminClothingCatalogPromoSuccess" hidden></div>
+                  <div class="admin-hero-warning" id="adminClothingCatalogPromoWarning" hidden></div>
+                </div>
+
+                <div class="admin-clothing-catalog-promo-form-actions">
+                  <button type="button" class="btn btn-primary admin-clothing-catalog-promo-save-btn" id="adminClothingCatalogPromoSaveBtn">Сохранить рекламу</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="admin-section admin-section-clothing-catalog-page" id="adminSectionClothingCatalog" aria-labelledby="adminClothingCatalogTitle">
+          <button type="button" class="admin-clothing-catalog-page-back-btn admin-clothing-catalog-page-back-btn--corner" id="adminClothingCatalogPageBack" aria-label="Назад в раздел «Одежда»">← Одежда</button>
+          <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
+
+          <div class="admin-clothing-catalog-page-card card">
+            <header class="admin-fitness-panel-header admin-clothing-catalog-page-header">
+              <div class="admin-fitness-panel-heading">
+                <span class="admin-fitness-catalog-icon admin-clothing-catalog-page-icon" aria-hidden="true">👗</span>
+                <div>
+                  <h2 class="admin-clothing-catalog-page-title" id="adminClothingCatalogTitle">Каталог товаров</h2>
+                  <p class="admin-clothing-catalog-page-desc">Добавление, редактирование, скидки и акции товаров раздела «Одежда»</p>
+                </div>
+              </div>
+            </header>
+
+            <div class="admin-fitness-catalog-layout admin-clothing-catalog-page-layout" id="adminClothingCatalogLayout">
+              <section class="admin-fitness-catalog-main">
+                <div class="admin-fitness-panel-actions">
+                  <button type="button" class="btn btn-primary admin-fitness-add-btn admin-clothing-catalog-add-btn" id="adminClothingAddProduct">+ Добавить товар</button>
+                  <span class="admin-fitness-catalog-count admin-clothing-catalog-page-count" id="adminClothingCatalogCount">0 товаров</span>
+                </div>
+                <div class="admin-fitness-catalog-list-wrap">
+                  <ul class="admin-fitness-product-list admin-clothing-catalog-list" id="adminClothingProductList"></ul>
+                </div>
+              </section>
+
+              <form class="admin-fitness-product-form admin-clothing-catalog-form" id="adminClothingProductForm" hidden>
+                <div class="admin-fitness-form-header admin-clothing-catalog-form-head">
+                  <h3 id="adminClothingFormTitle">Новый товар</h3>
+                  <p class="admin-fitness-form-desc admin-clothing-catalog-form-desc">Товар появится в разделе «Одежда» на сайте</p>
+                </div>
+
+                <label class="admin-field">
+                  <span>Название <em>*</em></span>
+                  <input type="text" name="title" required maxlength="255" placeholder="Например: Sport Line SS26">
+                </label>
+                <label class="admin-field">
+                  <span>Описание</span>
+                  <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
+                </label>
+                <label class="admin-field">
+                  <span>Линейка</span>
+                  <select name="category" required>
+                    <option value="sport">Спорт</option>
+                    <option value="casual">Casual</option>
+                  </select>
+                </label>
+
+                <fieldset class="admin-field admin-clothing-catalog-field">
+                  <legend>Каталог · публичная страница</legend>
+                  <p class="admin-clothing-tags-hint">Выберите категории — товар появится в соответствующих разделах каталога на сайте</p>
+                  <div class="admin-clothing-catalog-options">
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="men">
+                      <span class="admin-clothing-catalog-option-label">Мужчинам</span>
+                    </label>
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="women">
+                      <span class="admin-clothing-catalog-option-label">Женщинам</span>
+                    </label>
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="shirts">
+                      <span class="admin-clothing-catalog-option-label">Рубашки</span>
+                    </label>
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="pants">
+                      <span class="admin-clothing-catalog-option-label">Брюки</span>
+                    </label>
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="jeans">
+                      <span class="admin-clothing-catalog-option-label">Джинсы</span>
+                    </label>
+                    <label class="admin-clothing-catalog-option">
+                      <input type="checkbox" name="catalog_categories" value="accessories">
+                      <span class="admin-clothing-catalog-option-label">Аксессуары</span>
+                    </label>
+                  </div>
+                </fieldset>
+                <label class="admin-field">
+                  <span>Цена со скидкой (USD)</span>
+                  <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="89.00">
+                  <small class="admin-clothing-tags-hint">Новая цена — то, что видит покупатель</small>
+                </label>
+                <label class="admin-field">
+                  <span>Цена без скидки (USD)</span>
+                  <input type="number" name="compare_price_usd" min="0" max="999999.99" step="0.01" placeholder="120.00">
+                  <small class="admin-clothing-tags-hint">Старая цена — будет показана перечёркнутой на сайте</small>
+                </label>
+                <label class="admin-field">
+                  <span>Скидка (%)</span>
+                  <input type="number" name="discount_percent" min="1" max="99" step="1" placeholder="25">
+                  <small class="admin-clothing-tags-hint">Можно указать вместо старой цены — она рассчитается автоматически</small>
+                </label>
+                <label class="admin-field">
+                  <span>Тип акции</span>
+                  <select name="promo_type">
+                    <option value="">Без акции</option>
+                    <option value="sale">Распродажа</option>
+                    <option value="new">Новинка</option>
+                    <option value="limited">Лимитированный</option>
+                    <option value="hot">Горячее</option>
+                  </select>
+                </label>
+                <label class="admin-field">
+                  <span>Текст бейджа</span>
+                  <input type="text" name="promo_label" maxlength="32" placeholder="−30%, Sale, New drop…">
+                  <small class="admin-clothing-tags-hint">Необязательно — если пусто, подставится автоматически</small>
+                </label>
+                <label class="admin-field">
+                  <span>Текст на заглушке</span>
+                  <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
+                </label>
+                <label class="admin-field">
+                  <span>Дополнительные теги</span>
+                  <input type="text" name="tags" placeholder="popular">
+                  <small class="admin-clothing-tags-hint">Необязательно · popular — отметить как популярный (иначе добавится при 3+ отзывах)</small>
+                </label>
+
+                <div class="admin-fitness-image-field">
+                  <span class="admin-field-label">Изображение товара</span>
+                  <div class="admin-fitness-image-upload">
+                    <input type="file" id="adminClothingProductImage" accept="image/jpeg,image/png,image/webp" hidden>
+                    <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminClothingPickImage">Выбрать файл</button>
+                    <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminClothingRemoveImage" hidden>Убрать</button>
+                  </div>
+                  <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ · квадрат 1:1</p>
+                  <img class="admin-fitness-product-preview admin-clothing-catalog-preview" id="adminClothingProductImagePreview" alt="Предпросмотр товара" hidden>
+                </div>
+
+                <div class="admin-fitness-form-actions admin-clothing-catalog-form-actions">
+                  <button type="submit" class="btn btn-primary admin-fitness-save-btn admin-clothing-catalog-save-btn" id="adminClothingSaveProduct">Сохранить товар</button>
+                  <button type="button" class="btn btn-ghost" id="adminClothingCancelProduct">Отмена</button>
+                  <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingDeleteProduct" hidden>Удалить товар</button>
+                </div>
+              </form>
+            </div>
           </div>
         </section>
 
         <section class="admin-section admin-section-clothing" id="adminSectionClothing" aria-labelledby="adminClothingSectionTitle">
+          <button type="button" class="admin-section-back-btn admin-section-back-btn--corner" id="adminClothingBackToDashboard" aria-label="Назад к панели администратора">← К панели администратора</button>
           <div class="admin-panel-badge admin-panel-badge--clothing">Одежда</div>
 
           <div class="dashboard-grid admin-clothing-grid">
@@ -832,21 +1648,12 @@
                 <h2 id="adminClothingSectionTitle">Управление разделом</h2>
               </div>
               <div class="quick-links admin-content-links">
-                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseCatalog">
-                  <span class="quick-link-icon quick-link-icon--clothing-catalog" aria-hidden="true">
-                    <span class="quick-link-icon-glyph">👗</span>
-                  </span>
-                  <div>
-                    <strong>Каталог товаров</strong>
-                    <small>Добавление, редактирование и удаление товаров раздела</small>
-                  </div>
-                </button>
                 <button type="button" class="quick-link admin-content-link" id="adminClothingChooseBanner">
                   <span class="quick-link-icon quick-link-icon--clothing-banner" aria-hidden="true">
                     <span class="quick-link-icon-glyph">🖼️</span>
                   </span>
                   <div>
-                    <strong>Баннер раздела</strong>
+                    <strong>Баннер «Одежда»</strong>
                     <small>Загрузка, удаление и настройка hero-баннеров</small>
                   </div>
                 </button>
@@ -877,6 +1684,15 @@
                     <small>Баннер и стикер «Горячие предложения» в каталоге</small>
                   </div>
                 </button>
+                <button type="button" class="quick-link admin-content-link" id="adminClothingChooseCatalog">
+                  <span class="quick-link-icon quick-link-icon--clothing-catalog" aria-hidden="true">
+                    <span class="quick-link-icon-glyph">👗</span>
+                  </span>
+                  <div>
+                    <strong>Каталог товаров</strong>
+                    <small>Добавление, редактирование и удаление товаров раздела</small>
+                  </div>
+                </button>
               </div>
             </div>
 
@@ -888,10 +1704,6 @@
                 <li class="recent-loading">Загрузка…</li>
               </ul>
             </div>
-          </div>
-
-          <div class="admin-panel-footer">
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminClothingBackToDashboard">← К панели администратора</button>
           </div>
         </section>
 
@@ -956,11 +1768,11 @@
         </section>
 
         <section class="admin-section admin-section-site-about" id="adminSectionSiteAbout" aria-labelledby="adminSiteAboutTitle">
+          <button type="button" class="site-about-back-btn site-about-back-btn--corner" id="adminSiteAboutBack" aria-label="Назад на главный экран">← Главный экран</button>
           <div class="admin-panel-badge">О сайте</div>
 
           <div class="site-about-toolbar card">
             <div class="site-about-toolbar-main">
-              <button type="button" class="site-about-back-btn" id="adminSiteAboutBack" aria-label="Назад на главный экран">← Главный экран</button>
               <div>
                 <h2 id="adminSiteAboutTitle">Редактирование страницы «О сайте»</h2>
                 <p class="site-about-toolbar-desc">Меняйте текст, добавляйте блоки и выбирайте стили — абзацы, подзаголовки, списки и FAQ как на публичной странице.</p>
@@ -975,7 +1787,7 @@
             <p class="site-about-status" id="adminSiteAboutStatus" aria-live="polite"></p>
           </div>
 
-          <div class="site-about-layout">
+          <div class="site-about-layout" id="adminSiteAboutLayout">
             <div class="site-about-editor-col" id="adminSiteAboutEditor">
               <p class="site-about-loading">Загрузка редактора…</p>
             </div>
@@ -1069,7 +1881,7 @@
                 <h3 class="about-subtitle">Фитнес-индустрия</h3>
                 <ul class="about-list">
                   <li><strong>Каталог товаров</strong> — добавление, редактирование и удаление карточек добавок: название, описание, категория, цена, изображение</li>
-                  <li><strong>Баннер раздела</strong> — hero-баннеры на странице «Фитнес-индустрия»</li>
+                  <li><strong>Баннер «Фитнес-индустрия»</strong> — hero-баннеры на странице «Фитнес-индустрия»</li>
                 </ul>
 
                 <h3 class="about-subtitle">Мои Баннеры</h3>
@@ -1159,693 +1971,38 @@
       </div>
     </main>
 
-    <!-- Admin: редактирование баннеров главной -->
-    <div class="admin-banner-overlay" id="adminBannerModal" hidden>
-      <div class="admin-modal admin-modal-banners" id="adminBannerModalDialog" role="dialog" aria-labelledby="adminBannerModalTitle">
-        <div class="admin-banner-modal-drag-handle" id="adminBannerModalDrag" title="Перетащите окно">
-          <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
-          <span class="admin-banner-modal-drag-label">Перетащите окно</span>
+    <!-- Admin: подтверждение сохранения «О сайте» -->
+    <div class="admin-site-about-save-overlay" id="adminSiteAboutSaveModal" hidden>
+      <div class="site-about-save-modal" role="dialog" aria-modal="true" aria-labelledby="adminSiteAboutSaveModalTitle">
+        <div class="site-about-save-modal-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
         </div>
-        <button type="button" class="admin-modal-close" id="adminBannerModalClose" aria-label="Закрыть">✕</button>
-
-        <div class="admin-banner-step" id="adminBannerPickStep">
-          <header class="admin-banner-edit-header">
-            <h2 class="admin-modal-title" id="adminBannerModalTitle">Изменить баннер «Главная»</h2>
-            <p class="admin-modal-desc admin-banner-edit-desc">Выберите баннер для изменения</p>
-          </header>
-          <div class="admin-banner-pick-list">
-            <button type="button" class="admin-banner-pick-btn" data-pick="0">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 1</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="1">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 2</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="2">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 3</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="3">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 4</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="admin-banner-step admin-banner-step--edit" id="adminBannerEditStep" hidden>
-          <header class="admin-banner-edit-header">
-            <h2 class="admin-modal-title">Баннер <span id="adminBannerEditNum">1</span></h2>
-            <p class="admin-modal-desc admin-banner-edit-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP</p>
-          </header>
-
-          <div class="admin-banner-image-field admin-fitness-image-field">
-            <span class="admin-field-label">Изображение баннера</span>
-            <div class="admin-fitness-image-upload">
-              <input type="file" id="adminBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
-              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminBannerPickImage">Выбрать файл</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminBannerRemoveImage" hidden>Убрать</button>
-            </div>
-            <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
-            <img class="admin-fitness-product-preview admin-banner-image-preview" id="adminBannerImagePreview" alt="Предпросмотр баннера" hidden>
-          </div>
-
-          <div class="admin-banner-edit-messages">
-            <div class="admin-hero-success" id="adminHeroSuccess" hidden></div>
-            <div class="admin-hero-warning" id="adminHeroWarning" hidden></div>
-          </div>
-
-          <div class="admin-banner-edit-actions">
-            <button type="button" class="btn btn-primary" id="adminBannerSaveBtn">Сохранить баннер</button>
-            <button type="button" class="btn btn-ghost" id="adminBannerCancelBtn">Отмена</button>
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminBannerBack">← Выбрать другой баннер</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Admin: иконки разделов -->
-    <div class="admin-overlay admin-section-icons-overlay" id="adminSectionIconsModal" hidden>
-      <div class="admin-modal admin-modal-wide admin-section-icons-panel" role="dialog" aria-labelledby="adminSectionIconsTitle">
-        <button type="button" class="admin-modal-close" id="adminSectionIconsClose" aria-label="Закрыть">✕</button>
-        <header class="admin-section-icons-header">
-          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminSectionIconsBack">← Назад</button>
-          <div class="admin-section-icons-heading">
-            <h2 class="admin-section-icons-title" id="adminSectionIconsTitle">Иконки разделов</h2>
-            <p class="admin-section-icons-subtitle">Иконки в блоке «Разделы портфолио» на главной странице</p>
-            <p class="admin-section-icons-meta">Рекомендуемый размер 88×88 px · PNG, JPG, WebP</p>
-          </div>
-        </header>
-        <div class="admin-section-icons-list" id="adminSectionIconsList"></div>
-      </div>
-    </div>
-
-    <!-- Admin: цветовая палитра страниц -->
-    <div class="admin-overlay admin-section-icons-overlay" id="adminSectionPaletteModal" hidden>
-      <div class="admin-modal admin-modal-wide admin-section-palette-panel" role="dialog" aria-labelledby="adminSectionPaletteTitle">
-        <button type="button" class="admin-modal-close" id="adminSectionPaletteClose" aria-label="Закрыть">✕</button>
-        <header class="admin-section-icons-header">
-          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminSectionPaletteBack">← Назад</button>
-          <div class="admin-section-icons-heading">
-            <h2 class="admin-section-icons-title" id="adminSectionPaletteTitle">Цветовая палитра страниц</h2>
-            <p class="admin-section-icons-subtitle">Настройка фона, акцента и цвета кнопок навигации для каждого раздела сайта</p>
-            <p class="admin-section-icons-meta">Остальной текст подбирается автоматически по контрасту с фоном</p>
-          </div>
-        </header>
-        <div class="admin-palette-tabs" id="adminPaletteTabs"></div>
-        <div class="admin-palette-layout">
-          <div class="admin-palette-preview" id="adminPalettePreview"></div>
-          <div class="admin-palette-editor-wrap">
-            <div class="admin-palette-editor" id="adminPaletteEditor"></div>
-            <div class="admin-palette-actions">
-              <button type="button" class="btn btn-primary" id="adminPaletteSave">Сохранить палитру</button>
-              <button type="button" class="btn btn-ghost" id="adminPaletteReset">По умолчанию</button>
-            </div>
-            <p class="admin-palette-status" id="adminPaletteStatus" hidden></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Admin: иконки каталога одежды -->
-    <div class="admin-overlay admin-section-icons-overlay" id="adminClothingCatalogIconsModal" hidden>
-      <div class="admin-modal admin-modal-wide admin-section-icons-panel" role="dialog" aria-labelledby="adminClothingCatalogIconsTitle">
-        <button type="button" class="admin-modal-close" id="adminClothingCatalogIconsClose" aria-label="Закрыть">✕</button>
-        <header class="admin-section-icons-header">
-          <button type="button" class="btn btn-ghost btn-ghost-back admin-section-icons-back" id="adminClothingCatalogIconsBack">← Назад</button>
-          <div class="admin-section-icons-heading">
-            <h2 class="admin-section-icons-title" id="adminClothingCatalogIconsTitle">Иконки каталога</h2>
-            <p class="admin-section-icons-subtitle">Иконки категорий в фильтре «Каталог» раздела «Одежда»</p>
-            <p class="admin-section-icons-meta">Рекомендуемый размер 88×88 px · PNG, JPG, WebP</p>
-          </div>
-        </header>
-        <div class="admin-section-icons-list" id="adminClothingCatalogIconsList"></div>
-      </div>
-    </div>
-
-    <!-- Admin: акции и товары (раздел «Одежда») -->
-    <div class="admin-overlay admin-clothing-alerts-overlay" id="adminClothingAlertsModal" hidden>
-      <div class="admin-modal admin-modal-wide admin-clothing-alerts-panel" role="dialog" aria-labelledby="adminClothingAlertsTitle">
-        <button type="button" class="admin-modal-close" id="adminClothingAlertsClose" aria-label="Закрыть">✕</button>
-        <header class="admin-clothing-alerts-header">
-          <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-alerts-back" id="adminClothingAlertsBack">← Назад</button>
-          <div class="admin-clothing-alerts-heading">
-            <span class="admin-modal-icon admin-clothing-alerts-icon" aria-hidden="true">🏷</span>
-            <div>
-              <h2 class="admin-modal-title" id="adminClothingAlertsTitle">Акции и товары</h2>
-              <p class="admin-modal-desc">Предложения в боковом блоке hero-раздела «Одежда»</p>
-            </div>
-          </div>
-        </header>
-
-        <div class="admin-clothing-alerts-layout" id="adminClothingAlertsLayout">
-          <section class="admin-clothing-alerts-main">
-            <div class="admin-clothing-alerts-actions">
-              <button type="button" class="btn btn-primary" id="adminClothingAddAlert">+ Добавить предложение</button>
-              <span class="admin-clothing-alerts-count" id="adminClothingAlertsCount">0 предложений</span>
-            </div>
-            <div class="admin-clothing-alerts-list-wrap">
-              <ul class="admin-clothing-alerts-list" id="adminClothingAlertsList"></ul>
-              <p class="admin-clothing-alerts-empty" id="adminClothingAlertsEmpty" hidden>Предложений пока нет. Добавьте первое.</p>
-            </div>
-          </section>
-
-          <form class="admin-clothing-alerts-form" id="adminClothingAlertsForm" hidden>
-            <div class="admin-clothing-alerts-form-header">
-              <h3 id="adminClothingAlertsFormTitle">Новое предложение</h3>
-              <p class="admin-clothing-alerts-form-desc">Отображается в блоке «Акции и товары» на странице раздела</p>
-            </div>
-
-            <label class="admin-field">
-              <span>Тип <em>*</em></span>
-              <select name="alert_type" required>
-                <option value="sale">Скидка</option>
-                <option value="new">Новинка</option>
-                <option value="drop">Drop</option>
-              </select>
-            </label>
-            <label class="admin-field">
-              <span>Бейдж <em>*</em></span>
-              <input type="text" name="badge" required maxlength="32" placeholder="Например: −30%, New, Drop">
-            </label>
-            <label class="admin-field">
-              <span>Заголовок <em>*</em></span>
-              <input type="text" name="title" required maxlength="128" placeholder="Например: Sport Line SS26">
-            </label>
-            <label class="admin-field">
-              <span>Описание</span>
-              <textarea name="description" rows="3" maxlength="500" placeholder="Краткое описание предложения"></textarea>
-            </label>
-
-            <div class="admin-clothing-alerts-form-actions">
-              <button type="submit" class="btn btn-primary" id="adminClothingSaveAlert">Сохранить</button>
-              <button type="button" class="btn btn-ghost" id="adminClothingCancelAlert">Отмена</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingDeleteAlert" hidden>Удалить</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Admin: реклама каталога «Одежда» -->
-    <div class="admin-overlay admin-clothing-promo-overlay" id="adminClothingCatalogPromoModal" hidden>
-      <div class="admin-modal admin-modal-wide admin-clothing-promo-panel" role="dialog" aria-labelledby="adminClothingCatalogPromoTitle">
-        <button type="button" class="admin-modal-close" id="adminClothingCatalogPromoClose" aria-label="Закрыть">✕</button>
-        <header class="admin-clothing-promo-header">
-          <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-promo-back" id="adminClothingCatalogPromoBack">← Назад</button>
-          <div class="admin-clothing-promo-heading">
-            <span class="admin-modal-icon admin-clothing-promo-icon" aria-hidden="true">📣</span>
-            <div>
-              <h2 class="admin-modal-title" id="adminClothingCatalogPromoTitle">Реклама каталога</h2>
-              <p class="admin-modal-desc">Баннер справа от списка категорий · рекомендуемый размер <strong>960 × 1280 px</strong> (3:4)</p>
-            </div>
-          </div>
-        </header>
-
-        <div class="admin-clothing-promo-body">
-          <div class="admin-clothing-promo-preview-wrap">
-            <p class="admin-clothing-promo-preview-label">Предпросмотр на сайте</p>
-            <aside class="clothing-catalog-promo admin-clothing-promo-preview" id="adminClothingCatalogPromoPreview">
-              <div class="clothing-catalog-promo-card">
-                <div class="clothing-catalog-promo-media">
-                  <img class="clothing-catalog-promo-image" id="adminClothingCatalogPromoPreviewImage" alt="" hidden>
-                  <div class="clothing-catalog-promo-fallback" id="adminClothingCatalogPromoPreviewFallback" aria-hidden="true"></div>
-                  <span class="clothing-catalog-promo-sticker" id="adminClothingCatalogPromoPreviewSticker">Горячие предложения</span>
-                  <div class="clothing-catalog-promo-overlay" id="adminClothingCatalogPromoPreviewOverlay">
-                    <strong class="clothing-catalog-promo-title" id="adminClothingCatalogPromoPreviewTitle">Sale до −40%</strong>
-                    <p class="clothing-catalog-promo-subtitle" id="adminClothingCatalogPromoPreviewSubtitle">Лимитированная подборка сезона</p>
-                  </div>
-                </div>
-              </div>
-            </aside>
-          </div>
-
-          <form class="admin-clothing-promo-form" id="adminClothingCatalogPromoForm">
-            <label class="admin-field">
-              <span>Надпись на стикере <em>*</em></span>
-              <input type="text" name="promo_label" required maxlength="64" placeholder="Горячие предложения">
-            </label>
-            <label class="admin-field">
-              <span>Заголовок на баннере</span>
-              <input type="text" name="promo_title" maxlength="128" placeholder="Sale до −40%">
-            </label>
-            <label class="admin-field">
-              <span>Подзаголовок</span>
-              <input type="text" name="promo_subtitle" maxlength="255" placeholder="Лимитированная подборка сезона">
-            </label>
-            <label class="admin-field">
-              <span>Ссылка (необязательно)</span>
-              <input type="url" name="promo_link" maxlength="512" placeholder="https://...">
-            </label>
-
-            <div class="admin-clothing-promo-image-field">
-              <span class="admin-field-label">Изображение баннера</span>
-              <div class="admin-clothing-promo-image-upload">
-                <input type="file" id="adminClothingCatalogPromoImageInput" accept="image/jpeg,image/png,image/webp" hidden>
-                <button type="button" class="btn btn-ghost" id="adminClothingCatalogPromoPickImage">Выбрать файл</button>
-                <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingCatalogPromoRemoveImage" hidden>Убрать</button>
-              </div>
-              <p class="admin-clothing-promo-image-hint">JPG, PNG или WebP · до 15 МБ · вертикальный формат 3:4</p>
-            </div>
-
-            <div class="admin-clothing-promo-form-actions">
-              <button type="submit" class="btn btn-primary" id="adminClothingCatalogPromoSave">Сохранить</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <!-- Admin: баннер раздела «Одежда» -->
-    <div class="admin-banner-overlay admin-clothing-banner-overlay" id="adminClothingBannerModal" hidden>
-      <div class="admin-modal admin-modal-banners admin-clothing-banner-panel" id="adminClothingBannerModalDialog" role="dialog" aria-labelledby="adminClothingBannerModalTitle">
-        <div class="admin-banner-modal-drag-handle" id="adminClothingBannerModalDrag" title="Перетащите окно">
-          <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
-          <span class="admin-banner-modal-drag-label">Перетащите окно</span>
-        </div>
-        <button type="button" class="admin-modal-close" id="adminClothingBannerModalClose" aria-label="Закрыть">✕</button>
-
-        <div class="admin-banner-step" id="adminClothingBannerPickStep">
-          <header class="admin-banner-edit-header">
-            <h2 class="admin-modal-title" id="adminClothingBannerModalTitle">Изменить баннер «Одежда»</h2>
-            <p class="admin-modal-desc admin-banner-edit-desc">Компактный баннер в hero-блоке · на сайте <strong>400 × 360 px</strong></p>
-          </header>
-          <div class="admin-banner-pick-list">
-            <button type="button" class="admin-banner-pick-btn" data-pick="0">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 1</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="1">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 2</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="2">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 3</span>
-            </button>
-            <button type="button" class="admin-banner-pick-btn" data-pick="3">
-              <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-              <span class="admin-banner-pick-label">Баннер 4</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="admin-banner-step admin-banner-step--edit" id="adminClothingBannerEditStep" hidden>
-          <header class="admin-banner-edit-header">
-            <h2 class="admin-modal-title">Баннер <span id="adminClothingBannerEditNum">1</span></h2>
-            <p class="admin-modal-desc admin-banner-edit-desc">Загрузка <strong>1600 × 1440 px</strong> (или больше) · отображение <strong>400 × 360 px</strong> · JPG, PNG, WebP</p>
-          </header>
-
-          <div class="admin-banner-image-field admin-clothing-image-field">
-            <span class="admin-field-label">Изображение баннера</span>
-            <div class="admin-clothing-image-upload">
-              <input type="file" id="adminClothingBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
-              <button type="button" class="btn btn-ghost admin-clothing-image-btn" id="adminClothingBannerPickImage">Выбрать файл</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger admin-clothing-image-remove" id="adminClothingBannerRemoveImage" hidden>Убрать</button>
-            </div>
-            <p class="admin-clothing-image-hint">JPG, PNG или WebP · до 25 МБ · для чёткого качества на Retina загружайте от 1600 × 1440 px</p>
-            <div class="admin-clothing-banner-preview-frame">
-              <img class="admin-clothing-banner-preview admin-banner-image-preview" id="adminClothingBannerImagePreview" alt="Предпросмотр баннера" hidden>
-            </div>
-          </div>
-
-          <div class="admin-banner-edit-messages">
-            <div class="admin-hero-success" id="adminClothingHeroSuccess" hidden></div>
-            <div class="admin-hero-warning" id="adminClothingHeroWarning" hidden></div>
-          </div>
-
-          <div class="admin-banner-edit-actions">
-            <button type="button" class="btn btn-primary" id="adminClothingBannerSaveBtn">Сохранить баннер</button>
-            <button type="button" class="btn btn-ghost" id="adminClothingBannerCancelBtn">Отмена</button>
-            <button type="button" class="btn btn-ghost btn-ghost-back" id="adminClothingBannerBack">← Выбрать другой баннер</button>
-          </div>
+        <h2 class="site-about-save-modal-title" id="adminSiteAboutSaveModalTitle">Сохранить изменения?</h2>
+        <p class="site-about-save-modal-text">Вы готовы сохранить все правки на странице «О сайте»? После подтверждения текст обновится на публичном сайте.</p>
+        <div class="site-about-save-modal-actions">
+          <button type="button" class="site-about-save-btn site-about-save-btn--yes" id="adminSiteAboutSaveYes">Да, сохранить</button>
+          <button type="button" class="site-about-save-btn site-about-save-btn--no" id="adminSiteAboutSaveNo">Нет</button>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Admin: каталог раздела «Одежда» -->
-  <div class="admin-overlay admin-clothing-catalog-overlay" id="adminClothingCatalogPanel" hidden>
-    <div class="admin-modal admin-modal-wide admin-clothing-catalog-panel" role="dialog" aria-labelledby="adminClothingCatalogTitle">
-      <button type="button" class="admin-modal-close" id="adminClothingCatalogClose" aria-label="Закрыть">✕</button>
-      <header class="admin-clothing-catalog-header">
-        <button type="button" class="btn btn-ghost btn-ghost-back admin-clothing-catalog-back" id="adminClothingCatalogBack">← Назад</button>
-        <div class="admin-clothing-catalog-heading">
-          <span class="admin-modal-icon admin-clothing-catalog-icon" aria-hidden="true">👗</span>
-          <div>
-            <span class="admin-clothing-catalog-eyebrow">Fashion · Коллекция</span>
-            <h2 class="admin-modal-title" id="adminClothingCatalogTitle">Каталог товаров</h2>
-            <p class="admin-modal-desc">Добавление, редактирование, скидки и акции товаров раздела «Одежда»</p>
-          </div>
-        </div>
-      </header>
-
-      <div class="admin-clothing-catalog-layout" id="adminClothingCatalogLayout">
-        <section class="admin-clothing-catalog-main">
-          <div class="admin-clothing-catalog-actions">
-            <button type="button" class="btn btn-primary admin-clothing-catalog-add-btn" id="adminClothingAddProduct">+ Добавить товар</button>
-            <span class="admin-clothing-catalog-count" id="adminClothingCatalogCount">0 товаров</span>
-          </div>
-          <div class="admin-clothing-catalog-list-wrap">
-            <ul class="admin-clothing-product-list" id="adminClothingProductList"></ul>
-          </div>
-        </section>
-
-        <form class="admin-clothing-product-form" id="adminClothingProductForm" hidden>
-          <div class="admin-clothing-product-form-header">
-            <h3 id="adminClothingFormTitle">Новый товар</h3>
-            <p class="admin-clothing-product-form-desc">Товар появится в разделе «Одежда» на сайте</p>
-          </div>
-
-          <label class="admin-field">
-            <span>Название <em>*</em></span>
-            <input type="text" name="title" required maxlength="255" placeholder="Например: Sport Line SS26">
-          </label>
-          <label class="admin-field">
-            <span>Описание</span>
-            <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
-          </label>
-          <label class="admin-field">
-            <span>Линейка</span>
-            <select name="category" required>
-              <option value="sport">Спорт</option>
-              <option value="casual">Casual</option>
-            </select>
-          </label>
-
-          <fieldset class="admin-field admin-clothing-catalog-field">
-            <legend>Каталог · публичная страница</legend>
-            <p class="admin-clothing-tags-hint">Выберите категории — товар появится в соответствующих разделах каталога на сайте</p>
-            <div class="admin-clothing-catalog-options">
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="men">
-                <span class="admin-clothing-catalog-option-label">Мужчинам</span>
-              </label>
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="women">
-                <span class="admin-clothing-catalog-option-label">Женщинам</span>
-              </label>
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="shirts">
-                <span class="admin-clothing-catalog-option-label">Рубашки</span>
-              </label>
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="pants">
-                <span class="admin-clothing-catalog-option-label">Брюки</span>
-              </label>
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="jeans">
-                <span class="admin-clothing-catalog-option-label">Джинсы</span>
-              </label>
-              <label class="admin-clothing-catalog-option">
-                <input type="checkbox" name="catalog_categories" value="accessories">
-                <span class="admin-clothing-catalog-option-label">Аксессуары</span>
-              </label>
-            </div>
-          </fieldset>
-          <label class="admin-field">
-            <span>Цена со скидкой (USD)</span>
-            <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="89.00">
-            <small class="admin-clothing-tags-hint">Новая цена — то, что видит покупатель</small>
-          </label>
-          <label class="admin-field">
-            <span>Цена без скидки (USD)</span>
-            <input type="number" name="compare_price_usd" min="0" max="999999.99" step="0.01" placeholder="120.00">
-            <small class="admin-clothing-tags-hint">Старая цена — будет показана перечёркнутой на сайте</small>
-          </label>
-          <label class="admin-field">
-            <span>Скидка (%)</span>
-            <input type="number" name="discount_percent" min="1" max="99" step="1" placeholder="25">
-            <small class="admin-clothing-tags-hint">Можно указать вместо старой цены — она рассчитается автоматически</small>
-          </label>
-          <label class="admin-field">
-            <span>Тип акции</span>
-            <select name="promo_type">
-              <option value="">Без акции</option>
-              <option value="sale">Распродажа</option>
-              <option value="new">Новинка</option>
-              <option value="limited">Лимитированный</option>
-              <option value="hot">Горячее</option>
-            </select>
-          </label>
-          <label class="admin-field">
-            <span>Текст бейджа</span>
-            <input type="text" name="promo_label" maxlength="32" placeholder="−30%, Sale, New drop…">
-            <small class="admin-clothing-tags-hint">Необязательно — если пусто, подставится автоматически</small>
-          </label>
-          <label class="admin-field">
-            <span>Текст на заглушке</span>
-            <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
-          </label>
-          <label class="admin-field">
-            <span>Дополнительные теги</span>
-            <input type="text" name="tags" placeholder="popular">
-            <small class="admin-clothing-tags-hint">Необязательно · popular — отметить как популярный (иначе добавится при 3+ отзывах)</small>
-          </label>
-
-          <div class="admin-clothing-product-image-field">
-            <span class="admin-field-label">Изображение товара</span>
-            <div class="admin-clothing-product-image-upload">
-              <input type="file" id="adminClothingProductImage" accept="image/jpeg,image/png,image/webp" hidden>
-              <button type="button" class="btn btn-ghost admin-clothing-product-image-btn" id="adminClothingPickImage">Выбрать файл</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger admin-clothing-product-image-remove" id="adminClothingRemoveImage" hidden>Убрать</button>
-            </div>
-            <p class="admin-clothing-product-image-hint">JPG, PNG или WebP · до 15 МБ · квадрат 1:1</p>
-            <img class="admin-clothing-product-preview" id="adminClothingProductImagePreview" alt="Предпросмотр товара" hidden>
-          </div>
-
-          <div class="admin-clothing-product-form-actions">
-            <button type="submit" class="btn btn-primary admin-clothing-product-save-btn" id="adminClothingSaveProduct">Сохранить</button>
-            <button type="button" class="btn btn-ghost admin-clothing-product-cancel-btn" id="adminClothingCancelProduct">Отмена</button>
-            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminClothingDeleteProduct" hidden>Удалить товар</button>
-          </div>
-        </form>
+  <div class="admin-toast" id="adminToast" hidden role="status" aria-live="polite">
+    <div class="admin-toast-card">
+      <span class="admin-toast-icon" aria-hidden="true"></span>
+      <div class="admin-toast-content">
+        <span class="admin-toast-label">Готово</span>
+        <p class="admin-toast-message"></p>
       </div>
+      <button type="button" class="admin-toast-close" aria-label="Закрыть уведомление">✕</button>
+      <span class="admin-toast-progress" aria-hidden="true"></span>
     </div>
   </div>
-
-  <!-- Admin: каталог фитнес-раздела -->
-  <div class="admin-overlay admin-fitness-catalog-overlay" id="adminBannersCatalogPanel" hidden>
-    <div class="admin-modal admin-fitness-catalog-panel admin-banners-catalog-panel" role="dialog" aria-labelledby="adminBannersCatalogTitle">
-      <button type="button" class="admin-modal-close" id="adminBannersCatalogClose" aria-label="Закрыть">✕</button>
-      <div class="admin-fitness-panel-header">
-        <button type="button" class="btn btn-ghost btn-ghost-back admin-fitness-back" id="adminBannersCatalogBack">← Назад</button>
-        <div class="admin-fitness-panel-heading">
-          <span class="admin-fitness-catalog-icon" aria-hidden="true">🎨</span>
-          <div>
-            <h2 class="admin-modal-title" id="adminBannersCatalogTitle">Коллекция работ</h2>
-            <p class="admin-modal-desc">Работы публикуются в разделе «Мои Баннеры» в исходном разрешении изображения</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-fitness-catalog-layout" id="adminBannersCatalogLayout">
-        <div class="admin-fitness-catalog-main">
-          <div class="admin-fitness-panel-actions">
-            <button type="button" class="btn btn-primary admin-fitness-add-btn" id="adminBannersAddWork">+ Добавить работу</button>
-            <span class="admin-fitness-catalog-count" id="adminBannersCatalogCount">0 работ</span>
-          </div>
-          <div class="admin-fitness-catalog-list-wrap">
-            <ul class="admin-fitness-product-list" id="adminBannersWorkList"></ul>
-          </div>
-        </div>
-
-        <form class="admin-fitness-product-form admin-banners-work-form" id="adminBannersWorkForm" hidden>
-          <div class="admin-fitness-form-head">
-            <h3 id="adminBannersFormTitle">Новая работа</h3>
-          </div>
-
-          <label class="admin-fitness-field">
-            <span>Название</span>
-            <input type="text" name="title" required maxlength="128" autocomplete="off">
-          </label>
-
-          <label class="admin-fitness-field">
-            <span>Категория</span>
-            <select name="category" required>
-              <option value="preview">Превью</option>
-              <option value="illustrations">Иллюстрации</option>
-              <option value="logos">Логотипы</option>
-              <option value="pictures">Картинки</option>
-            </select>
-          </label>
-
-          <label class="admin-fitness-field">
-            <span>Описание</span>
-            <textarea name="description" rows="4" maxlength="1000" placeholder="Комментарий к работе — виден на сайте"></textarea>
-          </label>
-
-          <div class="admin-fitness-image-field">
-            <span class="admin-fitness-field-label">Изображение</span>
-            <p class="admin-banners-image-hint">JPG, PNG или WebP · на сайте отображается в исходном разрешении</p>
-            <div class="admin-fitness-image-actions">
-              <input type="file" id="adminBannersWorkImage" accept="image/jpeg,image/png,image/webp" hidden>
-              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminBannersPickImage">Выбрать файл</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminBannersRemoveImage" hidden>Убрать</button>
-            </div>
-            <p class="admin-banners-image-size" id="adminBannersImageSize" hidden></p>
-            <img class="admin-fitness-product-preview admin-banners-work-preview" id="adminBannersImagePreview" alt="Предпросмотр работы" hidden>
-          </div>
-
-          <div class="admin-fitness-form-actions">
-            <button type="submit" class="btn btn-primary admin-fitness-save-btn" id="adminBannersSaveWork">Сохранить</button>
-            <button type="button" class="btn btn-ghost" id="adminBannersCancelWork">Отмена</button>
-            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminBannersDeleteWork" hidden>Удалить работу</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="admin-overlay admin-fitness-catalog-overlay" id="adminFitnessCatalogPanel" hidden>
-    <div class="admin-modal admin-modal-wide admin-fitness-catalog-panel" role="dialog" aria-labelledby="adminFitnessCatalogTitle">
-      <button type="button" class="admin-modal-close" id="adminFitnessCatalogClose" aria-label="Закрыть">✕</button>
-      <header class="admin-fitness-panel-header">
-        <button type="button" class="btn btn-ghost btn-ghost-back admin-fitness-back" id="adminFitnessCatalogBack">← Назад</button>
-        <div class="admin-fitness-panel-heading">
-          <span class="admin-modal-icon admin-fitness-catalog-icon" aria-hidden="true">📦</span>
-          <div>
-            <h2 class="admin-modal-title" id="adminFitnessCatalogTitle">Каталог товаров</h2>
-            <p class="admin-modal-desc">Добавление, редактирование и удаление товаров раздела «Фитнес-индустрия»</p>
-          </div>
-        </div>
-      </header>
-
-      <div class="admin-fitness-catalog-layout" id="adminFitnessCatalogLayout">
-        <section class="admin-fitness-catalog-main">
-          <div class="admin-fitness-panel-actions">
-            <button type="button" class="btn btn-primary admin-fitness-add-btn" id="adminFitnessAddProduct">+ Добавить товар</button>
-            <span class="admin-fitness-catalog-count" id="adminFitnessCatalogCount">0 товаров</span>
-          </div>
-          <div class="admin-fitness-catalog-list-wrap">
-            <ul class="admin-fitness-product-list" id="adminFitnessProductList"></ul>
-          </div>
-        </section>
-
-        <form class="admin-fitness-product-form" id="adminFitnessProductForm" hidden>
-          <div class="admin-fitness-form-header">
-            <h3 id="adminFitnessFormTitle">Новый товар</h3>
-            <p class="admin-fitness-form-desc">Товар появится в разделе «Фитнес-индустрия» на сайте</p>
-          </div>
-
-          <label class="admin-field">
-            <span>Название <em>*</em></span>
-            <input type="text" name="title" required maxlength="255" placeholder="Например: Whey Protein Isolate">
-          </label>
-          <label class="admin-field">
-            <span>Описание</span>
-            <textarea name="description" rows="3" placeholder="Краткое описание для карточки товара"></textarea>
-          </label>
-          <label class="admin-field">
-            <span>Категория</span>
-            <select name="category" required>
-              <option value="protein">Протеин</option>
-              <option value="creatine">Креатин</option>
-              <option value="vitamins">Витамины</option>
-              <option value="equipment">Спорт-инвентарь</option>
-            </select>
-          </label>
-          <label class="admin-field">
-            <span>Цена (USD)</span>
-            <input type="number" name="price_usd" min="0" max="999999.99" step="0.01" placeholder="29.99">
-          </label>
-          <label class="admin-field">
-            <span>Текст на заглушке</span>
-            <input type="text" name="placeholder_text" maxlength="128" placeholder="Если нет изображения — показывается на карточке">
-          </label>
-          <label class="admin-field">
-            <span>Теги через запятую</span>
-            <input type="text" name="tags" placeholder="1200×628, Протеин">
-          </label>
-
-          <div class="admin-fitness-image-field">
-            <span class="admin-field-label">Изображение товара</span>
-            <div class="admin-fitness-image-upload">
-              <input type="file" id="adminFitnessProductImage" accept="image/jpeg,image/png,image/webp" hidden>
-              <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessPickImage">Выбрать файл</button>
-              <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessRemoveImage" hidden>Убрать</button>
-            </div>
-            <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
-            <img class="admin-fitness-product-preview" id="adminFitnessProductImagePreview" alt="Предпросмотр товара" hidden>
-          </div>
-
-          <div class="admin-fitness-form-actions">
-            <button type="submit" class="btn btn-primary admin-fitness-save-btn" id="adminFitnessSaveProduct">Сохранить</button>
-            <button type="button" class="btn btn-ghost" id="adminFitnessCancelProduct">Отмена</button>
-            <button type="button" class="btn btn-ghost btn-ghost-danger" id="adminFitnessDeleteProduct" hidden>Удалить товар</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Admin: баннер фитнес-раздела -->
-  <div class="admin-banner-overlay" id="adminFitnessBannerModal" hidden>
-    <div class="admin-modal admin-modal-banners" id="adminFitnessBannerModalDialog" role="dialog" aria-labelledby="adminFitnessBannerModalTitle">
-      <div class="admin-banner-modal-drag-handle" id="adminFitnessBannerModalDrag" title="Перетащите окно">
-        <span class="admin-banner-modal-drag-grip" aria-hidden="true"></span>
-        <span class="admin-banner-modal-drag-label">Перетащите окно</span>
-      </div>
-      <button type="button" class="admin-modal-close" id="adminFitnessBannerModalClose" aria-label="Закрыть">✕</button>
-
-      <div class="admin-banner-step" id="adminFitnessBannerPickStep">
-        <header class="admin-banner-edit-header">
-          <h2 class="admin-modal-title" id="adminFitnessBannerModalTitle">Изменить баннер «Фитнес-индустрия»</h2>
-          <p class="admin-modal-desc admin-banner-edit-desc">Выберите баннер для изменения</p>
-        </header>
-        <div class="admin-banner-pick-list">
-          <button type="button" class="admin-banner-pick-btn" data-pick="0">
-            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-            <span class="admin-banner-pick-label">Баннер 1</span>
-          </button>
-          <button type="button" class="admin-banner-pick-btn" data-pick="1">
-            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-            <span class="admin-banner-pick-label">Баннер 2</span>
-          </button>
-          <button type="button" class="admin-banner-pick-btn" data-pick="2">
-            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-            <span class="admin-banner-pick-label">Баннер 3</span>
-          </button>
-          <button type="button" class="admin-banner-pick-btn" data-pick="3">
-            <span class="admin-banner-pick-thumb" aria-hidden="true"></span>
-            <span class="admin-banner-pick-label">Баннер 4</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="admin-banner-step admin-banner-step--edit" id="adminFitnessBannerEditStep" hidden>
-        <header class="admin-banner-edit-header">
-          <h2 class="admin-modal-title">Баннер <span id="adminFitnessBannerEditNum">1</span></h2>
-          <p class="admin-modal-desc admin-banner-edit-desc">Рекомендуемый размер: <strong>3840 × 1200 px</strong> · JPG, PNG, WebP</p>
-        </header>
-
-        <div class="admin-banner-image-field admin-fitness-image-field">
-          <span class="admin-field-label">Изображение баннера</span>
-          <div class="admin-fitness-image-upload">
-            <input type="file" id="adminFitnessBannerImageInput" accept="image/jpeg,image/png,image/webp" hidden>
-            <button type="button" class="btn btn-ghost admin-fitness-image-btn" id="adminFitnessBannerPickImage">Выбрать файл</button>
-            <button type="button" class="btn btn-ghost btn-ghost-danger admin-fitness-image-remove" id="adminFitnessBannerRemoveImage" hidden>Убрать</button>
-          </div>
-          <p class="admin-fitness-image-hint">JPG, PNG или WebP · до 15 МБ</p>
-          <img class="admin-fitness-product-preview admin-banner-image-preview" id="adminFitnessBannerImagePreview" alt="Предпросмотр баннера" hidden>
-        </div>
-
-        <div class="admin-banner-edit-messages">
-          <div class="admin-hero-success" id="adminFitnessHeroSuccess" hidden></div>
-          <div class="admin-hero-warning" id="adminFitnessHeroWarning" hidden></div>
-        </div>
-
-        <div class="admin-banner-edit-actions">
-          <button type="button" class="btn btn-primary" id="adminFitnessBannerSaveBtn">Сохранить баннер</button>
-          <button type="button" class="btn btn-ghost" id="adminFitnessBannerCancelBtn">Отмена</button>
-          <button type="button" class="btn btn-ghost btn-ghost-back" id="adminFitnessBannerBack">← Выбрать другой баннер</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="admin-toast" id="adminToast" hidden role="status" aria-live="polite"></div>
 
   <div class="banners-viewer" id="bannersViewer" hidden>
     <div class="banners-viewer-backdrop" data-banners-viewer-close aria-hidden="true"></div>
@@ -1936,11 +2093,21 @@
   <script src="clothing-catalog-icons.js"></script>
   <script src="clothing-catalog-promo.js"></script>
   <script src="clothing-alerts.js"></script>
+  <script src="admin-toast.js"></script>
   <script src="admin-banner-editor.js"></script>
+  <script src="admin-home-banner.js"></script>
+  <script src="admin-fitness-banner.js"></script>
+  <script src="admin-fitness-catalog.js"></script>
+  <script src="admin-section-icons.js"></script>
   <script src="admin-appearance.js"></script>
   <script src="admin-appearance-palette.js"></script>
   <script src="admin-fitness.js"></script>
+  <script src="admin-banners-works.js"></script>
   <script src="admin-banners.js"></script>
+  <script src="admin-clothing-banner.js"></script>
+  <script src="admin-clothing-catalog-icons.js"></script>
+  <script src="admin-clothing-alerts.js"></script>
+  <script src="admin-clothing-catalog-promo.js"></script>
   <script src="admin-clothing.js"></script>
   <script src="admin-clothing-products.js"></script>
   <script src="admin-reviews.js"></script>
@@ -1948,5 +2115,8 @@
   <script src="about-page.js"></script>
   <script src="admin-site-about.js"></script>
   <script src="admin.js"></script>
+  <script src="site-cart.js"></script>
+  <script src="site-orders.js"></script>
+  <script src="site-float-actions.js"></script>
 </body>
 </html>

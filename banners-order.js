@@ -61,6 +61,25 @@ function initBannerOrderForm() {
       if (!response.ok) throw new Error(payload.error || 'Не удалось отправить заявку');
 
       setFormStatus(status, payload.message, false);
+
+      if (typeof window.SiteOrders?.addOrder === 'function') {
+        const categoryLabel = category && window.SiteOrders.getBannerCategoryLabel
+          ? window.SiteOrders.getBannerCategoryLabel(category)
+          : 'Работа на заказ';
+
+        window.SiteOrders.addOrder({
+          type: 'banner',
+          sectionId: 'banners',
+          title: category ? `Заявка: ${categoryLabel}` : 'Заявка на работу',
+          customer_name: formData.get('customer_name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          category: category || '',
+          message: formData.get('message'),
+          serverOrderId: payload.id
+        });
+      }
+
       form.reset();
       const emptyCategory = form.querySelector('input[name="category"][value=""]');
       if (emptyCategory) emptyCategory.checked = true;

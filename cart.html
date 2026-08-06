@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — Портфолио</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-float-actions.css">
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body class="cart-page">
+  <div class="app cart-app">
+    <header class="site-header cart-page-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="/" class="logo">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </a>
+        </div>
+        <div class="header-actions">
+          <a href="/" class="btn btn-ghost cart-page-back">← На главную</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="cart-main">
+      <div class="cart-content content">
+        <header class="cart-page-intro">
+          <h1 class="cart-page-title">Корзина</h1>
+          <p class="cart-page-desc">Товары из разделов «Фитнес-индустрия» и «Одежда». Оформите заказ на странице каждого товара.</p>
+        </header>
+
+        <div class="cart-stats" id="cartStats" hidden></div>
+
+        <div class="cart-panel card">
+          <div class="cart-panel-head card-header">
+            <h2>Список товаров</h2>
+            <span class="cart-panel-count" id="cartCount" hidden></span>
+          </div>
+
+          <div class="cart-panel-body">
+            <div class="cart-empty" id="cartEmpty" hidden>
+              <span class="cart-empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>
+              </span>
+              <strong>Корзина пуста</strong>
+              <p>Добавьте товары со страниц «Фитнес-индустрия» или «Одежда».</p>
+              <div class="cart-empty-links">
+                <a href="/#supplements" class="btn btn-primary">Фитнес-индустрия</a>
+                <a href="/#clothing" class="btn btn-ghost">Одежда</a>
+              </div>
+            </div>
+
+            <ul class="cart-list" id="cartList"></ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="site-cart.js"></script>
+  <script src="site-orders.js"></script>
+  <script src="site-float-actions.js"></script>
+  <script src="section-icons.js"></script>
+  <script src="cart.js"></script>
+</body>
+</html>

@@ -6,7 +6,20 @@ const sections = {
   about: { title: 'О сайте', el: 'section-about' }
 };
 
-const aboutAnchors = new Set(['order', 'faq', 'privacy', 'about-author']);
+const aboutAnchorsFallback = new Set(['order', 'faq', 'privacy', 'about-author']);
+
+function getAboutAnchorIds() {
+  const root = document.getElementById('aboutPageRoot');
+  if (!root) return new Set(aboutAnchorsFallback);
+
+  const ids = [...root.querySelectorAll('.about-block[id]')].map((el) => el.id).filter(Boolean);
+  return ids.length ? new Set(ids) : new Set(aboutAnchorsFallback);
+}
+
+function isAboutAnchor(id) {
+  if (!id || sections[id]) return false;
+  return getAboutAnchorIds().has(id);
+}
 
 const navLinks = document.querySelectorAll('[data-section]');
 const topNav = document.getElementById('topNav');
@@ -39,6 +52,8 @@ function showSection(sectionId) {
   }
 }
 
+window.showSection = showSection;
+
 function scrollToAboutAnchor(anchorId, updateHash = true) {
   showSection('about');
 
@@ -61,7 +76,7 @@ function navigateFromHash() {
   const legacyMap = { dashboard: 'home' };
   const id = legacyMap[hash] || hash;
 
-  if (aboutAnchors.has(id)) {
+  if (isAboutAnchor(id)) {
     scrollToAboutAnchor(id, false);
     return;
   }
@@ -113,15 +128,26 @@ navigateFromHash();
 
 window.addEventListener('hashchange', navigateFromHash);
 
-document.querySelectorAll('.about-page-nav-link, .footer-links a[href^="#"]').forEach((link) => {
-  const anchorId = link.getAttribute('href')?.slice(1);
-  if (!aboutAnchors.has(anchorId)) return;
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('.about-page-nav-link');
+  if (!link) return;
 
-  link.addEventListener('click', (event) => {
-    event.preventDefault();
-    scrollToAboutAnchor(anchorId);
-    closeNav();
-  });
+  const root = document.getElementById('aboutPageRoot');
+  if (!root?.contains(link)) return;
+
+  const anchorId = link.getAttribute('href')?.slice(1);
+  if (!anchorId) return;
+
+  event.preventDefault();
+  scrollToAboutAnchor(anchorId);
+  closeNav();
+});
+
+window.addEventListener('about-page-updated', () => {
+  const hash = window.location.hash.slice(1);
+  if (isAboutAnchor(hash)) {
+    scrollToAboutAnchor(hash, false);
+  }
 });
 
 window.addEventListener('resize', () => {

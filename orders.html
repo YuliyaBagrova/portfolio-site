@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказы — Портфолио</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-float-actions.css">
+  <link rel="stylesheet" href="orders.css">
+</head>
+<body class="orders-page">
+  <div class="app orders-app">
+    <header class="site-header orders-page-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="/" class="logo">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </a>
+        </div>
+        <div class="header-actions">
+          <a href="/" class="btn btn-ghost orders-page-back">← На главную</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="orders-main">
+      <div class="orders-content content">
+        <header class="orders-page-intro">
+          <h1 class="orders-page-title" id="ordersPageTitle">Заказы</h1>
+          <p class="orders-page-desc">Все заявки на товары и работы из разделов «Фитнес-индустрия», «Мои баннеры» и «Одежда».</p>
+        </header>
+
+        <div class="orders-stats" id="ordersStats" hidden></div>
+
+        <div class="orders-panel card">
+          <div class="orders-panel-head card-header">
+            <h2>Список заявок</h2>
+            <span class="orders-panel-count" id="ordersCount" hidden></span>
+          </div>
+
+          <div class="orders-panel-body">
+            <p class="orders-loading" id="ordersLoading">Загрузка заказов…</p>
+            <p class="orders-error" id="ordersError" hidden></p>
+
+            <div class="orders-empty" id="ordersEmpty" hidden>
+              <span class="orders-empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+              </span>
+              <strong>Заказов пока нет</strong>
+              <p>После отправки заявки она появится здесь автоматически.</p>
+            </div>
+
+            <ul class="orders-list recent-list" id="ordersList"></ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="site-cart.js"></script>
+  <script src="site-orders.js"></script>
+  <script src="site-float-actions.js"></script>
+  <script src="section-icons.js"></script>
+  <script src="orders.js"></script>
+</body>
+</html>

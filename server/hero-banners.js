@@ -6,6 +6,8 @@ function createHeroBannerStorage(rootDir) {
     uploadsSubdir: 'hero',
     apiPrefix: '/api/hero-banners',
     slideCount: 4,
+    dynamicSlides: true,
+    maxSlides: 10,
     filePrefix: 'slide',
     activity: {
       enabled: true,
@@ -23,7 +25,16 @@ function createFitnessBannerStorage(rootDir) {
     uploadsSubdir: 'fitness-hero',
     apiPrefix: '/api/fitness-hero-banners',
     slideCount: 4,
-    filePrefix: 'slide'
+    dynamicSlides: true,
+    maxSlides: 10,
+    filePrefix: 'slide',
+    activity: {
+      enabled: true,
+      badge: 'Баннер',
+      badgeClass: 'supplements',
+      titleSave: (index) => `Баннер «Фитнес-индустрия», слайд ${index + 1} обновлён`,
+      titleDelete: (index) => `Баннер «Фитнес-индустрия», слайд ${index + 1} удалён`
+    }
   });
 }
 

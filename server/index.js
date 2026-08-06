@@ -15,6 +15,7 @@ const { createSectionThemesStorage } = require('./section-themes');
 const { registerAppearanceActivityRoutes } = require('./appearance-activity');
 const { registerClothingActivityRoutes } = require('./clothing-activity');
 const { registerBannerOrderRoutes } = require('./banner-orders');
+const { registerSiteOrderRoutes } = require('./site-orders');
 const { registerBannerLikeRoutes } = require('./banner-likes');
 const { registerAboutPageRoutes } = require('./about-page');
 
@@ -62,7 +63,6 @@ app.get('/api/stats', async (_req, res) => {
       }
     });
 
-    stats.banners += stats.heroBanners;
     stats.total = stats.supplements + stats.banners + stats.clothing;
 
     await pool.query(
@@ -115,6 +115,7 @@ sectionThemesStorage.registerRoutes(app, getPool);
 registerAppearanceActivityRoutes(app, getPool);
 registerClothingActivityRoutes(app, getPool);
 registerBannerOrderRoutes(app, getPool);
+registerSiteOrderRoutes(app, getPool);
 registerBannerLikeRoutes(app, getPool);
 registerAboutPageRoutes(app, getPool);
 

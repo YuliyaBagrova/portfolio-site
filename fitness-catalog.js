@@ -47,6 +47,50 @@ function renderStarsCompact(rating, reviewCount) {
   `;
 }
 
+const FITNESS_CART_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>';
+
+let fitnessCatalogItems = [];
+
+function buildFitnessCartItem(item, quantity = 1) {
+  const gradient = item.gradient || FITNESS_DEFAULT_GRADIENTS[item.category] || FITNESS_DEFAULT_GRADIENTS.protein;
+
+  return {
+    workId: item.id,
+    sectionId: 'supplements',
+    title: item.title,
+    price_usd: item.price_usd,
+    compare_price_usd: item.compare_price_usd,
+    image: item.image,
+    gradient,
+    placeholder_text: item.placeholder_text || item.title,
+    category: item.category,
+    quantity
+  };
+}
+
+function bindFitnessCartActions(grid) {
+  if (!grid || grid.dataset.cartBound === 'true') return;
+
+  grid.dataset.cartBound = 'true';
+  grid.addEventListener('click', (event) => {
+    const btn = event.target.closest('.fitness-card-cart-btn');
+    if (!btn) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const workId = Number.parseInt(String(btn.dataset.workId ?? ''), 10);
+    const item = fitnessCatalogItems.find((entry) => Number(entry.id) === workId);
+    if (!item || typeof window.SiteCart?.addItem !== 'function') return;
+
+    const added = window.SiteCart.addItem(buildFitnessCartItem(item, 1), 1);
+    if (!added) return;
+
+    btn.classList.add('is-added');
+    window.setTimeout(() => btn.classList.remove('is-added'), 700);
+  });
+}
+
 function renderFitnessCard(item) {
   const gradient = item.gradient || FITNESS_DEFAULT_GRADIENTS[item.category] || FITNESS_DEFAULT_GRADIENTS.protein;
   const placeholder = item.placeholder_text || item.title;
@@ -56,8 +100,8 @@ function renderFitnessCard(item) {
     : `--gradient: ${gradient}`;
 
   return `
-    <a href="/product.html?id=${item.id}" target="_blank" rel="noopener noreferrer" class="fitness-card-link">
-      <article class="portfolio-card fitness-card" data-category="${escapeHtml(item.category || 'all')}">
+    <article class="portfolio-card fitness-card" data-category="${escapeHtml(item.category || 'all')}">
+      <a href="/product.html?id=${item.id}" target="_blank" rel="noopener noreferrer" class="fitness-card-link">
         <div class="portfolio-image" style="${imageStyle}">
           ${item.image ? '' : `<span class="portfolio-placeholder">${escapeHtml(placeholder)}</span>`}
         </div>
@@ -73,8 +117,20 @@ function renderFitnessCard(item) {
             ${renderStarsCompact(item.avg_rating, item.review_count)}
           </div>
         </div>
-      </article>
-    </a>
+      </a>
+      <div class="fitness-card-actions">
+        <button
+          type="button"
+          class="fitness-card-cart-btn"
+          data-work-id="${item.id}"
+          aria-label="Добавить «${escapeHtml(item.title)}» в корзину"
+          title="Добавить в корзину"
+        >
+          ${FITNESS_CART_ICON}
+          <span>В корзину</span>
+        </button>
+      </div>
+    </article>
   `;
 }
 
@@ -89,9 +145,11 @@ async function loadFitnessCatalog() {
     if (!response.ok) throw new Error('Не удалось загрузить каталог');
 
     const items = await response.json();
-    grid.querySelectorAll('.fitness-card-link').forEach((link) => link.remove());
+    fitnessCatalogItems = items;
+    grid.querySelectorAll('.fitness-card').forEach((card) => card.remove());
 
     if (!items.length) {
+      fitnessCatalogItems = [];
       if (emptyState) {
         emptyState.hidden = false;
         emptyState.textContent = 'Ждите поступления новых товаров';
@@ -102,10 +160,12 @@ async function loadFitnessCatalog() {
 
     if (emptyState) emptyState.hidden = true;
     grid.insertAdjacentHTML('beforeend', items.map(renderFitnessCard).join(''));
+    bindFitnessCartActions(grid);
     window.dispatchEvent(new CustomEvent('fitness-catalog-updated', { detail: { items } }));
     return items;
   } catch (error) {
     console.error('Fitness catalog load failed:', error);
+    fitnessCatalogItems = [];
     if (emptyState) {
       emptyState.hidden = false;
       emptyState.textContent = 'Не удалось загрузить каталог. Проверьте, что сервер запущен.';

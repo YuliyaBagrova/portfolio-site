@@ -69,18 +69,24 @@ function normalizeBlock(raw, index) {
 
 function normalizeNav(rawNav, blocks) {
   const anchors = new Set(blocks.map((block) => block.anchor).filter(Boolean));
+  const defaults = getDefaultAboutPageContent().nav.filter((item) => anchors.has(item.anchor));
 
-  if (!Array.isArray(rawNav)) {
-    return getDefaultAboutPageContent().nav.filter((item) => anchors.has(item.anchor));
+  if (!Array.isArray(rawNav) || !rawNav.length) {
+    return defaults;
   }
 
-  return rawNav
-    .map((item) => ({
-      anchor: normalizeText(item?.anchor, 80).replace(/[^a-z0-9-_]/gi, '-'),
-      label: normalizeText(item?.label, 120)
-    }))
-    .filter((item) => item.anchor && item.label && anchors.has(item.anchor))
-    .slice(0, 12);
+  const seen = new Set();
+  const normalized = [];
+
+  rawNav.forEach((item) => {
+    const anchor = normalizeText(item?.anchor, 80).replace(/[^a-z0-9-_]/gi, '-');
+    const label = normalizeText(item?.label, 120);
+    if (!anchor || !label || !anchors.has(anchor) || seen.has(anchor)) return;
+    seen.add(anchor);
+    normalized.push({ anchor, label });
+  });
+
+  return normalized.length ? normalized.slice(0, 12) : defaults;
 }
 
 function normalizeContent(raw) {

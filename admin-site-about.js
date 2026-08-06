@@ -7,8 +7,11 @@
   const editorRoot = document.getElementById('adminSiteAboutEditor');
   const previewRoot = document.getElementById('adminSiteAboutPreview');
   const previewPanel = document.getElementById('adminSiteAboutPreviewPanel');
+  const layoutEl = document.getElementById('adminSiteAboutLayout');
   const statusEl = document.getElementById('adminSiteAboutStatus');
-  const toast = document.getElementById('adminToast');
+  const saveModal = document.getElementById('adminSiteAboutSaveModal');
+  const saveYesBtn = document.getElementById('adminSiteAboutSaveYes');
+  const saveNoBtn = document.getElementById('adminSiteAboutSaveNo');
 
   if (!openBtn || !editorRoot) return;
 
@@ -25,14 +28,7 @@
   let previewVisible = true;
 
   function showToast(message, type = 'success') {
-    if (!toast) return;
-    toast.textContent = message;
-    toast.className = `admin-toast admin-toast--${type}`;
-    toast.hidden = false;
-    clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(() => {
-      toast.hidden = true;
-    }, 4500);
+    window.showAdminToast(message, type);
   }
 
   function setStatus(text) {
@@ -57,6 +53,96 @@
   function cloneContent(data) {
     return JSON.parse(JSON.stringify(data));
   }
+
+  function getBlockAnchors() {
+    return content.blocks
+      .map((block) => block.anchor)
+      .filter(Boolean);
+  }
+
+  function ensureNavArray() {
+    if (!Array.isArray(content.nav)) {
+      content.nav = [];
+    }
+  }
+
+  /** Удаляет кнопки навигации, если якорь блока больше не существует */
+  function cleanupNavAnchors() {
+    ensureNavArray();
+    const anchors = new Set(getBlockAnchors());
+    content.nav = content.nav.filter((item) => anchors.has(item.anchor));
+  }
+
+  /** Первичная инициализация nav из блоков, если в данных nav пуст */
+  function initNavFromBlocksIfEmpty() {
+    ensureNavArray();
+    if (content.nav.length) return;
+
+    content.nav = content.blocks
+      .filter((block) => block.anchor)
+      .map((block) => ({
+        anchor: block.anchor,
+        label: block.title
+      }));
+  }
+
+  function applyToPublicSite(savedContent) {
+    if (typeof window.applyPublicAboutPageContent === 'function') {
+      window.applyPublicAboutPageContent(savedContent);
+      return;
+    }
+
+    const publicRoot = document.getElementById('aboutPageRoot');
+    if (publicRoot && typeof window.renderAboutPageContent === 'function') {
+      window.renderAboutPageContent(publicRoot, savedContent);
+      publicRoot.hidden = false;
+      const loading = document.getElementById('aboutPageLoading');
+      if (loading) loading.hidden = true;
+    }
+  }
+
+  function openSaveConfirmModal() {
+    if (!saveModal) return;
+    saveModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    saveYesBtn?.focus();
+  }
+
+  function closeSaveConfirmModal() {
+    if (!saveModal) return;
+    saveModal.hidden = true;
+    if (!document.getElementById('adminPanel')?.hidden) {
+      document.body.style.overflow = 'hidden';
+    } else if (!document.getElementById('topNav')?.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  function bindSaveModalEvents() {
+    saveYesBtn?.addEventListener('click', () => {
+      closeSaveConfirmModal();
+      performSave();
+    });
+    saveNoBtn?.addEventListener('click', closeSaveConfirmModal);
+
+    saveModal?.addEventListener('click', (event) => {
+      if (event.target === saveModal) closeSaveConfirmModal();
+    });
+
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key !== 'Escape' || saveModal?.hidden) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        closeSaveConfirmModal();
+      },
+      true
+    );
+  }
+
+  bindSaveModalEvents();
+  syncPreviewVisibility();
 
   function updatePreview() {
     if (!previewRoot || !content || typeof window.renderAboutPageContent !== 'function') return;
@@ -85,6 +171,75 @@
     content.blocks.splice(target, 0, block);
     markDirty();
     renderEditor();
+  }
+
+  function moveNavItem(navIndex, direction) {
+    ensureNavArray();
+    const target = navIndex + direction;
+    if (target < 0 || target >= content.nav.length) return;
+    const [item] = content.nav.splice(navIndex, 1);
+    content.nav.splice(target, 0, item);
+    markDirty();
+    renderEditor();
+  }
+
+  function renderAnchorOptions(selectedAnchor) {
+    const anchors = getBlockAnchors();
+    if (!anchors.length) {
+      return '<option value="">— Сначала задайте якорь блоку —</option>';
+    }
+
+    return anchors
+      .map(
+        (anchor) =>
+          `<option value="${anchor.replace(/"/g, '&quot;')}"${anchor === selectedAnchor ? ' selected' : ''}>#${anchor}</option>`
+      )
+      .join('');
+  }
+
+  function renderNavEditor() {
+    ensureNavArray();
+    const anchors = getBlockAnchors();
+
+    const itemsHtml = content.nav.length
+      ? content.nav
+          .map((item, navIndex) => {
+            const anchorMissing = item.anchor && !anchors.includes(item.anchor);
+            return `
+          <div class="site-about-nav-row${anchorMissing ? ' site-about-nav-row--warn' : ''}" data-nav-index="${navIndex}">
+            <span class="site-about-nav-grip" aria-hidden="true">☰</span>
+            <label class="site-about-field site-about-nav-field">
+              <span class="site-about-field-label">Текст кнопки</span>
+              <input type="text" class="site-about-input" data-nav-label value="${(item.label || '').replace(/"/g, '&quot;')}" placeholder="Например: Как заказать">
+            </label>
+            <label class="site-about-field site-about-nav-field">
+              <span class="site-about-field-label">Якорь блока</span>
+              <select class="site-about-input" data-nav-anchor>
+                ${renderAnchorOptions(item.anchor)}
+              </select>
+            </label>
+            <div class="site-about-nav-row-actions">
+              <button type="button" class="site-about-icon-btn" data-nav-up title="Левее" aria-label="Левее">←</button>
+              <button type="button" class="site-about-icon-btn" data-nav-down title="Правее" aria-label="Правее">→</button>
+              <button type="button" class="site-about-icon-btn site-about-icon-btn--danger" data-nav-remove title="Удалить кнопку" aria-label="Удалить кнопку">✕</button>
+            </div>
+            ${anchorMissing ? '<p class="site-about-nav-warn">Якорь не найден среди блоков — выберите другой или задайте якорь блоку</p>' : ''}
+          </div>`;
+          })
+          .join('')
+      : '<p class="site-about-empty">Кнопок пока нет. Добавьте якорь блоку и нажмите «Добавить кнопку».</p>';
+
+    return `
+      <div class="site-about-nav-card card">
+        <div class="card-header site-about-nav-card-header">
+          <div>
+            <h2>Кнопки навигации</h2>
+            <p class="site-about-nav-desc">Ссылки под заголовком страницы — «Как заказать», «Частые вопросы» и другие</p>
+          </div>
+          <button type="button" class="site-about-chip site-about-chip--accent" id="adminSiteAboutAddNav"${anchors.length ? '' : ' disabled title="Сначала задайте якорь хотя бы одному блоку"'}>+ Добавить кнопку</button>
+        </div>
+        <div class="site-about-nav-list">${itemsHtml}</div>
+      </div>`;
   }
 
   function renderListEditor(blockIndex, itemIndex, item) {
@@ -146,7 +301,7 @@
     }
 
     return `
-      <div class="site-about-item" data-block-index="${blockIndex}" data-item-index="${itemIndex}">
+      <div class="site-about-item" data-item-block="${blockIndex}" data-item-index="${itemIndex}">
         <div class="site-about-item-head">
           <span class="site-about-item-badge site-about-item-badge--${type}">${ITEM_LABELS[type] || type}</span>
           <div class="site-about-item-actions">
@@ -163,8 +318,6 @@
     const itemsHtml = (block.items || [])
       .map((item, itemIndex) => renderItemEditor(blockIndex, item, itemIndex))
       .join('');
-
-    const navItem = (content.nav || []).find((item) => item.anchor === block.anchor);
 
     return `
       <article class="site-about-block-card" data-block-index="${blockIndex}">
@@ -192,14 +345,6 @@
               <option value="author" ${block.variant === 'author' ? 'selected' : ''}>Акцентный (автор)</option>
             </select>
           </label>
-          ${
-            block.anchor
-              ? `<label class="site-about-field site-about-field--inline">
-            <span class="site-about-field-label">Подпись в меню</span>
-            <input type="text" class="site-about-input" data-nav-label value="${(navItem?.label || '').replace(/"/g, '&quot;')}" placeholder="Текст ссылки">
-          </label>`
-              : ''
-          }
         </div>
 
         <div class="site-about-items">${itemsHtml || '<p class="site-about-empty">Добавьте элементы контента ниже</p>'}</div>
@@ -212,16 +357,6 @@
           <button type="button" class="site-about-chip" data-add-item="faq">FAQ</button>
         </div>
       </article>`;
-  }
-
-  function syncNavFromBlocks() {
-    const existing = new Map((content.nav || []).map((item) => [item.anchor, item.label]));
-    content.nav = content.blocks
-      .filter((block) => block.anchor)
-      .map((block) => ({
-        anchor: block.anchor,
-        label: existing.get(block.anchor) || block.title
-      }));
   }
 
   function renderEditor() {
@@ -244,6 +379,8 @@
         </div>
       </div>
 
+      ${renderNavEditor()}
+
       <div class="site-about-blocks-head">
         <h3>Блоки контента</h3>
         <button type="button" class="site-about-text-btn" id="adminSiteAboutAddBlock">+ Новый блок</button>
@@ -256,6 +393,210 @@
 
     bindEditorEvents();
     updatePreview();
+  }
+
+  function bindNavEvents() {
+    const addNavBtn = document.getElementById('adminSiteAboutAddNav');
+    addNavBtn?.addEventListener('click', () => {
+      const anchors = getBlockAnchors();
+      if (!anchors.length) {
+        showToast('Сначала задайте якорь хотя бы одному блоку', 'error');
+        return;
+      }
+
+      const firstFree =
+        anchors.find((anchor) => !content.nav.some((item) => item.anchor === anchor)) || anchors[0];
+      const block = content.blocks.find((entry) => entry.anchor === firstFree);
+
+      ensureNavArray();
+      content.nav.push({
+        anchor: firstFree,
+        label: block?.title || firstFree
+      });
+      markDirty();
+      renderEditor();
+    });
+
+    editorRoot.querySelectorAll('[data-nav-index]').forEach((rowEl) => {
+      const navIndex = Number(rowEl.dataset.navIndex);
+      const navItem = content.nav[navIndex];
+      if (!navItem) return;
+
+      rowEl.querySelector('[data-nav-label]')?.addEventListener('input', (e) => {
+        navItem.label = e.target.value;
+        markDirty();
+      });
+
+      rowEl.querySelector('[data-nav-anchor]')?.addEventListener('change', (e) => {
+        navItem.anchor = e.target.value;
+        markDirty();
+        renderEditor();
+      });
+
+      rowEl.querySelector('[data-nav-up]')?.addEventListener('click', () => moveNavItem(navIndex, -1));
+      rowEl.querySelector('[data-nav-down]')?.addEventListener('click', () => moveNavItem(navIndex, 1));
+      rowEl.querySelector('[data-nav-remove]')?.addEventListener('click', () => {
+        content.nav.splice(navIndex, 1);
+        markDirty();
+        renderEditor();
+      });
+    });
+  }
+
+  function bindBlockEvents(blockEl, blockIndex) {
+    const block = content.blocks[blockIndex];
+    if (!block) return;
+
+    blockEl.querySelector('[data-block-title]')?.addEventListener('input', (e) => {
+      block.title = e.target.value;
+      markDirty();
+    });
+
+    const anchorInput = blockEl.querySelector('[data-block-anchor]');
+    if (anchorInput) {
+      anchorInput.addEventListener('focus', () => {
+        anchorInput.dataset.prevAnchor = block.anchor || '';
+      });
+
+      anchorInput.addEventListener('change', (e) => {
+        const prevAnchor = anchorInput.dataset.prevAnchor || '';
+        const value = e.target.value.trim();
+        block.anchor = value || null;
+
+        ensureNavArray();
+        if (prevAnchor && prevAnchor !== block.anchor) {
+          content.nav.forEach((item) => {
+            if (item.anchor === prevAnchor) {
+              item.anchor = block.anchor || prevAnchor;
+            }
+          });
+        }
+
+        cleanupNavAnchors();
+        markDirty();
+        renderEditor();
+      });
+    }
+
+    blockEl.querySelector('[data-block-variant]')?.addEventListener('change', (e) => {
+      block.variant = e.target.value;
+      markDirty();
+    });
+
+    blockEl.querySelector('[data-block-up]')?.addEventListener('click', () => moveBlock(blockIndex, -1));
+    blockEl.querySelector('[data-block-down]')?.addEventListener('click', () => moveBlock(blockIndex, 1));
+    blockEl.querySelector('[data-block-remove]')?.addEventListener('click', () => {
+      if (!window.confirm('Удалить этот блок?')) return;
+      const removedAnchor = block.anchor;
+      content.blocks.splice(blockIndex, 1);
+      if (removedAnchor) {
+        content.nav = content.nav.filter((item) => item.anchor !== removedAnchor);
+      }
+      markDirty();
+      renderEditor();
+    });
+
+    blockEl.querySelectorAll('[data-add-item]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.addItem;
+        const newItem =
+          type === 'subtitle'
+            ? { type, text: '' }
+            : type === 'list'
+              ? { type, entries: [''] }
+              : type === 'faq'
+                ? { type, entries: [{ question: '', answer: '' }] }
+                : { type: 'text', html: '' };
+        block.items.push(newItem);
+        markDirty();
+        renderEditor();
+      });
+    });
+
+    blockEl.querySelectorAll('.site-about-item').forEach((itemEl) => {
+      bindItemEvents(itemEl, blockIndex);
+    });
+  }
+
+  function bindItemEvents(itemEl, blockIndex) {
+    const itemIndex = Number(itemEl.dataset.itemIndex);
+    const block = content.blocks[blockIndex];
+    const item = block?.items[itemIndex];
+    if (!item) return;
+
+    itemEl.querySelector('[data-item-text]')?.addEventListener('input', (e) => {
+      item.html = e.target.value;
+      markDirty();
+    });
+
+    itemEl.querySelector('[data-item-subtitle]')?.addEventListener('input', (e) => {
+      item.text = e.target.value;
+      markDirty();
+    });
+
+    itemEl.querySelector('[data-item-up]')?.addEventListener('click', () => moveItem(blockIndex, itemIndex, -1));
+    itemEl.querySelector('[data-item-down]')?.addEventListener('click', () => moveItem(blockIndex, itemIndex, 1));
+    itemEl.querySelector('[data-item-remove]')?.addEventListener('click', () => {
+      block.items.splice(itemIndex, 1);
+      markDirty();
+      renderEditor();
+    });
+
+    itemEl.querySelectorAll('[data-list-entry]').forEach((textarea) => {
+      textarea.addEventListener('input', (e) => {
+        const entryIndex = Number(e.target.dataset.listEntry);
+        item.entries[entryIndex] = e.target.value;
+        markDirty();
+      });
+    });
+
+    itemEl.querySelector('[data-list-add]')?.addEventListener('click', () => {
+      item.entries.push('');
+      markDirty();
+      renderEditor();
+    });
+
+    itemEl.querySelectorAll('[data-list-remove]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const entryIndex = Number(btn.dataset.listRemove);
+        item.entries.splice(entryIndex, 1);
+        if (!item.entries.length) item.entries.push('');
+        markDirty();
+        renderEditor();
+      });
+    });
+
+    itemEl.querySelectorAll('[data-faq-question]').forEach((input) => {
+      input.addEventListener('input', (e) => {
+        const entryIndex = Number(e.target.dataset.faqQuestion);
+        item.entries[entryIndex].question = e.target.value;
+        markDirty();
+      });
+    });
+
+    itemEl.querySelectorAll('[data-faq-answer]').forEach((textarea) => {
+      textarea.addEventListener('input', (e) => {
+        const entryIndex = Number(e.target.dataset.faqAnswer);
+        item.entries[entryIndex].answer = e.target.value;
+        markDirty();
+      });
+    });
+
+    itemEl.querySelector('[data-faq-add]')?.addEventListener('click', () => {
+      item.entries.push({ question: '', answer: '' });
+      markDirty();
+      renderEditor();
+    });
+
+    itemEl.querySelectorAll('[data-faq-remove]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const entryIndex = Number(btn.dataset.faqRemove);
+        item.entries.splice(entryIndex, 1);
+        if (!item.entries.length) item.entries.push({ question: '', answer: '' });
+        markDirty();
+        renderEditor();
+      });
+    });
   }
 
   function bindEditorEvents() {
@@ -289,144 +630,36 @@
       renderEditor();
     });
 
-    editorRoot.querySelectorAll('[data-block-index]').forEach((blockEl) => {
+    bindNavEvents();
+
+    editorRoot.querySelectorAll('.site-about-block-card').forEach((blockEl) => {
       const blockIndex = Number(blockEl.dataset.blockIndex);
-      const block = content.blocks[blockIndex];
-      if (!block) return;
-
-      blockEl.querySelector('[data-block-title]')?.addEventListener('input', (e) => {
-        block.title = e.target.value;
-        markDirty();
-      });
-
-      blockEl.querySelector('[data-block-anchor]')?.addEventListener('input', (e) => {
-        const value = e.target.value.trim();
-        block.anchor = value || null;
-        syncNavFromBlocks();
-        markDirty();
-        renderEditor();
-      });
-
-      blockEl.querySelector('[data-block-variant]')?.addEventListener('change', (e) => {
-        block.variant = e.target.value;
-        markDirty();
-        updatePreview();
-      });
-
-      blockEl.querySelector('[data-nav-label]')?.addEventListener('input', (e) => {
-        const navItem = content.nav.find((item) => item.anchor === block.anchor);
-        if (navItem) navItem.label = e.target.value;
-        markDirty();
-        updatePreview();
-      });
-
-      blockEl.querySelector('[data-block-up]')?.addEventListener('click', () => moveBlock(blockIndex, -1));
-      blockEl.querySelector('[data-block-down]')?.addEventListener('click', () => moveBlock(blockIndex, 1));
-      blockEl.querySelector('[data-block-remove]')?.addEventListener('click', () => {
-        if (!window.confirm('Удалить этот блок?')) return;
-        content.blocks.splice(blockIndex, 1);
-        syncNavFromBlocks();
-        markDirty();
-        renderEditor();
-      });
-
-      blockEl.querySelectorAll('[data-add-item]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const type = btn.dataset.addItem;
-          const newItem =
-            type === 'subtitle'
-              ? { type, text: '' }
-              : type === 'list'
-                ? { type, entries: [''] }
-                : type === 'faq'
-                  ? { type, entries: [{ question: '', answer: '' }] }
-                  : { type: 'text', html: '' };
-          block.items.push(newItem);
-          markDirty();
-          renderEditor();
-        });
-      });
-
-      blockEl.querySelectorAll('[data-item-index]').forEach((itemEl) => {
-        const itemIndex = Number(itemEl.dataset.itemIndex);
-        const item = block.items[itemIndex];
-        if (!item) return;
-
-        itemEl.querySelector('[data-item-text]')?.addEventListener('input', (e) => {
-          item.html = e.target.value;
-          markDirty();
-        });
-
-        itemEl.querySelector('[data-item-subtitle]')?.addEventListener('input', (e) => {
-          item.text = e.target.value;
-          markDirty();
-        });
-
-        itemEl.querySelector('[data-item-up]')?.addEventListener('click', () => moveItem(blockIndex, itemIndex, -1));
-        itemEl.querySelector('[data-item-down]')?.addEventListener('click', () => moveItem(blockIndex, itemIndex, 1));
-        itemEl.querySelector('[data-item-remove]')?.addEventListener('click', () => {
-          block.items.splice(itemIndex, 1);
-          markDirty();
-          renderEditor();
-        });
-
-        itemEl.querySelectorAll('[data-list-entry]').forEach((textarea) => {
-          textarea.addEventListener('input', (e) => {
-            const entryIndex = Number(e.target.dataset.listEntry);
-            item.entries[entryIndex] = e.target.value;
-            markDirty();
-          });
-        });
-
-        itemEl.querySelector('[data-list-add]')?.addEventListener('click', () => {
-          item.entries.push('');
-          markDirty();
-          renderEditor();
-        });
-
-        itemEl.querySelectorAll('[data-list-remove]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const entryIndex = Number(btn.dataset.listRemove);
-            item.entries.splice(entryIndex, 1);
-            if (!item.entries.length) item.entries.push('');
-            markDirty();
-            renderEditor();
-          });
-        });
-
-        itemEl.querySelectorAll('[data-faq-question]').forEach((input) => {
-          input.addEventListener('input', (e) => {
-            const entryIndex = Number(e.target.dataset.faqQuestion);
-            item.entries[entryIndex].question = e.target.value;
-            markDirty();
-          });
-        });
-
-        itemEl.querySelectorAll('[data-faq-answer]').forEach((textarea) => {
-          textarea.addEventListener('input', (e) => {
-            const entryIndex = Number(e.target.dataset.faqAnswer);
-            item.entries[entryIndex].answer = e.target.value;
-            markDirty();
-          });
-        });
-
-        itemEl.querySelector('[data-faq-add]')?.addEventListener('click', () => {
-          item.entries.push({ question: '', answer: '' });
-          markDirty();
-          renderEditor();
-        });
-
-        itemEl.querySelectorAll('[data-faq-remove]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const entryIndex = Number(btn.dataset.faqRemove);
-            item.entries.splice(entryIndex, 1);
-            if (!item.entries.length) item.entries.push({ question: '', answer: '' });
-            markDirty();
-            renderEditor();
-          });
-        });
-      });
+      bindBlockEvents(blockEl, blockIndex);
     });
+  }
+
+  function validateBeforeSave() {
+    ensureNavArray();
+    cleanupNavAnchors();
+
+    const anchors = new Set(getBlockAnchors());
+    const broken = content.nav.filter((item) => !item.label?.trim() || !anchors.has(item.anchor));
+    if (broken.length) {
+      showToast('Проверьте кнопки навигации: нужны текст и существующий якорь блока', 'error');
+      renderEditor();
+      return false;
+    }
+
+    const seen = new Set();
+    for (const item of content.nav) {
+      if (seen.has(item.anchor)) {
+        showToast('Две кнопки не могут вести на один якорь — измените или удалите дубликат', 'error');
+        return false;
+      }
+      seen.add(item.anchor);
+    }
+
+    return true;
   }
 
   async function loadAdminSiteAbout() {
@@ -437,24 +670,30 @@
       const response = await fetch('/api/about-page');
       if (!response.ok) throw new Error('Не удалось загрузить данные');
       content = cloneContent(await response.json());
-      syncNavFromBlocks();
+      initNavFromBlocksIfEmpty();
       markClean('Готово к редактированию');
       renderEditor();
+      syncPreviewVisibility();
     } catch (error) {
       editorRoot.innerHTML = `<p class="site-about-loading site-about-loading--error">${error.message}</p>`;
       setStatus('');
     }
   }
 
-  async function saveContent() {
+  function requestSave() {
+    if (!content || isSaving) return;
+    if (!validateBeforeSave()) return;
+    openSaveConfirmModal();
+  }
+
+  async function performSave() {
     if (!content || isSaving) return;
 
     isSaving = true;
-    saveBtn.disabled = true;
+    if (saveBtn) saveBtn.disabled = true;
     setStatus('Сохранение…');
 
     try {
-      syncNavFromBlocks();
       const response = await fetch('/api/admin/about-page', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -465,15 +704,21 @@
       if (!response.ok) throw new Error(data.error || 'Ошибка сохранения');
 
       content = cloneContent(data.content);
-      markClean('Сохранено');
-      showToast('Страница «О сайте» обновлена');
+      applyToPublicSite(content);
+      markClean('Сохранено на сайте');
+      showToast('Страница «О сайте» сохранена');
+      renderEditor();
     } catch (error) {
       setStatus('Ошибка сохранения');
       showToast(error.message, 'error');
     } finally {
       isSaving = false;
-      saveBtn.disabled = false;
+      if (saveBtn) saveBtn.disabled = false;
     }
+  }
+
+  async function saveContent() {
+    requestSave();
   }
 
   async function resetContent() {
@@ -487,7 +732,6 @@
       if (!response.ok) throw new Error(data.error || 'Ошибка сброса');
 
       content = cloneContent(data.content);
-      syncNavFromBlocks();
       markClean('Восстановлен исходный текст');
       renderEditor();
       showToast('Восстановлен исходный текст');
@@ -502,13 +746,27 @@
     }
   }
 
-  function togglePreview() {
-    previewVisible = !previewVisible;
-    if (previewPanel) previewPanel.hidden = !previewVisible;
+  function syncPreviewVisibility() {
+    if (previewPanel) {
+      previewPanel.hidden = !previewVisible;
+      previewPanel.classList.toggle('is-collapsed', !previewVisible);
+      previewPanel.setAttribute('aria-hidden', previewVisible ? 'false' : 'true');
+    }
+
+    if (layoutEl) {
+      layoutEl.classList.toggle('site-about-layout--preview-hidden', !previewVisible);
+    }
+
     if (previewToggle) {
       previewToggle.textContent = previewVisible ? 'Скрыть превью' : 'Показать превью';
       previewToggle.setAttribute('aria-pressed', previewVisible ? 'true' : 'false');
+      previewToggle.classList.toggle('is-active', previewVisible);
     }
+  }
+
+  function togglePreview() {
+    previewVisible = !previewVisible;
+    syncPreviewVisibility();
   }
 
   openBtn.addEventListener('click', openSiteAboutSection);

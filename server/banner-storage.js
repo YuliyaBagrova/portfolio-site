@@ -11,8 +11,12 @@ function createBannerStorage(rootDir, config) {
     uploadsSubdir,
     apiPrefix,
     slideCount = 4,
+    dynamicSlides = false,
+    maxSlides: configMaxSlides,
     filePrefix = 'slide'
   } = config;
+
+  const maxSlides = configMaxSlides || slideCount;
 
   const uploadsDir = path.join(rootDir, 'uploads', uploadsSubdir);
 
@@ -78,6 +82,75 @@ function createBannerStorage(rootDir, config) {
   }
 
   function registerRoutes(app, getPool) {
+    async function saveSlideAtIndex(index, body) {
+      const { image, width, height, fit } = body || {};
+      const pool = getPool();
+      const [existingRows] = await pool.query(
+        `SELECT image_data FROM ${tableName} WHERE slide_index = ?`,
+        [index]
+      );
+      const existing = parseSlideRow(existingRows[0]);
+
+      if (!image && !existing?.image) {
+        const error = new Error('Изображение обязательно');
+        error.status = 400;
+        throw error;
+      }
+
+      let imageUrl = existing?.image || null;
+
+      if (image && typeof image === 'string') {
+        if (image.startsWith('data:')) {
+          const { ext, buffer } = parseDataUrl(image);
+          imageUrl = await saveSlideFile(index, buffer, ext);
+        } else if (isValidStoredImage(image.split('?')[0])) {
+          imageUrl = image.split('?')[0];
+        } else {
+          const error = new Error('Неверный формат изображения');
+          error.status = 400;
+          throw error;
+        }
+      }
+
+      const normalizedFit = fit
+        ? {
+            scale: Math.min(3, Math.max(1, Number(fit.scale) || 1)),
+            x: Math.min(100, Math.max(0, Number(fit.x ?? 50))),
+            y: Math.min(100, Math.max(0, Number(fit.y ?? 50)))
+          }
+        : existing?.fit || { scale: 1, x: 50, y: 50 };
+
+      const slide = {
+        image: imageUrl,
+        width: Number(width) || existing?.width || null,
+        height: Number(height) || existing?.height || null,
+        fit: normalizedFit
+      };
+
+      await pool.query(
+        `INSERT INTO ${tableName} (slide_index, image_data)
+         VALUES (?, ?)
+         ON DUPLICATE KEY UPDATE image_data = VALUES(image_data)`,
+        [index, JSON.stringify(slide)]
+      );
+
+      if (config.activity?.enabled && image) {
+        const logActivity = config.activity.useClothingLog ? logClothingActivity : logAppearanceActivity;
+        await logActivity(pool, {
+          action_type: 'banner_upload',
+          target_id: String(index),
+          title: config.activity.titleSave?.(index) || `Баннер, слайд ${index + 1} обновлён`,
+          badge: config.activity.badge || 'Баннер',
+          badge_class: config.activity.badgeClass || 'banners'
+        });
+      }
+
+      return {
+        ...slide,
+        image: `${slide.image}?v=${Date.now()}`
+      };
+    }
+
     app.get(apiPrefix, async (_req, res) => {
       try {
         const pool = getPool();
@@ -85,12 +158,22 @@ function createBannerStorage(rootDir, config) {
           `SELECT slide_index, image_data FROM ${tableName} ORDER BY slide_index`
         );
 
-        const slides = Array(slideCount).fill(null);
-        rows.forEach((row) => {
-          slides[row.slide_index] = parseSlideRow(row);
-        });
-
-        res.json({ slides });
+        if (dynamicSlides) {
+          const slides = [];
+          rows.forEach((row) => {
+            slides[row.slide_index] = parseSlideRow(row);
+          });
+          while (slides.length > 0 && !slides[slides.length - 1]) {
+            slides.pop();
+          }
+          res.json({ slides });
+        } else {
+          const slides = Array(slideCount).fill(null);
+          rows.forEach((row) => {
+            slides[row.slide_index] = parseSlideRow(row);
+          });
+          res.json({ slides });
+        }
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
@@ -99,87 +182,54 @@ function createBannerStorage(rootDir, config) {
     app.put(`${apiPrefix}/:index`, async (req, res) => {
       const index = Number(req.params.index);
 
-      if (!Number.isInteger(index) || index < 0 || index >= slideCount) {
-        return res.status(400).json({ error: `Неверный номер баннера (0–${slideCount - 1})` });
+      const indexLimit = dynamicSlides ? maxSlides : slideCount;
+      if (!Number.isInteger(index) || index < 0 || index >= indexLimit) {
+        return res.status(400).json({ error: `Неверный номер баннера (0–${indexLimit - 1})` });
       }
 
-      const { image, width, height, fit } = req.body || {};
-
       try {
-        const pool = getPool();
-        const [existingRows] = await pool.query(
-          `SELECT image_data FROM ${tableName} WHERE slide_index = ?`,
-          [index]
-        );
-        const existing = parseSlideRow(existingRows[0]);
-
-        if (!image && !existing?.image) {
-          return res.status(400).json({ error: 'Изображение обязательно' });
-        }
-
-        let imageUrl = existing?.image || null;
-
-        if (image && typeof image === 'string') {
-          if (image.startsWith('data:')) {
-            const { ext, buffer } = parseDataUrl(image);
-            imageUrl = await saveSlideFile(index, buffer, ext);
-          } else if (isValidStoredImage(image.split('?')[0])) {
-            imageUrl = image.split('?')[0];
-          } else {
-            return res.status(400).json({ error: 'Неверный формат изображения' });
-          }
-        }
-
-        const normalizedFit = fit
-          ? {
-              scale: Math.min(3, Math.max(1, Number(fit.scale) || 1)),
-              x: Math.min(100, Math.max(0, Number(fit.x ?? 50))),
-              y: Math.min(100, Math.max(0, Number(fit.y ?? 50)))
-            }
-          : existing?.fit || { scale: 1, x: 50, y: 50 };
-
-        const slide = {
-          image: imageUrl,
-          width: Number(width) || existing?.width || null,
-          height: Number(height) || existing?.height || null,
-          fit: normalizedFit
-        };
-
-        await pool.query(
-          `INSERT INTO ${tableName} (slide_index, image_data)
-           VALUES (?, ?)
-           ON DUPLICATE KEY UPDATE image_data = VALUES(image_data)`,
-          [index, JSON.stringify(slide)]
-        );
-
-        if (config.activity?.enabled && image) {
-          const logActivity = config.activity.useClothingLog ? logClothingActivity : logAppearanceActivity;
-          await logActivity(pool, {
-            action_type: 'banner_upload',
-            target_id: String(index),
-            title: config.activity.titleSave?.(index) || `Баннер, слайд ${index + 1} обновлён`,
-            badge: config.activity.badge || 'Баннер',
-            badge_class: config.activity.badgeClass || 'banners'
-          });
-        }
-
-        res.json({
-          ok: true,
-          slide: {
-            ...slide,
-            image: `${slide.image}?v=${Date.now()}`
-          }
-        });
+        const slide = await saveSlideAtIndex(index, req.body);
+        res.json({ ok: true, slide, index });
       } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(error.status || 500).json({ error: error.message });
       }
     });
 
+    if (dynamicSlides) {
+      app.post(apiPrefix, async (req, res) => {
+        const { image } = req.body || {};
+
+        if (!image || typeof image !== 'string') {
+          return res.status(400).json({ error: 'Изображение обязательно' });
+        }
+
+        try {
+          const pool = getPool();
+          const [rows] = await pool.query(
+            `SELECT slide_index FROM ${tableName} ORDER BY slide_index`
+          );
+          const used = new Set(rows.map((row) => row.slide_index));
+          let index = 0;
+          while (used.has(index) && index < maxSlides) index += 1;
+
+          if (index >= maxSlides) {
+            return res.status(400).json({ error: `Максимум ${maxSlides} баннеров` });
+          }
+
+          const slide = await saveSlideAtIndex(index, req.body);
+          res.json({ ok: true, slide, index });
+        } catch (error) {
+          res.status(error.status || 500).json({ error: error.message });
+        }
+      });
+    }
+
     app.delete(`${apiPrefix}/:index`, async (req, res) => {
       const index = Number(req.params.index);
+      const indexLimit = dynamicSlides ? maxSlides : slideCount;
 
-      if (!Number.isInteger(index) || index < 0 || index >= slideCount) {
-        return res.status(400).json({ error: `Неверный номер баннера (0–${slideCount - 1})` });
+      if (!Number.isInteger(index) || index < 0 || index >= indexLimit) {
+        return res.status(400).json({ error: `Неверный номер баннера (0–${indexLimit - 1})` });
       }
 
       try {

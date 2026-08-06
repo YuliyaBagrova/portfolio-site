@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Товар — Фитнес-индустрия</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-float-actions.css">
   <link rel="stylesheet" href="product.css">
 </head>
 <body class="product-page">
@@ -59,7 +60,12 @@
             <span>Комментарий</span>
             <textarea name="message" rows="3" maxlength="500" placeholder="Доставка, вариант оплаты…"></textarea>
           </label>
-          <button type="submit" class="product-btn product-btn-primary">Купить</button>
+          <div class="product-order-actions">
+            <button type="button" class="product-btn product-btn-cart" id="productAddToCartBtn" aria-label="Добавить в корзину" title="Добавить в корзину">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>
+            </button>
+            <button type="submit" class="product-btn product-btn-primary">Купить</button>
+          </div>
           <p class="product-form-status" id="orderStatus" hidden></p>
         </form>
       </div>
@@ -101,6 +107,9 @@
     </section>
   </main>
 
+  <script src="site-cart.js"></script>
+  <script src="site-orders.js"></script>
+  <script src="site-float-actions.js"></script>
   <script src="order-confirm.js"></script>
   <script src="product.js"></script>
 </body>

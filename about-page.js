@@ -83,8 +83,8 @@
         const href = link.getAttribute('href');
         if (!href?.startsWith('#')) return;
 
-        const target = document.querySelector(href);
-        if (!target || !root.contains(target)) return;
+        const target = root.querySelector(href);
+        if (!target) return;
 
         event.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -102,8 +102,7 @@
       if (!response.ok) throw new Error('Не удалось загрузить страницу');
 
       const content = await response.json();
-      renderAboutPageContent(root, content);
-      root.hidden = false;
+      applyPublicAboutPageContent(content);
     } catch {
       if (loading) {
         loading.textContent = 'Не удалось загрузить содержимое. Обновите страницу.';
@@ -115,7 +114,34 @@
     if (loading) loading.hidden = true;
   }
 
+  function applyPublicAboutPageContent(content) {
+    const root = document.getElementById('aboutPageRoot');
+    const loading = document.getElementById('aboutPageLoading');
+    if (!root || !content) return;
+
+    renderAboutPageContent(root, content);
+    root.hidden = false;
+    if (loading) loading.hidden = true;
+
+    window.dispatchEvent(new CustomEvent('about-page-updated', { detail: { content } }));
+  }
+
+  async function reloadPublicAboutPage() {
+    const root = document.getElementById('aboutPageRoot');
+    if (!root) return;
+
+    try {
+      const response = await fetch('/api/about-page');
+      if (!response.ok) throw new Error('Не удалось загрузить страницу');
+      applyPublicAboutPageContent(await response.json());
+    } catch {
+      /* сохранённый контент уже может быть применён из админки */
+    }
+  }
+
   window.renderAboutPageContent = renderAboutPageContent;
+  window.applyPublicAboutPageContent = applyPublicAboutPageContent;
+  window.reloadPublicAboutPage = reloadPublicAboutPage;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadPublicAboutPage);

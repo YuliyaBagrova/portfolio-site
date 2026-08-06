@@ -728,12 +728,16 @@ body.admin-panel-open .app {
   color: #9a928a;
 }
 
-.admin-section-clothing .recent-badge.clothing {
+.admin-section-clothing .admin-recent-list .recent-badge {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: none;
+  border-radius: 2px;
+  color: #1a1816;
+  background: linear-gradient(180deg, rgba(253, 251, 248, 0.96) 0%, rgba(243, 239, 233, 0.96) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
 }
 
 .admin-recent-list .recent-loading,
@@ -944,6 +948,47 @@ body.admin-panel-open .app {
   font-size: 0.875rem;
   color: var(--text-muted);
   line-height: 1.45;
+}
+
+.admin-section-appearance,
+.admin-section-fitness,
+.admin-section-banners,
+.admin-section-clothing {
+  position: relative;
+  padding-bottom: 32px;
+}
+
+.admin-section-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-section-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.admin-section-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+@media (max-width: 640px) {
+  .admin-section-appearance .admin-appearance-grid,
+  .admin-section-fitness .admin-fitness-grid,
+  .admin-section-banners .admin-banners-grid,
+  .admin-section-clothing .admin-clothing-grid {
+    padding-top: 44px;
+  }
 }
 
 .admin-section-appearance {
@@ -1294,6 +1339,2928 @@ body.admin-panel-open .app {
   text-align: left;
 }
 
+.admin-section-home-banner {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --home-indigo: #6366f1;
+  --home-indigo-hot: #4f46e5;
+  --home-indigo-soft: #c7d2fe;
+  --home-indigo-muted: #eef2ff;
+}
+
+.admin-section-home-banner .admin-panel-badge--home,
+.admin-section-home-banner .admin-panel-badge {
+  background: rgba(99, 102, 241, 0.14);
+  color: #c7d2fe;
+}
+
+.admin-home-banner-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-home-banner-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.admin-home-banner-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-home-banner-page {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-home-banner-layout {
+  min-height: 420px;
+}
+
+.admin-section-home-banner .admin-home-banner-count {
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.admin-section-home-banner .admin-home-banner-item {
+  cursor: pointer;
+}
+
+.admin-section-home-banner .admin-home-banner-item:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-home-banner .admin-home-banner-item.is-active {
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+}
+
+.admin-home-banner-empty {
+  border-style: dashed;
+  border-color: rgba(99, 102, 241, 0.24);
+  background:
+    linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, rgba(99, 102, 241, 0.02) 100%),
+    var(--bg-secondary);
+}
+
+.admin-home-banner-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-home-banner-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--home-indigo-muted) 0%, var(--home-indigo-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-home-banner-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-section-home-banner .admin-fitness-back {
+  margin-bottom: 14px;
+}
+
+.admin-home-banner-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(99, 102, 241, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-home-banner .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+/* ===== Admin: иконки разделов (страница) ===== */
+.admin-section-icons-page {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --home-indigo: #6366f1;
+  --home-indigo-hot: #4f46e5;
+  --home-indigo-soft: #c7d2fe;
+  --home-indigo-muted: #eef2ff;
+}
+
+.admin-section-icons-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-section-icons-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.admin-section-icons-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-section-icons-page-card {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-section-icons-layout {
+  min-height: 360px;
+}
+
+.admin-section-icons-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-section-icons-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--home-indigo-muted) 0%, var(--home-indigo-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-section-icons-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-section-icons-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(99, 102, 241, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-icons-page .admin-panel-badge--appearance {
+  background: rgba(99, 102, 241, 0.14);
+  color: #c7d2fe;
+}
+
+.admin-section-icons-page .admin-section-icons-count {
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.admin-section-icons-page .admin-section-icons-item {
+  cursor: pointer;
+}
+
+.admin-section-icons-page .admin-section-icons-item:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-icons-page .admin-section-icons-item.is-active {
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+}
+
+.admin-section-icons-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.admin-section-icons-thumb {
+  width: 44px;
+  height: 44px;
+  margin-right: 0;
+}
+
+.admin-section-icons-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(99, 102, 241, 0.12);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+}
+
+.admin-section-icons-empty {
+  border-style: dashed;
+  border-color: rgba(99, 102, 241, 0.24);
+}
+
+.admin-section-icons-page .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-section-icons-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(99, 102, 241, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-section-icons-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--home-indigo-muted);
+}
+
+.admin-section-icons-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-section-icons-form-desc strong {
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.admin-section-icons-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-section-icons-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-section-icons-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-section-icons-preview-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.admin-section-icons-preview {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(99, 102, 241, 0.24);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.admin-section-icons-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.admin-section-icons-preview.is-zoomable:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+}
+
+.admin-section-icons-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.admin-section-icons-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-section-icons-save-btn {
+  background: linear-gradient(135deg, var(--home-indigo) 0%, var(--home-indigo-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+}
+
+.admin-section-icons-page .admin-fitness-image-btn:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+
+@media (max-width: 640px) {
+  .admin-section-icons-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: цветовая палитра (страница) ===== */
+.admin-section-palette-page {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --home-indigo: #6366f1;
+  --home-indigo-hot: #4f46e5;
+  --home-indigo-soft: #c7d2fe;
+  --home-indigo-muted: #eef2ff;
+}
+
+.admin-section-palette-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-section-palette-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.admin-section-palette-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-section-palette-page-card {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-section-palette-layout {
+  min-height: 360px;
+}
+
+.admin-section-palette-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-section-palette-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--home-indigo-muted) 0%, var(--home-indigo-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-section-palette-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-section-palette-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(99, 102, 241, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-palette-page .admin-panel-badge--appearance {
+  background: rgba(99, 102, 241, 0.14);
+  color: #c7d2fe;
+}
+
+.admin-section-palette-page .admin-section-palette-count {
+  color: #c7d2fe;
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.admin-section-palette-page .admin-section-palette-item {
+  cursor: pointer;
+}
+
+.admin-section-palette-page .admin-section-palette-item:hover {
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-palette-page .admin-section-palette-item.is-active {
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+}
+
+.admin-section-palette-swatches {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.admin-section-palette-swatch {
+  width: 18px;
+  height: 44px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.admin-section-palette-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(99, 102, 241, 0.12);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+}
+
+.admin-section-palette-empty {
+  border-style: dashed;
+  border-color: rgba(99, 102, 241, 0.24);
+}
+
+.admin-section-palette-page .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 20px;
+}
+
+.admin-section-palette-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(99, 102, 241, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-section-palette-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--home-indigo-muted);
+}
+
+.admin-section-palette-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-section-palette-editor-layout {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.admin-section-palette-editor-layout .admin-palette-preview {
+  min-height: 200px;
+}
+
+.admin-section-palette-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.admin-section-palette-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-section-palette-save-btn {
+  background: linear-gradient(135deg, var(--home-indigo) 0%, var(--home-indigo-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+}
+
+@media (max-width: 640px) {
+  .admin-section-palette-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+.admin-section-home-banner .admin-fitness-add-btn,
+.admin-home-banner-add-btn {
+  background: linear-gradient(135deg, var(--home-indigo) 0%, var(--home-indigo-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+}
+
+.admin-section-home-banner .admin-fitness-add-btn:hover,
+.admin-home-banner-add-btn:hover {
+  background: linear-gradient(135deg, #818cf8 0%, var(--home-indigo) 100%);
+}
+
+.admin-home-banner-thumb {
+  aspect-ratio: 16 / 5;
+  object-fit: cover;
+}
+
+.admin-home-banner-thumb-bg {
+  display: block;
+  background-repeat: no-repeat;
+  background-color: var(--bg-secondary);
+}
+
+.admin-home-banner-item .admin-home-banner-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(99, 102, 241, 0.12);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.22);
+}
+
+.admin-home-banner-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(99, 102, 241, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-home-banner-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--home-indigo-muted);
+  line-height: 1.3;
+}
+
+.admin-home-banner-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-home-banner-form-desc strong {
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.admin-home-banner-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-home-banner-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-home-banner-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-home-banner-edit-preview {
+  margin: 0;
+  border-color: rgba(99, 102, 241, 0.22);
+}
+
+.admin-home-banner-fit-controls {
+  margin: 0;
+  border-color: rgba(99, 102, 241, 0.18);
+}
+
+.admin-home-banner-form .admin-banner-edit-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-home-banner-form .admin-banner-edit-messages:not(:has(.admin-hero-success:not([hidden]), .admin-hero-warning:not([hidden]))) {
+  display: none;
+}
+
+.admin-home-banner-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.admin-home-banner-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-home-banner-fit-controls .admin-banner-fit-slider input[type='range'] {
+  accent-color: var(--home-indigo);
+}
+
+.admin-home-banner-fit-controls .admin-home-banner-save-fit {
+  align-self: center;
+  margin-inline: auto;
+}
+
+.admin-home-banner-save-fit {
+  background: linear-gradient(135deg, var(--home-indigo) 0%, var(--home-indigo-hot) 100%);
+  border: none;
+}
+
+.admin-home-banner-preview {
+  aspect-ratio: 16 / 5;
+  object-fit: cover;
+  width: 100%;
+  max-height: none !important;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  display: block;
+}
+
+.admin-home-banner-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.admin-home-banner-preview.is-zoomable:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.22);
+  transform: translateY(-1px);
+}
+
+.admin-home-banner-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.admin-home-banner-thumb-btn:hover .admin-home-banner-thumb {
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.45);
+}
+
+.admin-home-banner-save-btn {
+  background: linear-gradient(135deg, var(--home-indigo) 0%, var(--home-indigo-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.28);
+}
+
+.admin-home-banner-save-btn:hover {
+  background: linear-gradient(135deg, #818cf8 0%, var(--home-indigo) 100%);
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.36);
+}
+
+.admin-section-home-banner .btn-ghost-back:hover,
+.admin-home-banner-page .btn-ghost-back:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+
+.admin-section-home-banner .admin-fitness-image-btn:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #c7d2fe;
+}
+
+.admin-section-home-banner .admin-hero-success {
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.admin-section-home-banner .admin-hero-warning {
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+@media (max-width: 640px) {
+  .admin-home-banner-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: баннер «Фитнес-индустрия» (страница) ===== */
+.admin-section-fitness-banner {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --fitness-banner-orange: #f97316;
+  --fitness-banner-orange-hot: #ea580c;
+  --fitness-banner-orange-soft: #fdba74;
+  --fitness-banner-orange-muted: #fff7ed;
+}
+
+.admin-section-fitness-banner .admin-panel-badge--fitness,
+.admin-section-fitness-banner .admin-panel-badge {
+  background: rgba(249, 115, 22, 0.14);
+  color: #fdba74;
+}
+
+.admin-fitness-banner-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-fitness-banner-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+.admin-fitness-banner-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-fitness-banner-page {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(249, 115, 22, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-fitness-banner-layout {
+  min-height: 420px;
+}
+
+.admin-section-fitness-banner .admin-fitness-banner-count {
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.admin-section-fitness-banner .admin-fitness-banner-item {
+  cursor: pointer;
+}
+
+.admin-section-fitness-banner .admin-fitness-banner-item:hover {
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-fitness-banner .admin-fitness-banner-item.is-active {
+  border-color: rgba(249, 115, 22, 0.55);
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.25);
+}
+
+.admin-fitness-banner-empty {
+  border-style: dashed;
+  border-color: rgba(249, 115, 22, 0.24);
+  background:
+    linear-gradient(180deg, rgba(249, 115, 22, 0.06) 0%, rgba(249, 115, 22, 0.02) 100%),
+    var(--bg-secondary);
+}
+
+.admin-fitness-banner-page-header {
+  margin-bottom: 20px;
+  padding-right: 168px;
+}
+
+.admin-fitness-banner-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--fitness-banner-orange-muted) 0%, var(--fitness-banner-orange-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-fitness-banner-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-fitness-banner-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(249, 115, 22, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-fitness-banner .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-section-fitness-banner .admin-fitness-add-btn,
+.admin-fitness-banner-add-btn {
+  background: linear-gradient(135deg, var(--fitness-banner-orange) 0%, var(--fitness-banner-orange-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.28);
+}
+
+.admin-section-fitness-banner .admin-fitness-add-btn:hover,
+.admin-fitness-banner-add-btn:hover {
+  background: linear-gradient(135deg, #fb923c 0%, var(--fitness-banner-orange) 100%);
+}
+
+.admin-fitness-banner-thumb {
+  aspect-ratio: 16 / 5;
+  object-fit: cover;
+}
+
+.admin-fitness-banner-thumb-bg {
+  display: block;
+  background-repeat: no-repeat;
+  background-color: var(--bg-secondary);
+}
+
+.admin-fitness-banner-item .admin-fitness-banner-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(249, 115, 22, 0.12);
+  color: #fdba74;
+  border: 1px solid rgba(249, 115, 22, 0.22);
+}
+
+.admin-fitness-banner-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(249, 115, 22, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-fitness-banner-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--fitness-banner-orange-muted);
+}
+
+.admin-fitness-banner-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-fitness-banner-form-desc strong {
+  color: #fdba74;
+  font-weight: 600;
+}
+
+.admin-fitness-banner-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-fitness-banner-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-fitness-banner-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-fitness-banner-edit-preview {
+  min-height: 120px;
+}
+
+.admin-fitness-banner-fit-controls {
+  gap: 14px;
+}
+
+.admin-fitness-banner-fit-controls .admin-fitness-banner-save-fit {
+  align-self: center;
+  margin-inline: auto;
+}
+
+.admin-fitness-banner-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(249, 115, 22, 0.1);
+}
+
+.admin-fitness-banner-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-fitness-banner-fit-controls .admin-banner-fit-slider input[type='range'] {
+  accent-color: var(--fitness-banner-orange);
+}
+
+.admin-fitness-banner-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.admin-fitness-banner-thumb-btn:hover .admin-fitness-banner-thumb {
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.45);
+}
+
+.admin-fitness-banner-save-btn {
+  background: linear-gradient(135deg, var(--fitness-banner-orange) 0%, var(--fitness-banner-orange-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.28);
+}
+
+.admin-fitness-banner-save-btn:hover {
+  background: linear-gradient(135deg, #fb923c 0%, var(--fitness-banner-orange) 100%);
+  box-shadow: 0 10px 28px rgba(234, 88, 12, 0.36);
+}
+
+.admin-section-fitness-banner .admin-fitness-image-btn:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+  color: #fdba74;
+}
+
+@media (max-width: 640px) {
+  .admin-fitness-banner-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: каталог товаров «Фитнес-индустрия» (страница) ===== */
+.admin-section-fitness-catalog-page {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --fitness-banner-orange: #f97316;
+  --fitness-banner-orange-hot: #ea580c;
+  --fitness-banner-orange-soft: #fdba74;
+  --fitness-banner-orange-muted: #fff7ed;
+}
+
+.admin-section-fitness-catalog-page .admin-panel-badge--fitness,
+.admin-section-fitness-catalog-page .admin-panel-badge {
+  background: rgba(249, 115, 22, 0.14);
+  color: #fdba74;
+}
+
+.admin-fitness-catalog-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-fitness-catalog-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+.admin-fitness-catalog-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-fitness-catalog-page-card {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(249, 115, 22, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(249, 115, 22, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-fitness-catalog-page-layout {
+  min-height: 420px;
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-catalog-page-count {
+  color: #fdba74;
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-catalog-item {
+  cursor: pointer;
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-catalog-item:hover {
+  border-color: rgba(249, 115, 22, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-catalog-item.is-active {
+  border-color: rgba(249, 115, 22, 0.55);
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.25);
+}
+
+.admin-fitness-catalog-empty {
+  border-style: dashed;
+  border-color: rgba(249, 115, 22, 0.24);
+  background:
+    linear-gradient(180deg, rgba(249, 115, 22, 0.06) 0%, rgba(249, 115, 22, 0.02) 100%),
+    var(--bg-secondary);
+}
+
+.admin-fitness-catalog-page-header {
+  margin-bottom: 20px;
+  padding-right: 168px;
+}
+
+.admin-fitness-catalog-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--fitness-banner-orange-muted) 0%, var(--fitness-banner-orange-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-fitness-catalog-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-fitness-catalog-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(249, 115, 22, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-add-btn,
+.admin-fitness-catalog-add-btn {
+  background: linear-gradient(135deg, var(--fitness-banner-orange) 0%, var(--fitness-banner-orange-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.28);
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-add-btn:hover,
+.admin-fitness-catalog-add-btn:hover {
+  background: linear-gradient(135deg, #fb923c 0%, var(--fitness-banner-orange) 100%);
+}
+
+.admin-fitness-catalog-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(249, 115, 22, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-fitness-catalog-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--fitness-banner-orange-muted);
+}
+
+.admin-fitness-catalog-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-fitness-catalog-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(249, 115, 22, 0.1);
+}
+
+.admin-fitness-catalog-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-fitness-catalog-save-btn {
+  background: linear-gradient(135deg, var(--fitness-banner-orange) 0%, var(--fitness-banner-orange-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(234, 88, 12, 0.28);
+}
+
+.admin-fitness-catalog-save-btn:hover {
+  background: linear-gradient(135deg, #fb923c 0%, var(--fitness-banner-orange) 100%);
+  box-shadow: 0 10px 28px rgba(234, 88, 12, 0.36);
+}
+
+.admin-section-fitness-catalog-page .admin-fitness-image-btn:hover {
+  border-color: rgba(249, 115, 22, 0.4);
+  color: #fdba74;
+}
+
+.admin-fitness-catalog-preview {
+  margin-top: 12px;
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  object-fit: contain;
+}
+
+.admin-fitness-catalog-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.admin-fitness-catalog-preview.is-zoomable:hover {
+  border-color: rgba(249, 115, 22, 0.45);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.2);
+}
+
+.admin-fitness-catalog-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.admin-fitness-catalog-thumb-btn:hover .admin-fitness-catalog-thumb {
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.45);
+}
+
+@media (max-width: 640px) {
+  .admin-fitness-catalog-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: баннер «Одежда» (страница) ===== */
+.admin-section-clothing-banner {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --clothing-banner-cream: #fdfbf8;
+  --clothing-banner-cream-soft: #f3efe9;
+  --clothing-banner-ink: #1a1816;
+  --clothing-banner-gold: #c9a86c;
+  --clothing-banner-gold-light: #f5e6c8;
+  --clothing-banner-line: rgba(253, 251, 248, 0.14);
+  --clothing-banner-line-strong: rgba(253, 251, 248, 0.22);
+  --clothing-banner-shadow: rgba(26, 24, 22, 0.1);
+}
+
+.admin-section-clothing-banner .admin-panel-badge--clothing,
+.admin-section-clothing-banner .admin-panel-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--clothing-banner-ink);
+  background: linear-gradient(180deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-cream-soft) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 4px 14px var(--clothing-banner-shadow);
+}
+
+.admin-clothing-banner-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-clothing-banner-back-btn:hover {
+  color: var(--clothing-banner-cream);
+  border-color: rgba(201, 168, 108, 0.45);
+}
+
+.admin-clothing-banner-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-clothing-banner-page {
+  padding: 24px 28px 28px;
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at top right, rgba(253, 251, 248, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-clothing-banner-layout {
+  min-height: 420px;
+}
+
+.admin-section-clothing-banner .admin-clothing-banner-count {
+  color: var(--clothing-banner-gold-light);
+  background: rgba(253, 251, 248, 0.1);
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-banner .admin-clothing-banner-item {
+  cursor: pointer;
+}
+
+.admin-section-clothing-banner .admin-clothing-banner-item:hover {
+  border-color: var(--clothing-banner-line-strong);
+  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.08);
+}
+
+.admin-section-clothing-banner .admin-clothing-banner-item.is-active {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 0 0 1px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-banner-empty {
+  border-style: dashed;
+  border-color: var(--clothing-banner-line);
+  background:
+    linear-gradient(180deg, rgba(253, 251, 248, 0.55) 0%, rgba(243, 239, 233, 0.35) 100%),
+    var(--bg-secondary);
+}
+
+.admin-clothing-banner-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-clothing-banner-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-clothing-banner-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-clothing-banner-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.12);
+  font-size: 1.35rem;
+}
+
+.admin-section-clothing-banner .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-section-clothing-banner .admin-fitness-add-btn,
+.admin-clothing-banner-add-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-section-clothing-banner .admin-fitness-add-btn:hover,
+.admin-clothing-banner-add-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-section-clothing-banner .admin-fitness-add-btn:focus,
+.admin-section-clothing-banner .admin-fitness-add-btn:focus-visible,
+.admin-clothing-banner-add-btn:focus,
+.admin-clothing-banner-add-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-clothing-banner-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-clothing-banner-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-banner-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-clothing-banner-form-desc strong {
+  color: var(--clothing-banner-gold-light);
+  font-weight: 600;
+}
+
+.admin-clothing-banner-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-clothing-banner-form-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.admin-clothing-banner-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-clothing-banner-edit-preview {
+  margin: 0;
+  aspect-ratio: 400 / 360;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+}
+
+.admin-clothing-banner-fit-controls {
+  margin: 0;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-clothing-banner-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-banner-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-clothing-banner-save-btn {
+  background: transparent;
+  border: 1px solid var(--clothing-banner-ink);
+  box-shadow: none;
+  color: var(--clothing-banner-cream);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.admin-clothing-banner-save-btn:hover {
+  background: var(--clothing-banner-ink);
+  border-color: var(--clothing-banner-ink);
+  color: #fff;
+}
+
+.admin-clothing-banner-fit-controls .admin-banner-fit-slider input[type='range'] {
+  accent-color: var(--clothing-banner-gold);
+}
+
+.admin-clothing-banner-thumb {
+  aspect-ratio: 400 / 360;
+  object-fit: cover;
+}
+
+.admin-clothing-banner-thumb-bg {
+  display: block;
+  aspect-ratio: 400 / 360;
+  background-repeat: no-repeat;
+  background-color: var(--clothing-banner-cream-soft);
+}
+
+.admin-clothing-banner-item .admin-clothing-banner-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(253, 251, 248, 0.1);
+  color: var(--clothing-banner-gold-light);
+  border: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-banner-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.admin-clothing-banner-thumb-btn:hover .admin-clothing-banner-thumb-bg {
+  box-shadow: 0 0 0 1px var(--clothing-banner-ink);
+}
+
+.admin-section-clothing-banner .admin-fitness-image-btn:hover {
+  border-color: var(--clothing-banner-ink);
+  color: var(--clothing-banner-cream);
+}
+
+.admin-section-clothing-banner .admin-hero-success {
+  border-color: var(--clothing-banner-line);
+  background: linear-gradient(180deg, rgba(253, 251, 248, 0.12) 0%, rgba(243, 239, 233, 0.08) 100%);
+}
+
+.admin-section-clothing-banner .admin-hero-warning {
+  border-color: rgba(251, 191, 36, 0.35);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+@media (max-width: 640px) {
+  .admin-clothing-banner-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: иконки каталога «Одежда» (страница) ===== */
+.admin-section-clothing-catalog-icons {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --clothing-banner-cream: #fdfbf8;
+  --clothing-banner-cream-soft: #f3efe9;
+  --clothing-banner-ink: #1a1816;
+  --clothing-banner-gold: #c9a86c;
+  --clothing-banner-gold-light: #f5e6c8;
+  --clothing-banner-line: rgba(253, 251, 248, 0.14);
+  --clothing-banner-line-strong: rgba(253, 251, 248, 0.22);
+  --clothing-banner-shadow: rgba(26, 24, 22, 0.1);
+}
+
+.admin-section-clothing-catalog-icons .admin-panel-badge--clothing,
+.admin-section-clothing-catalog-icons .admin-panel-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--clothing-banner-ink);
+  background: linear-gradient(180deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-cream-soft) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 4px 14px var(--clothing-banner-shadow);
+}
+
+.admin-clothing-catalog-icons-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-clothing-catalog-icons-back-btn:hover {
+  color: var(--clothing-banner-cream);
+  border-color: rgba(201, 168, 108, 0.45);
+}
+
+.admin-clothing-catalog-icons-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-clothing-catalog-icons-page {
+  padding: 24px 28px 28px;
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at top right, rgba(253, 251, 248, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-clothing-catalog-icons-layout {
+  min-height: 360px;
+}
+
+.admin-clothing-catalog-icons-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-clothing-catalog-icons-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-clothing-catalog-icons-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-clothing-catalog-icons-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.12);
+  font-size: 1.35rem;
+}
+
+.admin-section-clothing-catalog-icons .admin-clothing-catalog-icons-count {
+  color: var(--clothing-banner-gold-light);
+  background: rgba(253, 251, 248, 0.1);
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-icons .admin-clothing-catalog-icons-item {
+  cursor: pointer;
+}
+
+.admin-section-clothing-catalog-icons .admin-clothing-catalog-icons-item:hover {
+  border-color: var(--clothing-banner-line-strong);
+  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.08);
+}
+
+.admin-section-clothing-catalog-icons .admin-clothing-catalog-icons-item.is-active {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 0 0 1px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-catalog-icons-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.admin-clothing-catalog-icons-thumb {
+  width: 44px;
+  height: 44px;
+  margin-right: 0;
+}
+
+.admin-clothing-catalog-icons-thumb.is-empty {
+  display: grid;
+  place-items: center;
+  background: rgba(253, 251, 248, 0.1);
+  border: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-icons-glyph {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.125rem;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--clothing-banner-gold-light);
+}
+
+.admin-clothing-catalog-icons-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(253, 251, 248, 0.1);
+  color: var(--clothing-banner-gold-light);
+  border: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-icons-empty {
+  border-style: dashed;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-icons .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-clothing-catalog-icons-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-clothing-catalog-icons-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-catalog-icons-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-clothing-catalog-icons-form-desc strong {
+  color: var(--clothing-banner-gold-light);
+  font-weight: 600;
+}
+
+.admin-clothing-catalog-icons-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-clothing-catalog-icons-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-clothing-catalog-icons-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-clothing-catalog-icons-preview-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.admin-clothing-catalog-icons-preview {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.08);
+}
+
+.admin-clothing-catalog-icons-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.admin-clothing-catalog-icons-preview.is-zoomable:hover {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 8px 24px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-catalog-icons-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-icons-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-clothing-catalog-icons-save-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+}
+
+.admin-clothing-catalog-icons-save-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-clothing-catalog-icons-save-btn:focus,
+.admin-clothing-catalog-icons-save-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-icons .admin-fitness-image-btn:hover {
+  border-color: var(--clothing-banner-ink);
+  color: var(--clothing-banner-cream);
+}
+
+.admin-section-clothing-catalog-icons .admin-hero-success {
+  border-color: var(--clothing-banner-line);
+  background: linear-gradient(180deg, rgba(253, 251, 248, 0.12) 0%, rgba(243, 239, 233, 0.08) 100%);
+}
+
+@media (max-width: 640px) {
+  .admin-clothing-catalog-icons-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: каталог товаров «Одежда» (страница) ===== */
+.admin-section-clothing-catalog-page {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --clothing-banner-cream: #fdfbf8;
+  --clothing-banner-cream-soft: #f3efe9;
+  --clothing-banner-ink: #1a1816;
+  --clothing-banner-gold: #c9a86c;
+  --clothing-banner-gold-light: #f5e6c8;
+  --clothing-banner-line: rgba(253, 251, 248, 0.14);
+  --clothing-banner-line-strong: rgba(253, 251, 248, 0.22);
+  --clothing-banner-shadow: rgba(26, 24, 22, 0.1);
+}
+
+.admin-section-clothing-catalog-page .admin-panel-badge--clothing,
+.admin-section-clothing-catalog-page .admin-panel-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--clothing-banner-ink);
+  background: linear-gradient(180deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-cream-soft) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 4px 14px var(--clothing-banner-shadow);
+}
+
+.admin-clothing-catalog-page-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-clothing-catalog-page-back-btn:hover {
+  color: var(--clothing-banner-cream);
+  border-color: rgba(201, 168, 108, 0.45);
+}
+
+.admin-clothing-catalog-page-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-page-card.card {
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+}
+
+.admin-clothing-catalog-page-card {
+  padding: 24px 28px 28px;
+  background:
+    radial-gradient(circle at top right, rgba(253, 251, 248, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-clothing-catalog-page-layout {
+  min-height: 360px;
+}
+
+.admin-clothing-catalog-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-clothing-catalog-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-clothing-catalog-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-clothing-catalog-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  background: rgba(253, 251, 248, 0.1);
+  border: 1px solid var(--clothing-banner-line);
+  font-size: 1.25rem;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-page-count {
+  color: var(--clothing-banner-gold-light);
+  background: rgba(253, 251, 248, 0.1);
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-add-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-add-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-add-btn:focus,
+.admin-section-clothing-catalog-page .admin-clothing-catalog-add-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-item {
+  cursor: pointer;
+  align-items: center;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-item:hover {
+  border-color: var(--clothing-banner-line-strong);
+  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.08);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-item.is-active {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 0 0 1px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-catalog-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.admin-clothing-catalog-thumb {
+  width: 44px;
+  height: 44px;
+  margin-right: 0;
+}
+
+.admin-clothing-catalog-empty {
+  border-style: dashed;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-page .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-clothing-catalog-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-clothing-catalog-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-catalog-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-form .admin-field span {
+  color: var(--text-secondary);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-form .admin-field span em {
+  color: var(--clothing-banner-gold-light);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-tags-hint {
+  color: var(--text-muted);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-catalog-option-label {
+  color: var(--text-secondary);
+}
+
+.admin-clothing-catalog-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-clothing-catalog-save-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+}
+
+.admin-clothing-catalog-save-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-clothing-catalog-save-btn:focus,
+.admin-clothing-catalog-save-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-preview {
+  width: 100%;
+  max-width: 160px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.08);
+}
+
+.admin-clothing-catalog-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.admin-clothing-catalog-preview.is-zoomable:hover {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 8px 24px rgba(26, 24, 22, 0.12);
+}
+
+.admin-section-clothing-catalog-page .admin-fitness-image-btn:hover {
+  border-color: var(--clothing-banner-ink);
+  color: var(--clothing-banner-cream);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-product-badge {
+  display: inline-flex;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.1);
+  color: var(--clothing-banner-gold-light);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-product-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-section-clothing-catalog-page .admin-clothing-product-price s {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+@media (max-width: 860px) {
+  .admin-section-clothing-catalog-page .admin-fitness-catalog-layout.is-editing {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-clothing-catalog-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: акции и товары «Одежда» (страница) ===== */
+.admin-section-clothing-alerts {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --clothing-banner-cream: #fdfbf8;
+  --clothing-banner-cream-soft: #f3efe9;
+  --clothing-banner-ink: #1a1816;
+  --clothing-banner-gold: #c9a86c;
+  --clothing-banner-gold-light: #f5e6c8;
+  --clothing-banner-line: rgba(253, 251, 248, 0.14);
+  --clothing-banner-line-strong: rgba(253, 251, 248, 0.22);
+  --clothing-banner-shadow: rgba(26, 24, 22, 0.1);
+}
+
+.admin-section-clothing-alerts .admin-panel-badge--clothing,
+.admin-section-clothing-alerts .admin-panel-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--clothing-banner-ink);
+  background: linear-gradient(180deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-cream-soft) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 4px 14px var(--clothing-banner-shadow);
+}
+
+.admin-clothing-alerts-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-clothing-alerts-back-btn:hover {
+  color: var(--clothing-banner-cream);
+  border-color: rgba(201, 168, 108, 0.45);
+}
+
+.admin-clothing-alerts-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-clothing-alerts-page {
+  padding: 24px 28px 28px;
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at top right, rgba(253, 251, 248, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-clothing-alerts-layout {
+  min-height: 360px;
+}
+
+.admin-clothing-alerts-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-clothing-alerts-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-clothing-alerts-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-clothing-alerts-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.12);
+  font-size: 1.35rem;
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-count {
+  color: var(--clothing-banner-gold-light);
+  background: rgba(253, 251, 248, 0.1);
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-add-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-add-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-add-btn:focus,
+.admin-section-clothing-alerts .admin-clothing-alerts-add-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-item {
+  cursor: pointer;
+  align-items: center;
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-item:hover {
+  border-color: var(--clothing-banner-line-strong);
+  box-shadow: 0 12px 28px rgba(26, 24, 22, 0.08);
+}
+
+.admin-section-clothing-alerts .admin-clothing-alerts-item.is-active {
+  border-color: var(--clothing-banner-ink);
+  box-shadow: 0 0 0 1px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-alerts-item-preview {
+  flex: 0 0 auto;
+  width: min(220px, 42%);
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(253, 251, 248, 0.06);
+}
+
+.admin-clothing-alerts-item-preview.clothing-alert {
+  padding: 10px;
+  border-bottom: 0;
+}
+
+.admin-clothing-alerts-pick-meta {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: rgba(253, 251, 248, 0.1);
+  color: var(--clothing-banner-gold-light);
+  border: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-alerts-empty {
+  border-style: dashed;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-alerts .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-clothing-alerts-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-clothing-alerts-form.is-saving {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.admin-clothing-alerts-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-alerts-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-clothing-alerts-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-clothing-alerts-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-clothing-alerts-form-field em {
+  color: #f87171;
+  font-style: normal;
+}
+
+.admin-clothing-alerts-form-field select,
+.admin-clothing-alerts-form-field input,
+.admin-clothing-alerts-form-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.admin-clothing-alerts-badge-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-clothing-alerts-badge-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-clothing-alerts-badge-suggestion {
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--clothing-banner-line);
+  background: rgba(253, 251, 248, 0.08);
+  color: var(--clothing-banner-gold-light);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
+}
+
+.admin-clothing-alerts-badge-suggestion:hover {
+  border-color: var(--clothing-banner-ink);
+  background: rgba(253, 251, 248, 0.14);
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-alerts-form-field select:focus,
+.admin-clothing-alerts-form-field input:focus,
+.admin-clothing-alerts-form-field textarea:focus {
+  outline: none;
+  border-color: var(--clothing-banner-ink);
+}
+
+.admin-clothing-alerts-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-alerts-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-clothing-alerts-save-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+}
+
+.admin-clothing-alerts-save-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-clothing-alerts-save-btn:focus,
+.admin-clothing-alerts-save-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-alerts .admin-hero-success {
+  border-color: var(--clothing-banner-line);
+  background: linear-gradient(180deg, rgba(253, 251, 248, 0.12) 0%, rgba(243, 239, 233, 0.08) 100%);
+}
+
+@media (max-width: 860px) {
+  .admin-section-clothing-alerts .admin-fitness-catalog-layout.is-editing {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-clothing-alerts-item-preview {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-clothing-alerts-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
+/* ===== Admin: реклама каталога «Одежда» (страница) ===== */
+.admin-section-clothing-catalog-promo {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --clothing-banner-cream: #fdfbf8;
+  --clothing-banner-cream-soft: #f3efe9;
+  --clothing-banner-ink: #1a1816;
+  --clothing-banner-gold: #c9a86c;
+  --clothing-banner-gold-light: #f5e6c8;
+  --clothing-banner-line: rgba(253, 251, 248, 0.14);
+  --clothing-banner-line-strong: rgba(253, 251, 248, 0.22);
+  --clothing-banner-shadow: rgba(26, 24, 22, 0.1);
+}
+
+.admin-section-clothing-catalog-promo .admin-panel-badge--clothing,
+.admin-section-clothing-catalog-promo .admin-panel-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--clothing-banner-ink);
+  background: linear-gradient(180deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-cream-soft) 100%);
+  border: 1px solid rgba(201, 168, 108, 0.45);
+  border-radius: 2px;
+  box-shadow: 0 4px 14px var(--clothing-banner-shadow);
+}
+
+.admin-clothing-catalog-promo-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-clothing-catalog-promo-back-btn:hover {
+  color: var(--clothing-banner-cream);
+  border-color: rgba(201, 168, 108, 0.45);
+}
+
+.admin-clothing-catalog-promo-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-section-clothing-catalog-promo .admin-clothing-catalog-promo-page.card {
+  border: 1px solid var(--clothing-banner-line);
+  border-radius: 2px;
+}
+
+.admin-clothing-catalog-promo-page {
+  width: fit-content;
+  max-width: 100%;
+  padding: 24px 28px 28px;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at top right, rgba(253, 251, 248, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-clothing-catalog-promo-layout {
+  min-height: 360px;
+  width: max-content;
+  max-width: 100%;
+}
+
+.admin-clothing-catalog-promo-page-header {
+  margin-bottom: 20px;
+  padding-right: 148px;
+}
+
+.admin-clothing-catalog-promo-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--clothing-banner-cream) 0%, var(--clothing-banner-gold-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-clothing-catalog-promo-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-clothing-catalog-promo-page-desc strong {
+  color: var(--clothing-banner-gold-light);
+  font-weight: 600;
+}
+
+.admin-clothing-catalog-promo-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  background: rgba(253, 251, 248, 0.1);
+  border: 1px solid var(--clothing-banner-line);
+  font-size: 1.25rem;
+}
+
+.admin-section-clothing-catalog-promo .admin-clothing-catalog-promo-count {
+  color: var(--clothing-banner-gold-light);
+  background: rgba(253, 251, 248, 0.1);
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-promo .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: 280px 340px;
+  gap: 20px;
+}
+
+.admin-clothing-catalog-promo-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.admin-clothing-catalog-promo-preview-label {
+  margin: 0 0 10px;
+  width: 100%;
+  max-width: 280px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-clothing-catalog-promo-preview.clothing-catalog-promo {
+  position: static;
+  top: auto;
+  width: 100%;
+  max-width: 280px;
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-card {
+  display: block;
+  pointer-events: none;
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: 0 18px 42px rgba(26, 24, 22, 0.12);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #ddd5c8;
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-image.is-zoomable {
+  pointer-events: auto;
+  cursor: zoom-in;
+  transition: filter var(--transition);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-image.is-zoomable:hover {
+  filter: brightness(1.05);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-image[hidden] {
+  display: none;
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-fallback {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(26, 24, 22, 0.04) 0%, rgba(26, 24, 22, 0.22) 100%),
+    linear-gradient(145deg, #f5f1eb 0%, #c8bdb0 52%, #8f8173 100%);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-sticker {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  max-width: calc(100% - 28px);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: 56px 14px 16px;
+  background: linear-gradient(180deg, rgba(26, 24, 22, 0) 0%, rgba(26, 24, 22, 0.72) 100%);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-title {
+  display: block;
+  margin: 0 0 4px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.15;
+  color: #fff;
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-subtitle {
+  margin: 0;
+  font-size: 0.6875rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-title[hidden],
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-subtitle[hidden],
+.admin-clothing-catalog-promo-preview .clothing-catalog-promo-overlay[hidden] {
+  display: none;
+}
+
+.admin-clothing-catalog-promo-form.admin-fitness-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: var(--clothing-banner-line);
+  border-radius: 2px;
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-clothing-catalog-promo-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--clothing-banner-cream);
+}
+
+.admin-clothing-catalog-promo-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-clothing-catalog-promo-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-clothing-catalog-promo-form-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.admin-clothing-catalog-promo-form-upload {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-clothing-catalog-promo-image-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.admin-clothing-catalog-promo-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid var(--clothing-banner-line);
+}
+
+.admin-clothing-catalog-promo-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-clothing-catalog-promo-save-btn {
+  background: #fff;
+  border: 1px solid var(--clothing-banner-line);
+  box-shadow: none;
+  color: var(--clothing-banner-ink);
+}
+
+.admin-clothing-catalog-promo-save-btn:hover {
+  background: var(--clothing-banner-cream);
+  border-color: var(--clothing-banner-line);
+  color: var(--clothing-banner-ink);
+  box-shadow: none;
+}
+
+.admin-clothing-catalog-promo-save-btn:focus,
+.admin-clothing-catalog-promo-save-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--clothing-banner-line);
+}
+
+.admin-section-clothing-catalog-promo .admin-fitness-image-btn:hover {
+  border-color: var(--clothing-banner-ink);
+  color: var(--clothing-banner-cream);
+}
+
+.admin-section-clothing-catalog-promo .admin-hero-success {
+  border-color: var(--clothing-banner-line);
+  background: linear-gradient(180deg, rgba(253, 251, 248, 0.12) 0%, rgba(243, 239, 233, 0.08) 100%);
+}
+
+@media (max-width: 860px) {
+  .admin-section-clothing-catalog-promo .admin-clothing-catalog-promo-page.card,
+  .admin-clothing-catalog-promo-layout {
+    width: 100%;
+  }
+
+  .admin-section-clothing-catalog-promo .admin-fitness-catalog-layout.is-editing {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-clothing-catalog-promo-preview-wrap,
+  .admin-clothing-catalog-promo-preview.clothing-catalog-promo {
+    max-width: min(280px, 100%);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-clothing-catalog-promo-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
 .admin-banner-overlay {
   position: fixed;
   inset: 0;
@@ -1317,6 +4284,16 @@ body.admin-panel-open .app {
   margin: 0;
   transform: translate(0, 0);
   will-change: transform;
+}
+
+.admin-modal-banners--static {
+  transform: none !important;
+  will-change: auto;
+  padding: 28px 32px 32px;
+}
+
+.admin-modal-banners--static .admin-banner-edit-header {
+  padding-right: 28px;
 }
 
 .admin-modal-banners.is-dragging-window {
@@ -1668,37 +4645,150 @@ body.admin-panel-open .app {
 
 .admin-toast {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 400;
-  max-width: min(360px, calc(100vw - 48px));
-  padding: 14px 18px;
-  border-radius: var(--radius-sm);
-  background: rgba(16, 185, 129, 0.95);
-  color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
-  animation: admin-toast-in 0.25s ease;
-}
-
-.admin-toast--error {
-  background: rgba(239, 68, 68, 0.95);
+  right: 20px;
+  bottom: 20px;
+  z-index: 12100;
+  width: min(380px, calc(100vw - 40px));
+  pointer-events: none;
 }
 
 .admin-toast[hidden] {
-  display: none;
+  display: none !important;
 }
 
-@keyframes admin-toast-in {
+.admin-toast-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 14px 16px;
+  border-radius: calc(var(--radius-sm) + 4px);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  background:
+    radial-gradient(ellipse 120% 90% at 100% 0%, rgba(99, 102, 241, 0.14), transparent 55%),
+    linear-gradient(165deg, rgba(30, 41, 59, 0.97), rgba(15, 23, 42, 0.98));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 16px 40px rgba(0, 0, 0, 0.42);
+  overflow: hidden;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(14px) scale(0.98);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.admin-toast.is-visible .admin-toast-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.admin-toast-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.admin-toast-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-toast--success .admin-toast-icon {
+  background: rgba(34, 197, 94, 0.16);
+  color: #86efac;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.08);
+}
+
+.admin-toast--error .admin-toast-icon {
+  background: rgba(248, 113, 113, 0.16);
+  color: #fca5a5;
+  box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.08);
+}
+
+.admin-toast-content {
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.admin-toast-label {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #a5b4fc;
+}
+
+.admin-toast--error .admin-toast-label {
+  color: #fca5a5;
+}
+
+.admin-toast-message {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+.admin-toast-close {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.admin-toast-close:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.admin-toast-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #6366f1, #818cf8);
+  animation: admin-toast-progress 4.8s linear forwards;
+}
+
+.admin-toast--success .admin-toast-progress {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.admin-toast--error .admin-toast-progress {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+@keyframes admin-toast-progress {
   from {
-    opacity: 0;
-    transform: translateY(12px);
+    transform: scaleX(1);
   }
 
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: scaleX(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-toast {
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+    width: auto;
   }
 }
 
@@ -2332,7 +5422,7 @@ body.admin-panel-open .app {
   align-items: center;
   padding: 14px 32px;
   background: var(--accent);
-  color: white;
+  color: var(--theme-accent-btn-text, #fff);
   font-size: 1rem;
   font-weight: 600;
   border-radius: var(--radius-sm);
@@ -2732,6 +5822,7 @@ button.stat-icon:hover {
   --fitness-orange: #f97316;
   --fitness-orange-hot: #ea580c;
   --fitness-orange-soft: #fdba74;
+  --fitness-orange-glow: rgba(234, 88, 12, 0.45);
   --fitness-white: #fff7ed;
   --fitness-white-muted: rgba(255, 247, 237, 0.72);
   font-family: var(--home-font-body);
@@ -2827,17 +5918,17 @@ button.stat-icon:hover {
 }
 
 #section-supplements .fitness-hero-btn {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  color: #fff;
-  box-shadow: 0 8px 28px rgba(234, 88, 12, 0.45);
-  border: 1px solid rgba(253, 186, 116, 0.35);
+  background: linear-gradient(135deg, var(--fitness-orange) 0%, var(--fitness-orange-hot) 100%);
+  color: var(--theme-accent-btn-text, #fff);
+  box-shadow: 0 8px 28px var(--fitness-orange-glow, rgba(234, 88, 12, 0.45));
+  border: 1px solid color-mix(in srgb, var(--fitness-orange-soft) 35%, transparent);
   text-decoration: none;
   letter-spacing: 0.02em;
 }
 
 #section-supplements .fitness-hero-btn:hover {
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
-  box-shadow: 0 10px 36px rgba(249, 115, 22, 0.55);
+  background: linear-gradient(135deg, var(--fitness-orange-soft) 0%, var(--fitness-orange) 100%);
+  box-shadow: 0 10px 36px var(--fitness-orange-glow, rgba(249, 115, 22, 0.55));
 }
 
 #section-supplements .hero-dot:hover,
@@ -3016,9 +6107,50 @@ button.stat-icon:hover {
   color: inherit;
 }
 
-#section-supplements .fitness-card-link:focus-visible .fitness-card {
+#section-supplements .fitness-card-link:focus-visible {
   outline: 2px solid var(--fitness-orange);
   outline-offset: 3px;
+  border-radius: 10px;
+}
+
+#section-supplements .fitness-card-actions {
+  padding: 0 16px 16px;
+}
+
+#section-supplements .fitness-card-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(249, 115, 22, 0.45);
+  background: rgba(249, 115, 22, 0.08);
+  color: var(--fitness-orange-soft);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+#section-supplements .fitness-card-cart-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+#section-supplements .fitness-card-cart-btn:hover {
+  background: rgba(249, 115, 22, 0.16);
+  border-color: rgba(249, 115, 22, 0.65);
+  transform: translateY(-1px);
+}
+
+#section-supplements .fitness-card-cart-btn.is-added {
+  border-color: #6ee7b7;
+  color: #6ee7b7;
+  background: rgba(110, 231, 183, 0.12);
 }
 
 #section-supplements .fitness-card-rating {
@@ -4244,10 +7376,12 @@ button.stat-icon:hover {
 }
 
 #section-clothing .clothing-card-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
   text-decoration: none;
   color: inherit;
-  height: 100%;
+  min-height: 0;
 }
 
 #section-clothing .clothing-card-link.is-hidden {
@@ -4273,8 +7407,8 @@ button.stat-icon:hover {
   grid-column: auto;
 }
 
-#section-clothing .clothing-card-link:hover .clothing-card,
-#section-clothing .clothing-card-link:focus-visible .clothing-card {
+#section-clothing .clothing-card:has(.clothing-card-link:hover),
+#section-clothing .clothing-card:has(.clothing-card-link:focus-visible) {
   transform: translateY(-6px);
   border-color: rgba(26, 24, 22, 0.22);
   box-shadow:
@@ -4282,18 +7416,18 @@ button.stat-icon:hover {
     0 24px 48px rgba(26, 24, 22, 0.12);
 }
 
-#section-clothing .clothing-card-link:hover .clothing-card-media,
-#section-clothing .clothing-card-link:focus-visible .clothing-card-media {
+#section-clothing .clothing-card:has(.clothing-card-link:hover) .clothing-card-media,
+#section-clothing .clothing-card:has(.clothing-card-link:focus-visible) .clothing-card-media {
   transform: scale(1.04);
 }
 
-#section-clothing .clothing-card-link:hover .clothing-card-hover-layer,
-#section-clothing .clothing-card-link:focus-visible .clothing-card-hover-layer {
+#section-clothing .clothing-card:has(.clothing-card-link:hover) .clothing-card-hover-layer,
+#section-clothing .clothing-card:has(.clothing-card-link:focus-visible) .clothing-card-hover-layer {
   opacity: 1;
 }
 
-#section-clothing .clothing-card-link:hover .clothing-card-hover-cta,
-#section-clothing .clothing-card-link:focus-visible .clothing-card-hover-cta {
+#section-clothing .clothing-card:has(.clothing-card-link:hover) .clothing-card-hover-cta,
+#section-clothing .clothing-card:has(.clothing-card-link:focus-visible) .clothing-card-hover-cta {
   transform: translateY(0);
   opacity: 1;
 }
@@ -4302,9 +7436,57 @@ button.stat-icon:hover {
   display: none;
 }
 
-#section-clothing .clothing-card-link:focus-visible .clothing-card {
+#section-clothing .clothing-card-link:focus-visible {
   outline: 2px solid var(--clothing-ink);
   outline-offset: 3px;
+}
+
+#section-clothing .clothing-card-actions {
+  padding: 0 16px 16px;
+  margin-top: auto;
+}
+
+#section-clothing .clothing-card-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 2px;
+  border: 1px solid var(--clothing-ink);
+  background: rgba(26, 24, 22, 0.04);
+  color: var(--clothing-ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+#section-clothing .clothing-card-cart-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+#section-clothing .clothing-card-cart-btn:hover {
+  background: var(--clothing-ink);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+#section-clothing .clothing-card-cart-btn.is-added {
+  border-color: #059669;
+  color: #059669;
+  background: rgba(5, 150, 105, 0.08);
+}
+
+#section-clothing .clothing-card-cart-btn.is-added:hover {
+  background: rgba(5, 150, 105, 0.14);
+  color: #047857;
 }
 
 #section-clothing .clothing-empty {
@@ -5952,15 +9134,19 @@ button.stat-icon:hover {
   width: 100%;
   margin-top: 2px;
   padding: 13px 16px;
-  border: 1px solid rgba(255, 77, 157, 0.42);
+  border: 1px solid color-mix(in srgb, var(--banners-accent) 42%, transparent);
   border-radius: 2px;
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #fff;
-  background: linear-gradient(135deg, rgba(255, 77, 157, 0.22) 0%, rgba(255, 77, 157, 0.08) 100%);
+  color: var(--theme-accent-btn-text, #fff);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--banners-accent) 22%, transparent) 0%,
+    color-mix(in srgb, var(--banners-accent) 8%, transparent) 100%
+  );
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   transition:
     color 0.22s ease,
@@ -5971,10 +9157,14 @@ button.stat-icon:hover {
 }
 
 #section-banners .banners-order-btn:hover {
-  color: #fff;
-  border-color: rgba(255, 77, 157, 0.72);
-  background: linear-gradient(135deg, rgba(255, 77, 157, 0.38) 0%, rgba(255, 77, 157, 0.16) 100%);
-  box-shadow: 0 10px 28px rgba(255, 77, 157, 0.22);
+  color: var(--theme-accent-btn-text, #fff);
+  border-color: color-mix(in srgb, var(--banners-accent) 72%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--banners-accent) 38%, transparent) 0%,
+    color-mix(in srgb, var(--banners-accent) 16%, transparent) 100%
+  );
+  box-shadow: 0 10px 28px var(--banners-accent-glow);
   transform: translateY(-1px);
 }
 
@@ -6986,6 +10176,224 @@ button.stat-icon:hover {
   color: var(--text-muted);
 }
 
+/* ===== Admin: коллекция работ «Мои Баннеры» (страница) ===== */
+.admin-section-banners-works-page {
+  position: relative;
+  padding-bottom: 32px;
+  font-family: var(--home-font-body);
+  --banners-works-pink: #ff4d9d;
+  --banners-works-pink-hot: #e11d8f;
+  --banners-works-pink-soft: #ffb8da;
+  --banners-works-pink-muted: #fff0f7;
+}
+
+.admin-section-banners-works-page .admin-panel-badge--banners,
+.admin-section-banners-works-page .admin-panel-badge {
+  background: rgba(255, 77, 157, 0.14);
+  color: #ffb8da;
+}
+
+.admin-banners-works-back-btn {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.admin-banners-works-back-btn:hover {
+  color: var(--text-primary);
+  border-color: rgba(255, 77, 157, 0.35);
+}
+
+.admin-banners-works-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-banners-works-page-card {
+  padding: 24px 28px 28px;
+  border: 1px solid rgba(255, 77, 157, 0.22);
+  background:
+    radial-gradient(circle at top right, rgba(255, 77, 157, 0.1), transparent 42%),
+    var(--bg-card);
+}
+
+.admin-banners-works-layout {
+  min-height: 420px;
+}
+
+.admin-section-banners-works-page .admin-banners-works-count {
+  color: #ffb8da;
+  background: rgba(255, 77, 157, 0.1);
+  border-color: rgba(255, 77, 157, 0.2);
+}
+
+.admin-section-banners-works-page .admin-banners-works-item {
+  cursor: pointer;
+}
+
+.admin-section-banners-works-page .admin-banners-works-item:hover {
+  border-color: rgba(255, 77, 157, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.admin-section-banners-works-page .admin-banners-works-item.is-active {
+  border-color: rgba(255, 77, 157, 0.55);
+  box-shadow: 0 0 0 1px rgba(255, 77, 157, 0.25);
+}
+
+.admin-banners-works-empty {
+  border-style: dashed;
+  border-color: rgba(255, 77, 157, 0.24);
+  background:
+    linear-gradient(180deg, rgba(255, 77, 157, 0.06) 0%, rgba(255, 77, 157, 0.02) 100%),
+    var(--bg-secondary);
+}
+
+.admin-banners-works-page-header {
+  margin-bottom: 20px;
+  padding-right: 168px;
+}
+
+.admin-banners-works-page-title {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, var(--banners-works-pink-muted) 0%, var(--banners-works-pink-soft) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-banners-works-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.admin-banners-works-page-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 77, 157, 0.15);
+  font-size: 1.35rem;
+}
+
+.admin-section-banners-works-page .admin-fitness-catalog-layout.is-editing {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  gap: 20px;
+}
+
+.admin-section-banners-works-page .admin-fitness-add-btn,
+.admin-banners-works-add-btn {
+  background: linear-gradient(135deg, var(--banners-works-pink) 0%, var(--banners-works-pink-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(255, 77, 157, 0.28);
+}
+
+.admin-section-banners-works-page .admin-fitness-add-btn:hover,
+.admin-banners-works-add-btn:hover {
+  background: linear-gradient(135deg, #ff7eb8 0%, var(--banners-works-pink) 100%);
+}
+
+.admin-banners-works-form.admin-fitness-product-form:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 20px;
+  border-color: rgba(255, 77, 157, 0.2);
+  background: rgba(15, 17, 23, 0.55);
+}
+
+.admin-banners-works-form-head h3 {
+  margin: 0 0 6px;
+  font-family: var(--home-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--banners-works-pink-muted);
+}
+
+.admin-banners-works-form-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.admin-banners-works-form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(255, 77, 157, 0.1);
+}
+
+.admin-banners-works-form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.admin-banners-works-save-btn {
+  background: linear-gradient(135deg, var(--banners-works-pink) 0%, var(--banners-works-pink-hot) 100%);
+  border: none;
+  box-shadow: 0 8px 24px rgba(255, 77, 157, 0.28);
+}
+
+.admin-banners-works-save-btn:hover {
+  background: linear-gradient(135deg, #ff7eb8 0%, var(--banners-works-pink) 100%);
+  box-shadow: 0 10px 28px rgba(255, 77, 157, 0.36);
+}
+
+.admin-section-banners-works-page .admin-fitness-image-btn:hover {
+  border-color: rgba(255, 77, 157, 0.4);
+  color: #ffb8da;
+}
+
+.admin-banners-works-preview.is-zoomable {
+  cursor: zoom-in;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  border: 1px solid rgba(255, 77, 157, 0.2);
+}
+
+.admin-banners-works-preview.is-zoomable:hover {
+  border-color: rgba(255, 77, 157, 0.45);
+  box-shadow: 0 8px 24px rgba(255, 77, 157, 0.2);
+}
+
+.admin-banners-works-thumb-btn {
+  display: block;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.admin-banners-works-thumb-btn:hover .admin-banners-works-thumb {
+  box-shadow: 0 0 0 1px rgba(255, 77, 157, 0.45);
+}
+
+@media (max-width: 640px) {
+  .admin-banners-works-page-header {
+    padding-right: 0;
+    padding-top: 44px;
+  }
+}
+
 @media (max-width: 860px) {
   #section-banners .banners-content {
     padding: 40px 20px 72px;
@@ -7524,7 +10932,19 @@ button.stat-icon:hover {
 }
 
 .admin-section-site-about {
+  position: relative;
   padding-bottom: 32px;
+}
+
+.site-about-back-btn--corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.admin-section-site-about .site-about-toolbar-main {
+  padding-right: 148px;
 }
 
 .site-about-toolbar {
@@ -7641,6 +11061,11 @@ button.stat-icon:hover {
   grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
   gap: 20px;
   align-items: start;
+  transition: grid-template-columns 0.25s ease;
+}
+
+.site-about-layout--preview-hidden {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .site-about-editor-col {
@@ -7660,6 +11085,18 @@ button.stat-icon:hover {
   border-radius: var(--radius);
   background: var(--bg-secondary);
   overflow: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.site-about-preview-col.is-collapsed,
+.site-about-preview-col[hidden] {
+  display: none !important;
+}
+
+.site-about-secondary-btn.is-active {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.12);
+  color: #c7d2fe;
 }
 
 .site-about-preview-head {
@@ -7688,13 +11125,17 @@ button.stat-icon:hover {
 
 .site-about-preview-content {
   padding: 0;
-  pointer-events: none;
   transform: scale(0.92);
   transform-origin: top center;
 }
 
+.site-about-preview-content .about-page-nav {
+  pointer-events: auto;
+}
+
 .site-about-preview-content .about-page-nav-link {
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .site-about-page-card .card-header {
@@ -7705,6 +11146,85 @@ button.stat-icon:hover {
   display: grid;
   gap: 14px;
   padding: 0 20px 20px;
+}
+
+.site-about-nav-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-about-nav-desc {
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.site-about-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 20px 20px;
+}
+
+.site-about-nav-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1.2fr) minmax(140px, 0.9fr) auto;
+  gap: 10px;
+  align-items: end;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.site-about-nav-row--warn {
+  border-color: rgba(251, 191, 36, 0.45);
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.site-about-nav-grip {
+  align-self: center;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1;
+  padding-bottom: 8px;
+}
+
+.site-about-nav-field {
+  min-width: 0;
+}
+
+.site-about-nav-row-actions {
+  display: flex;
+  gap: 4px;
+  padding-bottom: 2px;
+}
+
+.site-about-nav-warn {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 0.75rem;
+  color: #fde68a;
+}
+
+.site-about-chip--accent {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.14);
+  color: #e0e7ff;
+  flex-shrink: 0;
+}
+
+.site-about-chip--accent:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.24);
+}
+
+.site-about-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .site-about-blocks-head {
@@ -8008,6 +11528,8 @@ button.stat-icon:hover {
 @media (max-width: 640px) {
   .site-about-toolbar-main {
     flex-direction: column;
+    padding-right: 0;
+    padding-top: 44px;
   }
 
   .site-about-toolbar-actions {
@@ -8019,6 +11541,140 @@ button.stat-icon:hover {
   .site-about-preview-link {
     flex: 1 1 calc(50% - 5px);
   }
+
+  .site-about-nav-row {
+    grid-template-columns: 1fr;
+  }
+
+  .site-about-nav-row-actions {
+    justify-content: flex-end;
+  }
+}
+
+/* ===== Admin: подтверждение сохранения «О сайте» ===== */
+.admin-site-about-save-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 6, 23, 0.78);
+  backdrop-filter: blur(8px);
+  animation: site-about-save-fade-in 0.2s ease;
+}
+
+.admin-site-about-save-overlay[hidden] {
+  display: none !important;
+}
+
+@keyframes site-about-save-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.site-about-save-modal {
+  position: relative;
+  width: min(400px, 100%);
+  padding: 28px 26px 22px;
+  border: 1px solid rgba(99, 102, 241, 0.32);
+  border-radius: calc(var(--radius) + 4px);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(99, 102, 241, 0.18), transparent 55%),
+    linear-gradient(180deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 24px 56px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  animation: site-about-save-pop 0.24s ease;
+}
+
+@keyframes site-about-save-pop {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.site-about-save-modal-icon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.16);
+  color: #a5b4fc;
+  box-shadow: 0 0 0 6px rgba(99, 102, 241, 0.08);
+}
+
+.site-about-save-modal-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.site-about-save-modal-title {
+  margin: 0 0 10px;
+  font-size: 1.1875rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.site-about-save-modal-text {
+  margin: 0 0 22px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.site-about-save-modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.site-about-save-btn {
+  flex: 1;
+  min-height: 42px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.site-about-save-btn--yes {
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.28);
+}
+
+.site-about-save-btn--yes:hover {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+}
+
+.site-about-save-btn--no {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+}
+
+.site-about-save-btn--no:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ===== Footer ===== */
@@ -9207,7 +12863,7 @@ button.stat-icon:hover {
   border: 0;
   border-radius: 999px;
   background: var(--preview-accent, #6366f1);
-  color: #fff;
+  color: var(--preview-accent-btn-text, #fff);
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: default;
@@ -9357,9 +13013,20 @@ button.stat-icon:hover {
 #section-home.has-custom-theme .card-header h2,
 #section-home.has-custom-theme .quick-link strong,
 #section-home.has-custom-theme .recent-title,
-#section-home.has-custom-theme .recent-badge,
-#section-home.has-custom-theme .btn-hero {
+#section-home.has-custom-theme .recent-badge {
   color: var(--theme-text-primary, var(--text-primary));
+}
+
+#section-home.has-custom-theme .btn-hero {
+  background: var(--accent);
+  color: var(--theme-accent-btn-text, #fff);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+#section-home.has-custom-theme .btn-hero:hover {
+  background: var(--accent-hover);
+  color: var(--theme-accent-btn-text, #fff);
+  box-shadow: 0 6px 28px var(--accent-glow);
 }
 
 #section-home.has-custom-theme .stat-label,
@@ -9378,9 +13045,21 @@ button.stat-icon:hover {
 #section-supplements.has-custom-theme .fitness-hero-title,
 #section-supplements.has-custom-theme .fitness-section-header h2,
 #section-supplements.has-custom-theme .fitness-card .portfolio-body h3,
-#section-supplements.has-custom-theme .fitness-card-price,
-#section-supplements.has-custom-theme .fitness-hero-btn {
+#section-supplements.has-custom-theme .fitness-card-price {
   color: var(--fitness-white, var(--theme-text-primary));
+}
+
+#section-supplements.has-custom-theme .fitness-hero-btn {
+  background: linear-gradient(135deg, var(--fitness-orange) 0%, var(--fitness-orange-hot) 100%);
+  color: var(--theme-accent-btn-text, #fff);
+  border-color: color-mix(in srgb, var(--fitness-orange-soft) 35%, transparent);
+  box-shadow: 0 8px 28px var(--fitness-orange-glow, rgba(234, 88, 12, 0.45));
+}
+
+#section-supplements.has-custom-theme .fitness-hero-btn:hover {
+  background: linear-gradient(135deg, var(--fitness-orange-soft) 0%, var(--fitness-orange) 100%);
+  color: var(--theme-accent-btn-text, #fff);
+  box-shadow: 0 10px 36px var(--fitness-orange-glow, rgba(249, 115, 22, 0.55));
 }
 
 #section-supplements.has-custom-theme .fitness-hero-desc,
@@ -9416,6 +13095,16 @@ button.stat-icon:hover {
   border-color: var(--clothing-line, var(--border));
 }
 
+#section-clothing.has-custom-theme .clothing-hero-cta {
+  color: var(--clothing-accent);
+  border-color: var(--clothing-accent);
+}
+
+#section-clothing.has-custom-theme .clothing-hero-cta:hover {
+  background: var(--clothing-accent);
+  color: var(--theme-accent-btn-text, #fff);
+}
+
 #section-banners.has-custom-theme .banners-masthead-title,
 #section-banners.has-custom-theme .banners-title-line,
 #section-banners.has-custom-theme .banners-viewer-title,
@@ -9436,6 +13125,27 @@ button.stat-icon:hover {
   background: var(--banners-panel, var(--bg-card));
   border-color: var(--banners-line, var(--border));
   color: var(--theme-text-primary, var(--text-primary));
+}
+
+#section-banners.has-custom-theme .banners-order-btn {
+  color: var(--theme-accent-btn-text, #fff);
+  border-color: color-mix(in srgb, var(--banners-accent) 42%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--banners-accent) 22%, transparent) 0%,
+    color-mix(in srgb, var(--banners-accent) 8%, transparent) 100%
+  );
+}
+
+#section-banners.has-custom-theme .banners-order-btn:hover {
+  color: var(--theme-accent-btn-text, #fff);
+  border-color: color-mix(in srgb, var(--banners-accent) 72%, transparent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--banners-accent) 38%, transparent) 0%,
+    color-mix(in srgb, var(--banners-accent) 16%, transparent) 100%
+  );
+  box-shadow: 0 10px 28px var(--banners-accent-glow);
 }
 
 #section-about.has-custom-theme,

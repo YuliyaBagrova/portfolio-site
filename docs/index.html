@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — каталог с админ-панелью</title>
+  <meta name="description" content="Демо-сайт портфолио: каталог, корзина, заказы, панель администратора. Node.js, MySQL, Docker.">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+    }
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 48px 20px 64px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      line-height: 1.15;
+    }
+    p { color: var(--muted); margin: 0 0 16px; }
+    .card {
+      margin-top: 28px;
+      padding: 24px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+    ul { margin: 0; padding-left: 1.2rem; color: var(--muted); }
+    li + li { margin-top: 8px; }
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    a {
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: var(--accent);
+      font-weight: 600;
+    }
+    a.secondary {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: var(--text);
+    }
+    footer {
+      margin-top: 32px;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="badge">Portfolio Demo</span>
+    <h1>Сайт-портфолио с админ-панелью</h1>
+    <p>
+      Учебный/демонстрационный проект: каталог товаров, корзина, заказы,
+      регистрация администратора и панель управления контентом.
+    </p>
+
+    <div class="card">
+      <strong>Стек</strong>
+      <ul>
+        <li>Frontend: HTML, CSS, JavaScript</li>
+        <li>Backend: Node.js, Express</li>
+        <li>База данных: MySQL</li>
+        <li>Развёртывание: Docker Compose</li>
+      </ul>
+    </div>
+
+    <div class="links">
+      <a href="https://github.com/YuliyaBagrova/portfolio-site" target="_blank" rel="noopener">Исходный код на GitHub</a>
+      <a class="secondary" href="https://github.com/YuliyaBagrova" target="_blank" rel="noopener">Профиль автора</a>
+    </div>
+
+    <footer>
+      Проект Yuliya Bagrova · демо для портфолио
+    </footer>
+  </main>
+</body>
+</html>

@@ -44,9 +44,12 @@ services:
     networks:
       - portfolio_internal
     dns:
-      - 127.0.0.11
+      - 8.8.8.8
+      - 1.1.1.1
     ports:
       - "${APP_PORT:-3000}:3000"
+    env_file:
+      - .env
     environment:
       NODE_ENV: ${NODE_ENV:-development}
       PORT: 3000

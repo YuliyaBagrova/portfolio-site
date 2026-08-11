@@ -483,62 +483,208 @@
 
     <!-- Admin: выбор входа -->
     <div class="admin-overlay" id="adminGate" hidden>
-      <div class="admin-modal admin-modal-gate" role="dialog" aria-labelledby="adminGateTitle">
-        <button type="button" class="admin-modal-close" id="adminGateClose" aria-label="Закрыть">✕</button>
-        <div class="admin-modal-heading">
-          <span class="admin-modal-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <circle cx="12" cy="10" r="3"/>
-              <path d="M12 13v3"/>
-            </svg>
-          </span>
-          <h2 class="admin-modal-title" id="adminGateTitle">Панель администратора</h2>
-        </div>
-        <p class="admin-modal-desc">Выберите способ входа. Оба варианта открывают одну панель с одинаковыми правами.</p>
-        <div class="admin-choice-grid">
-          <button type="button" class="admin-choice-card" id="adminChooseRegister">
-            <span class="admin-choice-emoji" aria-hidden="true">📝</span>
-            <strong>Регистрация</strong>
-            <small>Демо-форма регистрации для заказчика</small>
-          </button>
-          <button type="button" class="admin-choice-card" id="adminChoosePreview">
-            <span class="admin-choice-emoji" aria-hidden="true">👁️</span>
-            <strong>Предварительный просмотр</strong>
-            <small>Сразу перейти в панель управления</small>
-          </button>
-        </div>
+      <div class="admin-gate-shell" role="dialog" aria-labelledby="adminGateTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Панель администратора">
+                <span class="nav-link active" id="adminGateTitle">Панель администратора</span>
+              </nav>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="admin-btn admin-gate-close" id="adminGateClose" aria-label="Закрыть" title="Закрыть">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Вход в систему</div>
+            <p class="admin-gate-lead">Выберите способ входа. Оба варианта открывают одну панель с одинаковыми правами.</p>
+
+            <div class="card admin-gate-card">
+              <div class="card-header">
+                <h2>Способ входа</h2>
+              </div>
+              <div class="quick-links admin-gate-links">
+                <button type="button" class="quick-link admin-gate-link" id="adminChooseRegister">
+                  <span class="quick-link-icon quick-link-icon--register" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <line x1="19" y1="8" x2="19" y2="14"/>
+                      <line x1="22" y1="11" x2="16" y2="11"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Регистрация</strong>
+                    <small>Демо-форма для заказчика — можно заполнить или пропустить</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-gate-link admin-gate-link--preview" id="adminChoosePreview">
+                  <span class="quick-link-icon quick-link-icon--preview" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Предварительный просмотр</strong>
+                    <small>Сразу перейти в панель управления без лишних шагов</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <p class="admin-gate-note">Функционал панели одинаковый для обоих способов входа — это демонстрация разных сценариев onboarding.</p>
+          </div>
+        </main>
       </div>
     </div>
 
     <!-- Admin: регистрация (опционально) -->
     <div class="admin-overlay" id="adminRegister" hidden>
-      <div class="admin-modal admin-modal-wide" role="dialog" aria-labelledby="adminRegisterTitle">
-        <button type="button" class="admin-modal-close" id="adminRegisterClose" aria-label="Закрыть">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </button>
-        <h2 class="admin-modal-title" id="adminRegisterTitle">Регистрация</h2>
-        <p class="admin-modal-desc">Необязательный шаг — можно зарегистрироваться или сразу перейти в панель.</p>
-        <form class="admin-form" id="adminRegisterForm">
-          <label class="admin-field">
-            <span>Имя</span>
-            <input type="text" name="name" placeholder="Ваше имя" autocomplete="name">
-          </label>
-          <label class="admin-field">
-            <span>Email</span>
-            <input type="email" name="email" placeholder="email@example.com" autocomplete="email">
-          </label>
-          <label class="admin-field">
-            <span>Пароль</span>
-            <input type="password" name="password" placeholder="••••••••" autocomplete="new-password">
-          </label>
-          <div class="admin-form-actions">
-            <button type="button" class="btn btn-ghost" id="adminRegisterSkip">Пропустить и войти</button>
-            <button type="submit" class="btn btn-primary">Зарегистрироваться и войти</button>
+      <div class="admin-gate-shell admin-gate-shell--register" role="dialog" aria-labelledby="adminRegisterTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Регистрация">
+                <span class="nav-link active" id="adminRegisterTitle">Регистрация</span>
+              </nav>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="admin-btn admin-gate-close" id="adminRegisterClose" aria-label="Назад" title="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
           </div>
-        </form>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Демо-регистрация</div>
+            <p class="admin-gate-lead">Демо-регистрация: проверка пароля и подтверждение кодом. В демо-режиме код показывается на экране — SMTP и пароль приложения не нужны.</p>
+
+            <div class="admin-register-progress" aria-label="Шаги регистрации">
+              <div class="admin-register-progress-item is-active" data-register-step-indicator="1">
+                <span class="admin-register-progress-num">1</span>
+                <span class="admin-register-progress-label">Данные</span>
+              </div>
+              <div class="admin-register-progress-line" aria-hidden="true"></div>
+              <div class="admin-register-progress-item" data-register-step-indicator="2">
+                <span class="admin-register-progress-num">2</span>
+                <span class="admin-register-progress-label">Подтверждение</span>
+              </div>
+            </div>
+
+            <div class="card admin-gate-card admin-register-card">
+              <form class="admin-form admin-gate-form admin-register-form" id="adminRegisterForm" novalidate>
+                <div class="admin-register-step" id="adminRegisterStepCredentials">
+                  <div class="card-header">
+                    <h2>Данные пользователя</h2>
+                  </div>
+
+                  <label class="admin-field">
+                    <span>Имя</span>
+                    <input type="text" name="name" id="adminRegisterName" placeholder="Ваше имя" autocomplete="name" required>
+                  </label>
+
+                  <label class="admin-field">
+                    <span>Email</span>
+                    <input type="email" name="registerEmail" id="adminRegisterEmail" placeholder="email@example.com" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="email" required>
+                    <small class="admin-field-hint">Только латиница и ENG-раскладка: example@gmail.com, name@mail.ru</small>
+                  </label>
+
+                  <label class="admin-field admin-field--password">
+                    <span>Пароль</span>
+                    <div class="admin-password-wrap">
+                      <input type="password" name="password" id="adminRegisterPassword" placeholder="Минимум 8 символов" autocomplete="new-password" autocapitalize="off" spellcheck="false" required>
+                      <button type="button" class="admin-password-toggle" id="adminRegisterTogglePassword" aria-label="Показать пароль">Показать</button>
+                    </div>
+                  </label>
+
+                  <div class="admin-password-strength" aria-live="polite">
+                    <div class="admin-password-strength-track">
+                      <div class="admin-password-strength-bar" id="adminRegisterStrengthBar"></div>
+                    </div>
+                    <span class="admin-password-strength-label" id="adminRegisterStrengthLabel">Надёжность пароля</span>
+                  </div>
+
+                  <ul class="admin-password-rules" aria-label="Требования к паролю">
+                    <li class="admin-password-rule" data-password-rule="minLength">Минимум 8 символов</li>
+                    <li class="admin-password-rule" data-password-rule="upper">Заглавная буква (A–Z)</li>
+                    <li class="admin-password-rule" data-password-rule="lower">Строчная буква (a–z)</li>
+                    <li class="admin-password-rule" data-password-rule="digit">Цифра (0–9)</li>
+                    <li class="admin-password-rule" data-password-rule="english">Только латиница — пароль на английском</li>
+                  </ul>
+
+                  <label class="admin-field">
+                    <span>Повторите пароль</span>
+                    <input type="password" name="passwordConfirm" id="adminRegisterPasswordConfirm" placeholder="Ещё раз, как выше" autocomplete="new-password" autocapitalize="off" spellcheck="false" required>
+                  </label>
+
+                  <label class="admin-field admin-field--auth-code">
+                    <span>Код аутентификации</span>
+                    <input type="text" id="adminRegisterAuthCode" name="authCode" placeholder="Введите код" autocomplete="off" autocapitalize="off" spellcheck="false">
+                    <small class="admin-field-hint">Код для быстрого входа заказчика — отдельно от 6-значного кода из email.</small>
+                  </label>
+
+                  <div class="admin-form-actions">
+                    <button type="button" class="btn btn-ghost" id="adminRegisterSkip">Пропустить и войти</button>
+                    <button type="button" class="btn btn-primary" id="adminRegisterSendCode">Получить код</button>
+                  </div>
+
+                  <div class="admin-register-auth-action">
+                    <button type="button" class="btn btn-primary admin-register-auth-btn" id="adminRegisterLogin" disabled>Войти</button>
+                  </div>
+                </div>
+
+                <div class="admin-register-step" id="adminRegisterStepVerify" hidden>
+                  <div class="card-header">
+                    <h2>Подтверждение email</h2>
+                  </div>
+
+                  <p class="admin-register-verify-text" id="adminRegisterVerifyIntro">
+                    Введите 6-значный код подтверждения.
+                  </p>
+                  <p class="admin-register-verify-email" id="adminRegisterVerifyEmailWrap" hidden>
+                    Email: <strong id="adminRegisterVerifyEmail"></strong>
+                  </p>
+
+                  <p class="admin-register-demo-hint" id="adminRegisterDemoHint" hidden>
+                    Код подтверждения:
+                    <strong class="admin-register-email-code" id="adminRegisterDemoCodeValue"></strong>
+                  </p>
+
+                  <label class="admin-field">
+                    <span>Код подтверждения</span>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="adminRegisterEmailCode" placeholder="000000" autocomplete="one-time-code">
+                  </label>
+
+                  <div class="admin-form-actions admin-form-actions--split">
+                    <button type="button" class="btn btn-ghost" id="adminRegisterBackToCredentials">← Назад</button>
+                    <div class="admin-form-actions-group">
+                      <button type="button" class="btn btn-ghost" id="adminRegisterResendCode">Отправить код снова</button>
+                      <button type="button" class="btn btn-primary" id="adminRegisterVerify">Подтвердить и войти</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   </div>
@@ -1850,7 +1996,7 @@
                 <p class="about-text">На публичном сайте кнопка в шапке открывает окно выбора сценария входа. Оба варианта ведут в одну панель с одинаковым функционалом — это демонстрация разных UX-подходов к onboarding.</p>
 
                 <h3 class="about-subtitle">Регистрация</h3>
-                <p class="about-text">Демо-форма для заказчика: имя, email и пароль. Поля можно заполнить или пропустить — после отправки или нажатия «Пропустить» открывается панель. На главном экране отображается метка «Вход: регистрация».</p>
+                <p class="about-text">Демо-форма для заказчика с современной валидацией: пароль минимум 8 символов, заглавные и строчные латинские буквы, цифра, только английская раскладка. После отправки на email приходит 6-значный код; для демонстрации заказчику доступен код аутентификации <strong>admin</strong>. Можно пропустить регистрацию — панель откроется с меткой «Вход: регистрация».</p>
 
                 <h3 class="about-subtitle">Предварительный просмотр</h3>
                 <p class="about-text">Мгновенный переход в админку без заполнения формы — аналог demo-режима в продуктах. На главном экране отображается метка «Вход: предварительный просмотр».</p>
@@ -2114,6 +2260,7 @@
   <script src="admin-orders.js"></script>
   <script src="about-page.js"></script>
   <script src="admin-site-about.js"></script>
+  <script src="admin-register.js"></script>
   <script src="admin.js"></script>
   <script src="site-cart.js"></script>
   <script src="site-orders.js"></script>

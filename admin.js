@@ -7,7 +7,6 @@ const adminRegisterClose = document.getElementById('adminRegisterClose');
 const adminPanelClose = document.getElementById('adminPanelClose');
 const adminChooseRegister = document.getElementById('adminChooseRegister');
 const adminChoosePreview = document.getElementById('adminChoosePreview');
-const adminRegisterForm = document.getElementById('adminRegisterForm');
 const adminRegisterSkip = document.getElementById('adminRegisterSkip');
 const adminEntryBadge = document.getElementById('adminEntryBadge');
 const adminNavLinks = document.querySelectorAll('[data-admin-section]');
@@ -114,12 +113,16 @@ function showOverlay(overlay) {
   modalOverlays.forEach(el => { el.hidden = true; });
   overlay.hidden = false;
   document.body.style.overflow = 'hidden';
+  if (overlay === adminRegister && typeof window.resetAdminRegistration === 'function') {
+    window.resetAdminRegistration();
+  }
 }
 
 function openAdminPanel(entryType) {
   const labels = {
     register: 'Вход: регистрация',
-    preview: 'Вход: предварительный просмотр'
+    preview: 'Вход: предварительный просмотр',
+    auth: 'Вход: код аутентификации'
   };
   adminEntryBadge.textContent = labels[entryType] || labels.preview;
   sessionStorage.setItem('admin_entry', entryType);
@@ -138,6 +141,8 @@ function openAdminPanel(entryType) {
   adminPanel.querySelector('.admin-page-main')?.scrollTo(0, 0);
 }
 
+window.openAdminPanel = openAdminPanel;
+
 adminNavLinks.forEach(link => {
   link.addEventListener('click', () => showAdminSection(link.dataset.adminSection));
 });
@@ -152,29 +157,6 @@ adminChooseRegister.addEventListener('click', () => showOverlay(adminRegister));
 adminChoosePreview.addEventListener('click', () => openAdminPanel('preview'));
 
 adminRegisterSkip.addEventListener('click', () => openAdminPanel('register'));
-
-async function saveAdminRegistration(form) {
-  const formData = new FormData(form);
-  try {
-    await fetch('/api/admin/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: formData.get('name') || '',
-        email: formData.get('email') || '',
-        password: formData.get('password') || ''
-      })
-    });
-  } catch {
-    // Панель откроется даже без сохранения в БД
-  }
-}
-
-adminRegisterForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await saveAdminRegistration(adminRegisterForm);
-  openAdminPanel('register');
-});
 
 modalOverlays.forEach(overlay => {
   overlay.addEventListener('click', (e) => {

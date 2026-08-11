@@ -18,6 +18,8 @@ const { registerBannerOrderRoutes } = require('./banner-orders');
 const { registerSiteOrderRoutes } = require('./site-orders');
 const { registerBannerLikeRoutes } = require('./banner-likes');
 const { registerAboutPageRoutes } = require('./about-page');
+const { registerAdminRegisterRoutes, isRegisterDemoMode } = require('./admin-register');
+const { verifyMailTransport } = require('./mail');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -118,34 +120,7 @@ registerBannerOrderRoutes(app, getPool);
 registerSiteOrderRoutes(app, getPool);
 registerBannerLikeRoutes(app, getPool);
 registerAboutPageRoutes(app, getPool);
-
-app.post('/api/admin/register', async (req, res) => {
-  const { name, email, password } = req.body || {};
-
-  if (!email) {
-    return res.status(400).json({ error: 'Email обязателен' });
-  }
-
-  try {
-    const pool = getPool();
-    const [result] = await pool.query(
-      `INSERT INTO admin_users (name, email, password_hash)
-       VALUES (?, ?, ?)
-       ON DUPLICATE KEY UPDATE
-         name = VALUES(name),
-         password_hash = VALUES(password_hash)`,
-      [name || null, email, password || null]
-    );
-
-    res.status(201).json({
-      ok: true,
-      id: result.insertId,
-      message: 'Регистрация сохранена в базе данных'
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+registerAdminRegisterRoutes(app, getPool);
 
 app.get('*', (req, res) => {
   if (req.path.endsWith('.html') || req.path.includes('.')) {
@@ -158,6 +133,11 @@ async function start() {
   try {
     await waitForDatabase();
     await runMigrations(getPool());
+    if (isRegisterDemoMode()) {
+      console.log('Регистрация: демо-режим — код подтверждения показывается на экране');
+    } else {
+      await verifyMailTransport();
+    }
     await heroBannerStorage.ensureUploadsDir();
     await fitnessBannerStorage.ensureUploadsDir();
     await clothingBannerStorage.ensureUploadsDir();

@@ -1,13 +1,15 @@
 const adminBtn = document.getElementById('adminBtn');
 const adminGate = document.getElementById('adminGate');
 const adminRegister = document.getElementById('adminRegister');
+const adminLogin = document.getElementById('adminLogin');
 const adminPanel = document.getElementById('adminPanel');
 const adminGateClose = document.getElementById('adminGateClose');
 const adminRegisterClose = document.getElementById('adminRegisterClose');
+const adminLoginClose = document.getElementById('adminLoginClose');
+const adminShowLogin = document.getElementById('adminShowLogin');
 const adminPanelClose = document.getElementById('adminPanelClose');
 const adminChooseRegister = document.getElementById('adminChooseRegister');
 const adminChoosePreview = document.getElementById('adminChoosePreview');
-const adminRegisterSkip = document.getElementById('adminRegisterSkip');
 const adminEntryBadge = document.getElementById('adminEntryBadge');
 const adminNavLinks = document.querySelectorAll('[data-admin-section]');
 const adminSections = {
@@ -30,10 +32,30 @@ const adminSections = {
   reviews: document.getElementById('adminSectionReviews'),
   orders: document.getElementById('adminSectionOrders'),
   siteAbout: document.getElementById('adminSectionSiteAbout'),
+  profile: document.getElementById('adminSectionProfile'),
   about: document.getElementById('adminSectionAbout')
 };
 
-const modalOverlays = [adminGate, adminRegister];
+const modalOverlays = [adminGate, adminRegister, adminLogin];
+const ADMIN_PANEL_OPEN_KEY = 'admin_panel_open';
+const ADMIN_SECTION_KEY = 'admin_section';
+
+function markAdminPanelOpen() {
+  sessionStorage.setItem(ADMIN_PANEL_OPEN_KEY, '1');
+}
+
+function markAdminPanelClosed() {
+  sessionStorage.removeItem(ADMIN_PANEL_OPEN_KEY);
+  sessionStorage.removeItem(ADMIN_SECTION_KEY);
+  sessionStorage.removeItem('admin_entry');
+  document.documentElement.classList.remove('admin-panel-restore');
+}
+
+function saveAdminSection(sectionId) {
+  if (adminSections[sectionId] && !adminPanel.hidden) {
+    sessionStorage.setItem(ADMIN_SECTION_KEY, sectionId);
+  }
+}
 
 function showAdminSection(sectionId) {
   if (!adminSections[sectionId]) return;
@@ -44,6 +66,8 @@ function showAdminSection(sectionId) {
   adminNavLinks.forEach(link => {
     link.classList.toggle('active', link.dataset.adminSection === sectionId);
   });
+
+  saveAdminSection(sectionId);
 
   if (sectionId === 'reviews' && typeof window.loadAdminReviews === 'function') {
     window.loadAdminReviews();
@@ -92,6 +116,10 @@ function showAdminSection(sectionId) {
     }
   }
 
+  if (sectionId === 'profile' && typeof window.refreshAdminProfileUi === 'function') {
+    window.refreshAdminProfileUi();
+  }
+
   adminPanel.querySelector('.admin-page-main')?.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -103,6 +131,10 @@ function hideAllAdmin() {
   if (typeof window.showAdminSection === 'function') {
     window.showAdminSection('dashboard');
   }
+  if (typeof window.clearAdminSessionUser === 'function') {
+    window.clearAdminSessionUser();
+  }
+  markAdminPanelClosed();
   document.body.classList.remove('admin-panel-open');
   document.body.style.overflow = '';
 }
@@ -116,21 +148,65 @@ function showOverlay(overlay) {
   if (overlay === adminRegister && typeof window.resetAdminRegistration === 'function') {
     window.resetAdminRegistration();
   }
+  if (overlay === adminLogin && typeof window.resetAdminLogin === 'function') {
+    window.resetAdminLogin();
+  }
 }
 
-function openAdminPanel(entryType) {
+function showAdminAuthOverlay(mode) {
+  if (mode === 'login') {
+    showOverlay(adminLogin);
+    return;
+  }
+  showOverlay(adminRegister);
+}
+
+window.showAdminAuthOverlay = showAdminAuthOverlay;
+
+function openAdminPanel(entryType, user) {
   const labels = {
     register: 'Вход: регистрация',
     preview: 'Вход: предварительный просмотр',
-    auth: 'Вход: код аутентификации'
+    auth: 'Вход: демо-код',
+    login: 'Вход: аккаунт'
   };
+  const isDemoEntry = entryType === 'preview' || entryType === 'auth';
+  const isAccountEntry = entryType === 'login' || entryType === 'register';
+  const hasRealUser = typeof window.isRealAdminUser === 'function' && window.isRealAdminUser(user);
+
+  if (isAccountEntry && !hasRealUser) {
+    return false;
+  }
+
   adminEntryBadge.textContent = labels[entryType] || labels.preview;
   sessionStorage.setItem('admin_entry', entryType);
+
+  if (typeof window.clearAdminSessionUser === 'function') {
+    window.clearAdminSessionUser();
+  }
+
+  if (hasRealUser) {
+    const saved = typeof window.setAdminSessionUser === 'function'
+      ? window.setAdminSessionUser(user, entryType)
+      : null;
+    if (!saved) {
+      return false;
+    }
+  } else if (isDemoEntry) {
+    if (typeof window.setAdminDemoSession === 'function') {
+      window.setAdminDemoSession(entryType);
+    }
+  }
+
   modalOverlays.forEach(el => { el.hidden = true; });
   adminPanel.hidden = false;
   document.body.classList.add('admin-panel-open');
   document.body.style.overflow = 'hidden';
+  markAdminPanelOpen();
   showAdminSection('dashboard');
+  if (typeof window.refreshAdminProfileUi === 'function') {
+    window.refreshAdminProfileUi();
+  }
   if (typeof window.loadRecentWorks === 'function') {
     window.loadRecentWorks();
   }
@@ -139,9 +215,52 @@ function openAdminPanel(entryType) {
   }
   adminPanel.scrollTop = 0;
   adminPanel.querySelector('.admin-page-main')?.scrollTo(0, 0);
+  return true;
 }
 
 window.openAdminPanel = openAdminPanel;
+
+function restoreAdminPanelIfNeeded() {
+  const shouldRestore = sessionStorage.getItem(ADMIN_PANEL_OPEN_KEY) === '1'
+    || document.documentElement.classList.contains('admin-panel-restore');
+  if (!shouldRestore) return;
+
+  const profile = typeof window.getAdminSessionUser === 'function'
+    ? window.getAdminSessionUser()
+    : null;
+  if (!profile) {
+    markAdminPanelClosed();
+    return;
+  }
+
+  if (profile.isDemo) {
+    sessionStorage.setItem('admin_entry', profile.entryType || 'preview');
+  }
+
+  const entryType = sessionStorage.getItem('admin_entry') || profile.entryType || 'login';
+  const labels = {
+    register: 'Вход: регистрация',
+    preview: 'Вход: предварительный просмотр',
+    auth: 'Вход: демо-код',
+    login: 'Вход: аккаунт'
+  };
+  adminEntryBadge.textContent = labels[entryType] || labels.preview;
+
+  modalOverlays.forEach(el => { el.hidden = true; });
+  adminPanel.hidden = false;
+  document.documentElement.classList.remove('admin-panel-restore');
+  document.body.classList.add('admin-panel-open');
+  document.body.style.overflow = 'hidden';
+
+  const savedSection = sessionStorage.getItem(ADMIN_SECTION_KEY) || 'dashboard';
+  showAdminSection(adminSections[savedSection] ? savedSection : 'dashboard');
+
+  if (typeof window.refreshAdminProfileUi === 'function') {
+    window.refreshAdminProfileUi();
+  }
+}
+
+restoreAdminPanelIfNeeded();
 
 adminNavLinks.forEach(link => {
   link.addEventListener('click', () => showAdminSection(link.dataset.adminSection));
@@ -151,12 +270,12 @@ adminBtn.addEventListener('click', () => showOverlay(adminGate));
 
 adminGateClose.addEventListener('click', hideAllAdmin);
 adminRegisterClose.addEventListener('click', () => showOverlay(adminGate));
+adminLoginClose.addEventListener('click', () => showAdminAuthOverlay('register'));
+adminShowLogin?.addEventListener('click', () => showAdminAuthOverlay('login'));
 adminPanelClose.addEventListener('click', hideAllAdmin);
 
 adminChooseRegister.addEventListener('click', () => showOverlay(adminRegister));
 adminChoosePreview.addEventListener('click', () => openAdminPanel('preview'));
-
-adminRegisterSkip.addEventListener('click', () => openAdminPanel('register'));
 
 modalOverlays.forEach(overlay => {
   overlay.addEventListener('click', (e) => {
@@ -305,6 +424,12 @@ document.addEventListener('keydown', (e) => {
   }
 
   const siteAboutSection = document.getElementById('adminSectionSiteAbout');
+  const profileSection = document.getElementById('adminSectionProfile');
+  if (profileSection?.classList.contains('active')) {
+    if (typeof window.showAdminSection === 'function') window.showAdminSection('dashboard');
+    return;
+  }
+
   if (siteAboutSection?.classList.contains('active')) {
     if (typeof window.showAdminSection === 'function') window.showAdminSection('dashboard');
     return;

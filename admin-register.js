@@ -9,7 +9,6 @@
   const authCodeInput = document.getElementById('adminRegisterAuthCode');
   const emailCodeInput = document.getElementById('adminRegisterEmailCode');
   const sendCodeBtn = document.getElementById('adminRegisterSendCode');
-  const loginBtn = document.getElementById('adminRegisterLogin');
   const verifyBtn = document.getElementById('adminRegisterVerify');
   const backToCredentialsBtn = document.getElementById('adminRegisterBackToCredentials');
   const resendCodeBtn = document.getElementById('adminRegisterResendCode');
@@ -23,15 +22,17 @@
   const verifyIntro = document.getElementById('adminRegisterVerifyIntro');
   const requirementItems = document.querySelectorAll('[data-password-rule]');
 
-  const CUSTOMER_AUTH_CODE = 'admin';
-
   if (!form || !stepCredentials || !stepVerify) return;
+
+  const CUSTOMER_AUTH_CODE = 'admin';
 
   let currentStep = 1;
   let pendingEmail = '';
   let mailConfig = {
     senderEmail: '',
-    deliveryMode: 'personal-smtp'
+    deliveryMode: 'personal-smtp',
+    demoMode: true,
+    developerEmail: ''
   };
 
   async function loadMailConfig() {
@@ -42,7 +43,9 @@
       mailConfig = {
         senderEmail: String(data.senderEmail || data.user || '').trim().toLowerCase(),
         deliveryMode: data.deliveryMode || 'personal-smtp',
-        provider: data.provider || 'smtp'
+        provider: data.provider || 'smtp',
+        demoMode: Boolean(data.demoMode),
+        developerEmail: String(data.developerEmail || '').trim().toLowerCase()
       };
     } catch {
       // ignore
@@ -73,17 +76,10 @@
   }
 
   function sanitizeClientEmail(value) {
-    const homoglyphs = {
-      '\u0430': 'a', '\u0435': 'e', '\u043e': 'o', '\u0440': 'p', '\u0441': 'c',
-      '\u0443': 'y', '\u0445': 'x', '\u0456': 'i', '\u0410': 'a', '\u0415': 'e',
-      '\u041e': 'o', '\u0420': 'p', '\u0421': 'c', '\u0423': 'y', '\u0425': 'x'
-    };
-    return String(value || '')
-      .trim()
-      .split('')
-      .map((char) => homoglyphs[char] || char)
-      .join('')
-      .toLowerCase();
+    if (typeof window.sanitizeAdminEmail === 'function') {
+      return window.sanitizeAdminEmail(value);
+    }
+    return String(value || '').trim().toLowerCase();
   }
 
   function getEmailValidationError(value) {
@@ -106,11 +102,8 @@
       && payload.password
       && payload.confirmPassword
       && payload.password === payload.confirmPassword
+      && payload.authCode === CUSTOMER_AUTH_CODE
       && allChecksPassed(getPasswordChecks(payload.password));
-  }
-
-  function hasCustomerAuthCode() {
-    return authCodeInput?.value.trim() === CUSTOMER_AUTH_CODE;
   }
 
   function getStrengthScore(password) {
@@ -146,10 +139,6 @@
       const mismatch = confirmInput.value.length > 0 && confirmInput.value !== password;
       confirmInput.classList.toggle('is-invalid', mismatch);
       confirmInput.setAttribute('aria-invalid', mismatch ? 'true' : 'false');
-    }
-
-    if (loginBtn) {
-      loginBtn.disabled = !hasCustomerAuthCode();
     }
 
     if (sendCodeBtn) {
@@ -202,57 +191,24 @@
     }
   }
 
-  function finishRegistration(message) {
+  function finishRegistration(message, user) {
     window.showAdminToast?.(message || 'Регистрация завершена');
     resetRegistrationForm();
-    if (typeof window.openAdminPanel === 'function') {
-      window.openAdminPanel('register');
-    }
-  }
-
-  async function loginWithAuthCode() {
-    const authCode = authCodeInput?.value.trim() || '';
-
-    if (authCode !== CUSTOMER_AUTH_CODE) {
-      window.showAdminToast?.('Неверный код аутентификации', 'error');
+    if (!user || (typeof window.isRealAdminUser === 'function' && !window.isRealAdminUser(user))) {
+      if (typeof window.showAdminAuthOverlay === 'function') {
+        window.showAdminAuthOverlay('login');
+      }
       return;
     }
-
-    loginBtn.disabled = true;
-    loginBtn.dataset.loading = 'true';
-
-    try {
-      const response = await fetch('/api/admin/register/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ authCode })
-      });
-      const data = await parseResponse(response);
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Не удалось выполнить вход');
-      }
-
-      resetRegistrationForm();
-      if (typeof window.openAdminPanel === 'function') {
-        window.openAdminPanel('auth');
-      }
-      window.showAdminToast?.(data.message || 'Вход выполнен');
-    } catch (error) {
-      if (error.message.includes('Failed to fetch') || error.message.includes('npm start')) {
-        resetRegistrationForm();
-        if (typeof window.openAdminPanel === 'function') {
-          window.openAdminPanel('auth');
+    if (typeof window.openAdminPanel === 'function') {
+      const opened = window.openAdminPanel('login', user);
+      if (!opened) {
+        window.showAdminToast?.('Не удалось открыть панель после регистрации', 'error');
+        if (typeof window.showAdminAuthOverlay === 'function') {
+          window.showAdminAuthOverlay('login');
         }
-        window.showAdminToast?.('Вход выполнен');
         return;
       }
-
-      window.showAdminToast?.(error.message || 'Ошибка входа', 'error');
-    } finally {
-      loginBtn.disabled = false;
-      delete loginBtn.dataset.loading;
-      updatePasswordUi();
     }
   }
 
@@ -265,7 +221,15 @@
       return;
     }
 
-    if (mailConfig.deliveryMode === 'personal-smtp' && mailConfig.senderEmail && payload.email === mailConfig.senderEmail) {
+    if (mailConfig.demoMode) {
+      const isDeveloper = mailConfig.developerEmail && payload.email === mailConfig.developerEmail;
+      const confirmed = window.confirm(
+        isDeveloper
+          ? `Отправить код на ${payload.email} и показать на экране?`
+          : 'Показать код подтверждения на экране?'
+      );
+      if (!confirmed) return;
+    } else if (mailConfig.deliveryMode === 'personal-smtp' && mailConfig.senderEmail && payload.email === mailConfig.senderEmail) {
       const proceedSame = window.confirm(
         `Вы указали email отправителя (${payload.email}). Код придёт на этот же ящик.\n\nДля другого пользователя укажите его email.`
       );
@@ -276,6 +240,10 @@
     }
 
     if (!credentialsAreValid()) {
+      if ((authCodeInput?.value.trim() || '') !== CUSTOMER_AUTH_CODE) {
+        window.showAdminToast?.('Неверный код аутентификации', 'error');
+        return;
+      }
       window.showAdminToast?.('Заполните все поля и проверьте пароль', 'error');
       return;
     }
@@ -287,7 +255,13 @@
       const response = await fetch('/api/admin/register/send-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          name: payload.name,
+          email: payload.email,
+          password: payload.password,
+          confirmPassword: payload.confirmPassword,
+          authCode: payload.authCode
+        })
       });
       const data = await parseResponse(response);
 
@@ -296,6 +270,9 @@
       }
 
       pendingEmail = data.sentTo || data.email || payload.email.toLowerCase();
+      if (emailInput && pendingEmail) {
+        emailInput.value = pendingEmail;
+      }
       if (verifyEmailLabel) verifyEmailLabel.textContent = pendingEmail;
       if (verifyEmailWrap) verifyEmailWrap.hidden = false;
       if (emailCodeInput) emailCodeInput.value = '';
@@ -305,10 +282,14 @@
         if (demoCodeValue && data.demoCode) demoCodeValue.textContent = data.demoCode;
         if (verifyIntro) {
           verifyIntro.textContent = data.mailSent === false
-            ? `Письмо не доставлено на ${pendingEmail}. Используйте код ниже — регистрация всё равно возможна.`
-            : data.demoMode
-              ? 'Демо-режим: код показан ниже. Письмо не отправляется.'
-              : data.mailProvider === 'brevo'
+            ? (data.developerMail
+              ? `Письмо на ${pendingEmail} не отправилось. Используйте код ниже.`
+              : `Письмо не доставлено на ${pendingEmail}. Используйте код ниже — регистрация всё равно возможна.`)
+            : data.demoMode && data.developerMail && data.mailSent
+              ? `Демо-режим: код на экране и отправлен на ${pendingEmail}.`
+              : data.demoMode
+                ? 'Демо-режим: код показан ниже. Письмо не отправляется.'
+                : data.mailProvider === 'brevo'
                 ? `Код отправлен на ${pendingEmail} через Brevo. Проверьте «Входящие» и «Спам». Код также показан ниже.`
                 : data.mailProvider === 'gas'
                   ? `Код отправлен на ${pendingEmail} через Google Apps Script. Проверьте «Входящие» и «Спам». Код также показан ниже.`
@@ -323,7 +304,11 @@
       }
 
       setStep(2);
-      window.showAdminToast?.(data.message || 'Код отправлен на email');
+      window.showAdminToast?.(
+        data.demoMode
+          ? (data.message || 'Код показан на экране')
+          : (data.message || 'Код отправлен на email')
+      );
       emailCodeInput?.focus();
     } catch (error) {
       window.showAdminToast?.(error.message || 'Ошибка отправки кода', 'error');
@@ -352,7 +337,8 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: pendingEmail || payload.email.toLowerCase(),
-          emailCode
+          emailCode,
+          authCode: payload.authCode
         })
       });
       const data = await parseResponse(response);
@@ -361,7 +347,7 @@
         throw new Error(data.error || 'Не удалось подтвердить регистрацию');
       }
 
-      finishRegistration(data.message);
+      finishRegistration(data.message, data.user);
     } catch (error) {
       window.showAdminToast?.(error.message || 'Ошибка подтверждения', 'error');
     } finally {
@@ -376,13 +362,7 @@
   emailInput?.addEventListener('input', updatePasswordUi);
   authCodeInput?.addEventListener('input', updatePasswordUi);
 
-  togglePasswordBtn?.addEventListener('click', () => {
-    if (!passwordInput) return;
-    const isHidden = passwordInput.type === 'password';
-    passwordInput.type = isHidden ? 'text' : 'password';
-    togglePasswordBtn.setAttribute('aria-pressed', isHidden ? 'true' : 'false');
-    togglePasswordBtn.textContent = isHidden ? 'Скрыть' : 'Показать';
-  });
+  window.bindAdminPasswordToggle?.(togglePasswordBtn, passwordInput);
 
   emailCodeInput?.addEventListener('input', () => {
     emailCodeInput.value = emailCodeInput.value.replace(/\D/g, '').slice(0, 6);
@@ -391,11 +371,6 @@
   sendCodeBtn?.addEventListener('click', (event) => {
     event.preventDefault();
     sendVerificationCode();
-  });
-
-  loginBtn?.addEventListener('click', (event) => {
-    event.preventDefault();
-    loginWithAuthCode();
   });
 
   resendCodeBtn?.addEventListener('click', (event) => {
@@ -419,12 +394,6 @@
       verifyAndRegister();
       return;
     }
-
-    if (document.activeElement === authCodeInput && hasCustomerAuthCode()) {
-      loginWithAuthCode();
-      return;
-    }
-
     sendVerificationCode();
   });
 

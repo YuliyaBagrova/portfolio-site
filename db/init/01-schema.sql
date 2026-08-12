@@ -56,7 +56,59 @@ CREATE TABLE IF NOT EXISTS admin_users (
 
   password_hash VARCHAR(255),
 
+  avatar_data MEDIUMTEXT NULL,
+
+  location VARCHAR(128) NULL,
+
+  phone VARCHAR(32) NULL,
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+
+CREATE TABLE IF NOT EXISTS site_users (
+
+  id INT AUTO_INCREMENT PRIMARY KEY,
+
+  name VARCHAR(128),
+
+  email VARCHAR(255) NOT NULL UNIQUE,
+
+  password_hash VARCHAR(255),
+
+  avatar_data MEDIUMTEXT NULL,
+
+  location VARCHAR(128) NULL,
+
+  phone VARCHAR(32) NULL,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
+
+
+CREATE TABLE IF NOT EXISTS site_verification_codes (
+
+  id INT AUTO_INCREMENT PRIMARY KEY,
+
+  email VARCHAR(255) NOT NULL,
+
+  code VARCHAR(16) NOT NULL,
+
+  name VARCHAR(128),
+
+  password_hash VARCHAR(255) NOT NULL,
+
+  expires_at TIMESTAMP NOT NULL,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  INDEX idx_site_verify_email (email),
+
+  INDEX idx_site_verify_expires (expires_at)
 
 );
 

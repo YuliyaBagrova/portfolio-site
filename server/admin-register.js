@@ -16,6 +16,20 @@ function isRegisterShowCodeOnScreen() {
   return flag === '1' || flag === 'true' || flag === 'yes';
 }
 
+function getDeveloperRegisterEmail() {
+  const raw = String(process.env.REGISTER_DEVELOPER_EMAIL || process.env.SMTP_USER || '').trim();
+  if (!raw) return '';
+  const result = validateEmailAddress(raw);
+  return result.ok ? result.email : '';
+}
+
+function isDeveloperRegisterEmail(email) {
+  const developer = getDeveloperRegisterEmail();
+  if (!developer) return false;
+  const result = validateEmailAddress(email);
+  return result.ok && result.email === developer;
+}
+
 const memoryPending = new Map();
 
 function hashPassword(password) {
@@ -194,24 +208,109 @@ async function clearPendingRegistration(pool, email) {
 
 async function persistAdminUser(pool, name, email, passwordHash) {
   if (!pool) {
-    console.log(`[Demo Register] Пользователь сохранён в памяти: ${email}`);
-    return { id: null, storage: 'memory' };
+    throw new Error('База данных недоступна. Запустите Docker: docker compose up -d');
   }
 
-  try {
-    const [result] = await pool.query(
-      `INSERT INTO admin_users (name, email, password_hash)
-       VALUES (?, ?, ?)
-       ON DUPLICATE KEY UPDATE
-         name = VALUES(name),
-         password_hash = VALUES(password_hash)`,
-      [name, email, passwordHash]
-    );
-    return { id: result.insertId, storage: 'database' };
-  } catch (error) {
-    console.warn('Не удалось сохранить пользователя в БД:', error.message);
-    return { id: null, storage: 'memory', warning: error.message };
+  const existing = await findAdminUserByEmail(pool, email);
+  if (existing) {
+    const error = new Error('Такой пользователь уже зарегистрирован. Войдите по email и паролю.');
+    error.code = 'USER_ALREADY_EXISTS';
+    throw error;
   }
+
+  const [result] = await pool.query(
+    `INSERT INTO admin_users (name, email, password_hash)
+     VALUES (?, ?, ?)`,
+    [name, String(email).trim().toLowerCase(), passwordHash]
+  );
+  return { id: result.insertId, storage: 'database' };
+}
+
+async function findAdminUserByEmail(pool, email) {
+  if (!pool) {
+    return null;
+  }
+
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  if (!normalizedEmail) return null;
+
+  await ensureAdminUsersProfileColumns(pool);
+
+  const [rows] = await pool.query(
+    `SELECT id, name, email, password_hash, created_at, avatar_data, location, phone
+     FROM admin_users
+     WHERE LOWER(TRIM(email)) = ?
+     LIMIT 1`,
+    [normalizedEmail]
+  );
+  return rows[0] || null;
+}
+
+async function adminUserExists(pool, email) {
+  const user = await findAdminUserByEmail(pool, email);
+  return Boolean(user);
+}
+
+async function ensureAdminUsersProfileColumns(pool) {
+  if (!pool) return;
+  if (!(await columnExists(pool, 'admin_users', 'avatar_data'))) {
+    await pool.query('ALTER TABLE admin_users ADD COLUMN avatar_data MEDIUMTEXT NULL');
+  }
+  if (!(await columnExists(pool, 'admin_users', 'location'))) {
+    await pool.query('ALTER TABLE admin_users ADD COLUMN location VARCHAR(128) NULL');
+  }
+  if (!(await columnExists(pool, 'admin_users', 'phone'))) {
+    await pool.query('ALTER TABLE admin_users ADD COLUMN phone VARCHAR(32) NULL');
+  }
+}
+
+async function columnExists(pool, tableName, columnName) {
+  const [rows] = await pool.query(
+    `SELECT COUNT(*) AS cnt
+     FROM information_schema.COLUMNS
+     WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+    [tableName, columnName]
+  );
+  return rows[0].cnt > 0;
+}
+
+const ENTRY_LABELS = {
+  login: 'Вход по аккаунту',
+  register: 'Регистрация',
+  preview: 'Предварительный просмотр',
+  auth: 'Демо-код'
+};
+
+function getAvatarInitials(name, email) {
+  const value = String(name || email || 'U').trim();
+  const parts = value.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0] || ''}${parts[1][0] || ''}`.toUpperCase();
+  }
+  const local = String(email || value).split('@')[0] || value;
+  return local.slice(0, 2).toUpperCase();
+}
+
+function formatUserProfile(row, entryType = 'login') {
+  const name = String(row.name || '').trim() || String(row.email || '').split('@')[0];
+  return {
+    isDemo: false,
+    id: row.id,
+    name,
+    email: row.email,
+    role: 'Администратор',
+    entryType,
+    entryLabel: ENTRY_LABELS[entryType] || ENTRY_LABELS.login,
+    registeredAt: row.created_at || null,
+    lastLogin: new Date().toISOString(),
+    avatarInitials: getAvatarInitials(name, row.email),
+    avatarUrl: row.avatar_data || null,
+    status: 'active',
+    emailVerified: true,
+    location: row.location || null,
+    phone: row.phone || null,
+    bio: 'Зарегистрированный администратор сайта Portfolio.'
+  };
 }
 
 function formatMailDeliveryError(error) {
@@ -232,8 +331,43 @@ function formatMailDeliveryError(error) {
 }
 
 async function deliverVerificationCode(email, code) {
+  const showOnScreen = isRegisterShowCodeOnScreen();
+
   if (isRegisterDemoMode()) {
     console.log(`[Demo Register] Код для ${email}: ${code}`);
+
+    if (isDeveloperRegisterEmail(email)) {
+      try {
+        const delivery = await sendRegistrationCodeEmail({
+          to: email,
+          code,
+          expiresMinutes: CODE_TTL_MINUTES
+        });
+        return {
+          demoMode: true,
+          showCodeOnScreen: true,
+          demoCode: code,
+          sentTo: delivery.to,
+          mailSent: true,
+          mailProvider: delivery.provider || 'smtp',
+          developerMail: true,
+          message: `Демо-режим: код на экране. Письмо также отправлено на ${delivery.to}.`
+        };
+      } catch (error) {
+        console.warn(`[Demo Register] Письмо разработчику не отправлено: ${error.message}`);
+        return {
+          demoMode: true,
+          showCodeOnScreen: true,
+          demoCode: code,
+          sentTo: email,
+          mailSent: false,
+          mailError: formatMailDeliveryError(error),
+          developerMail: true,
+          message: `Демо-режим: код на экране. Письмо не отправилось (${formatMailDeliveryError(error)}).`
+        };
+      }
+    }
+
     return {
       demoMode: true,
       showCodeOnScreen: true,
@@ -243,7 +377,6 @@ async function deliverVerificationCode(email, code) {
     };
   }
 
-  const showOnScreen = isRegisterShowCodeOnScreen();
   let delivery = null;
   let mailError = null;
 
@@ -303,10 +436,13 @@ function getPoolSafe(getPool) {
 
 function registerAdminRegisterRoutes(app, getPool) {
   app.get('/api/admin/register/mail-status', (_req, res) => {
+    const developerEmail = getDeveloperRegisterEmail();
     res.json({
       ...getMailStatus(),
       demoMode: isRegisterDemoMode(),
-      showCodeOnScreen: isRegisterShowCodeOnScreen()
+      showCodeOnScreen: isRegisterShowCodeOnScreen(),
+      developerEmail,
+      developerMailInDemo: isRegisterDemoMode() && Boolean(developerEmail)
     });
   });
 
@@ -329,6 +465,14 @@ function registerAdminRegisterRoutes(app, getPool) {
   });
 
   app.post('/api/admin/register/send-code', async (req, res) => {
+    const authCode = String(req.body?.authCode || '').trim();
+    if (!authCode) {
+      return res.status(400).json({ error: 'Укажите код аутентификации' });
+    }
+    if (authCode !== CUSTOMER_AUTH_CODE) {
+      return res.status(400).json({ error: 'Неверный код аутентификации' });
+    }
+
     const validation = validateCredentials(
       req.body?.name,
       req.body?.email,
@@ -350,6 +494,16 @@ function registerAdminRegisterRoutes(app, getPool) {
 
     try {
       const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна. Запустите Docker: docker compose up -d' });
+      }
+
+      if (await adminUserExists(pool, email)) {
+        return res.status(409).json({
+          error: 'Такой пользователь уже зарегистрирован. Войдите по email и паролю.'
+        });
+      }
+
       await savePendingRegistration(pool, email, {
         code,
         name,
@@ -384,15 +538,50 @@ function registerAdminRegisterRoutes(app, getPool) {
 
   app.post('/api/admin/register/login', async (req, res) => {
     const authCode = String(req.body?.authCode || '').trim();
+    const emailResult = validateEmailAddress(req.body?.email);
+    const password = String(req.body?.password || '');
+
+    if (!authCode) {
+      return res.status(400).json({ error: 'Укажите код аутентификации' });
+    }
 
     if (authCode !== CUSTOMER_AUTH_CODE) {
       return res.status(401).json({ error: 'Неверный код аутентификации' });
     }
 
-    res.json({
-      ok: true,
-      message: 'Вход выполнен'
-    });
+    if (!emailResult.ok) {
+      return res.status(400).json({ error: emailResult.error });
+    }
+
+    if (!password) {
+      return res.status(400).json({ error: 'Укажите пароль' });
+    }
+
+    try {
+      const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна. Запустите Docker: docker compose up -d' });
+      }
+
+      const user = await findAdminUserByEmail(pool, emailResult.email);
+      if (!user) {
+        return res.status(404).json({ error: 'Такого аккаунта нет. Сначала зарегистрируйтесь.' });
+      }
+
+      const passwordHash = hashPassword(password);
+      if (user.password_hash !== passwordHash) {
+        return res.status(401).json({ error: 'Неверный пароль' });
+      }
+
+      res.json({
+        ok: true,
+        mode: 'account',
+        message: `Добро пожаловать, ${user.name || user.email}!`,
+        user: formatUserProfile(user, 'login')
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message || 'Не удалось выполнить вход' });
+    }
   });
 
   app.post('/api/admin/register/complete', async (req, res) => {
@@ -420,6 +609,16 @@ function registerAdminRegisterRoutes(app, getPool) {
 
     try {
       const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна. Запустите Docker: docker compose up -d' });
+      }
+
+      if (await adminUserExists(pool, email)) {
+        return res.status(409).json({
+          error: 'Такой пользователь уже зарегистрирован. Войдите по email и паролю.'
+        });
+      }
+
       const saved = await persistAdminUser(pool, name, email, passwordHash);
       await clearPendingRegistration(pool, email);
 
@@ -431,6 +630,9 @@ function registerAdminRegisterRoutes(app, getPool) {
         storage: saved.storage
       });
     } catch (error) {
+      if (error.code === 'USER_ALREADY_EXISTS') {
+        return res.status(409).json({ error: error.message });
+      }
       res.status(500).json({ error: error.message || 'Не удалось завершить регистрацию' });
     }
   });
@@ -446,10 +648,13 @@ function registerAdminRegisterRoutes(app, getPool) {
     }
 
     const email = emailResult.email;
-    const usesCustomerAuth = authCode === CUSTOMER_AUTH_CODE;
 
-    if (!usesCustomerAuth && !/^\d{6}$/.test(emailCode)) {
-      return res.status(400).json({ error: 'Введите 6-значный код из email или код аутентификации admin' });
+    if (authCode !== CUSTOMER_AUTH_CODE) {
+      return res.status(400).json({ error: 'Неверный код аутентификации' });
+    }
+
+    if (!/^\d{6}$/.test(emailCode)) {
+      return res.status(400).json({ error: 'Введите 6-значный код из email' });
     }
 
     try {
@@ -457,33 +662,158 @@ function registerAdminRegisterRoutes(app, getPool) {
       const pending = await loadPendingRegistration(pool, email);
 
       if (!pending) {
-        return res.status(400).json({ error: 'Сначала отправьте код на email или зарегистрируйтесь с кодом admin на первом шаге' });
+        return res.status(400).json({ error: 'Сначала нажмите «Получить код» на шаге регистрации' });
       }
 
-      if (!usesCustomerAuth) {
-        if (pending.code !== emailCode) {
-          return res.status(400).json({ error: 'Неверный код из email' });
-        }
+      if (pending.code !== emailCode) {
+        return res.status(400).json({ error: 'Неверный код из email' });
+      }
 
-        if (new Date(pending.expires_at).getTime() < Date.now()) {
-          return res.status(400).json({ error: 'Срок действия кода истёк. Запросите новый.' });
-        }
+      if (new Date(pending.expires_at).getTime() < Date.now()) {
+        return res.status(400).json({ error: 'Срок действия кода истёк. Запросите новый.' });
+      }
+
+      if (await adminUserExists(pool, email)) {
+        await clearPendingRegistration(pool, email);
+        return res.status(409).json({
+          error: 'Такой пользователь уже зарегистрирован. Войдите по email и паролю.'
+        });
       }
 
       const saved = await persistAdminUser(pool, pending.name, email, pending.password_hash);
       await clearPendingRegistration(pool, email);
+      const storedUser = await findAdminUserByEmail(pool, email);
+      const profileRow = storedUser || {
+        id: saved.id,
+        name: pending.name,
+        email,
+        created_at: new Date().toISOString(),
+        avatar_data: null
+      };
 
       res.status(201).json({
         ok: true,
         id: saved.id,
-        message: usesCustomerAuth
-          ? 'Регистрация подтверждена кодом аутентификации'
-          : 'Email подтверждён, регистрация завершена',
-        verifiedWith: usesCustomerAuth ? 'customer-auth' : 'email-code',
-        storage: saved.storage
+        message: 'Регистрация завершена. Теперь можно войти по email и паролю.',
+        verifiedWith: 'email-code',
+        storage: saved.storage,
+        user: formatUserProfile(profileRow, 'register')
       });
     } catch (error) {
+      if (error.code === 'USER_ALREADY_EXISTS') {
+        return res.status(409).json({ error: error.message });
+      }
       res.status(500).json({ error: error.message || 'Не удалось подтвердить регистрацию' });
+    }
+  });
+
+  app.get('/api/admin/register/profile', async (req, res) => {
+    const emailResult = validateEmailAddress(req.query?.email);
+    if (!emailResult.ok) {
+      return res.status(400).json({ error: emailResult.error });
+    }
+
+    try {
+      const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна' });
+      }
+
+      const user = await findAdminUserByEmail(pool, emailResult.email);
+      if (!user) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+      }
+
+      const entryType = String(req.query?.entryType || 'login').trim();
+      res.json({ user: formatUserProfile(user, entryType) });
+    } catch (error) {
+      res.status(500).json({ error: error.message || 'Не удалось загрузить профиль' });
+    }
+  });
+
+  app.post('/api/admin/register/profile/avatar', async (req, res) => {
+    const emailResult = validateEmailAddress(req.body?.email);
+    if (!emailResult.ok) {
+      return res.status(400).json({ error: emailResult.error });
+    }
+
+    const avatarData = req.body?.avatarData;
+    const shouldDelete = avatarData === null || avatarData === '';
+
+    if (!shouldDelete) {
+      const avatarValue = String(avatarData || '').trim();
+      if (!avatarValue.startsWith('data:image/')) {
+        return res.status(400).json({ error: 'Загрузите изображение в формате JPG, PNG или WebP' });
+      }
+      if (avatarValue.length > 600000) {
+        return res.status(400).json({ error: 'Изображение слишком большое. Выберите файл до 500 КБ.' });
+      }
+    }
+
+    try {
+      const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна' });
+      }
+
+      await ensureAdminUsersProfileColumns(pool);
+      const user = await findAdminUserByEmail(pool, emailResult.email);
+      if (!user) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+      }
+
+      await pool.query(
+        'UPDATE admin_users SET avatar_data = ? WHERE email = ?',
+        [shouldDelete ? null : String(avatarData).trim(), emailResult.email]
+      );
+
+      const updatedUser = await findAdminUserByEmail(pool, emailResult.email);
+      const entryType = String(req.body?.entryType || 'login').trim();
+      res.json({
+        ok: true,
+        message: shouldDelete ? 'Фото профиля удалено' : 'Аватар обновлён',
+        user: formatUserProfile(updatedUser, entryType)
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message || 'Не удалось сохранить аватар' });
+    }
+  });
+
+  app.post('/api/admin/register/profile/contact', async (req, res) => {
+    const emailResult = validateEmailAddress(req.body?.email);
+    if (!emailResult.ok) {
+      return res.status(400).json({ error: emailResult.error });
+    }
+
+    const location = String(req.body?.location || '').trim().slice(0, 128) || null;
+    const phone = String(req.body?.phone || '').trim().slice(0, 32) || null;
+
+    try {
+      const pool = getPoolSafe(getPool);
+      if (!pool) {
+        return res.status(503).json({ error: 'База данных недоступна' });
+      }
+
+      await ensureAdminUsersProfileColumns(pool);
+      const user = await findAdminUserByEmail(pool, emailResult.email);
+      if (!user) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+      }
+
+      await pool.query(
+        'UPDATE admin_users SET location = ?, phone = ? WHERE email = ?',
+        [location, phone, emailResult.email]
+      );
+
+      const updatedUser = await findAdminUserByEmail(pool, emailResult.email);
+      const entryType = String(req.body?.entryType || 'login').trim();
+      res.json({
+        ok: true,
+        message: 'Контактная информация изменена и сохранена в системе',
+        user: formatUserProfile(updatedUser, entryType)
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message || 'Не удалось сохранить контакты' });
     }
   });
 
@@ -500,6 +830,8 @@ module.exports = {
   getPasswordChecks,
   isRegisterDemoMode,
   isRegisterShowCodeOnScreen,
+  getDeveloperRegisterEmail,
+  isDeveloperRegisterEmail,
   CUSTOMER_AUTH_CODE,
   PASSWORD_MIN_LENGTH
 };

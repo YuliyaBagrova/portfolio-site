@@ -18,7 +18,8 @@ const { registerBannerOrderRoutes } = require('./banner-orders');
 const { registerSiteOrderRoutes } = require('./site-orders');
 const { registerBannerLikeRoutes } = require('./banner-likes');
 const { registerAboutPageRoutes } = require('./about-page');
-const { registerAdminRegisterRoutes, isRegisterDemoMode } = require('./admin-register');
+const { registerAdminRegisterRoutes, isRegisterDemoMode, getDeveloperRegisterEmail } = require('./admin-register');
+const { registerSiteRegisterRoutes } = require('./site-register');
 const { verifyMailTransport } = require('./mail');
 
 const app = express();
@@ -121,6 +122,7 @@ registerSiteOrderRoutes(app, getPool);
 registerBannerLikeRoutes(app, getPool);
 registerAboutPageRoutes(app, getPool);
 registerAdminRegisterRoutes(app, getPool);
+registerSiteRegisterRoutes(app, getPool);
 
 app.get('*', (req, res) => {
   if (req.path.endsWith('.html') || req.path.includes('.')) {
@@ -134,7 +136,13 @@ async function start() {
     await waitForDatabase();
     await runMigrations(getPool());
     if (isRegisterDemoMode()) {
-      console.log('Регистрация: демо-режим — код подтверждения показывается на экране');
+      const developerEmail = getDeveloperRegisterEmail();
+      if (developerEmail) {
+        console.log(`Регистрация: демо — код на экране; письмо разработчику: ${developerEmail}`);
+        await verifyMailTransport();
+      } else {
+        console.log('Регистрация: демо-режим — код подтверждения показывается на экране');
+      }
     } else {
       await verifyMailTransport();
     }

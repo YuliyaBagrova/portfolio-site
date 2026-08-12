@@ -3,12 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    (function () {
+      try {
+        if (
+          sessionStorage.getItem('admin_panel_open') === '1'
+          && sessionStorage.getItem('portfolio_admin_user')
+        ) {
+          document.documentElement.classList.add('admin-panel-restore');
+        }
+        if (localStorage.getItem('site_gate_unlocked') !== '1') {
+          document.documentElement.classList.add('site-gate-pending');
+        }
+      } catch (error) {
+        /* storage may be unavailable */
+      }
+    })();
+  </script>
+  <style>
+    html.admin-panel-restore body {
+      overflow: hidden;
+    }
+
+    html.admin-panel-restore .app > :not(#adminPanel):not(#adminToast) {
+      display: none !important;
+    }
+
+    html.admin-panel-restore #adminPanel[hidden] {
+      display: flex !important;
+    }
+  </style>
   <title>Портфолио — Главная</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="site-float-actions.css">
+  <link rel="stylesheet" href="site-user.css">
 </head>
 <body>
   <div class="app">
@@ -43,17 +74,125 @@
             </button>
             <div class="search-dropdown" id="siteSearchResults" hidden role="listbox" aria-label="Результаты поиска"></div>
           </div>
-          <button class="admin-btn" id="adminBtn" aria-label="Панель администратора" title="Панель администратора">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7" rx="1"/>
-              <rect x="14" y="3" width="7" height="7" rx="1"/>
-              <rect x="3" y="14" width="7" height="7" rx="1"/>
-              <rect x="14" y="14" width="7" height="7" rx="1"/>
-            </svg>
-          </button>
+          <div class="header-icon-actions">
+            <div class="site-user-header-wrap">
+              <button type="button" class="admin-btn site-user-header-btn" id="siteUserHeaderBtn" aria-label="О пользователе" title="О пользователе" aria-haspopup="menu" aria-expanded="false" aria-controls="siteUserMenu">
+                <span class="site-header-user-avatar" id="siteHeaderUserAvatar" data-has-image="false">
+                  <img class="site-header-user-avatar-img" id="siteHeaderUserAvatarImg" alt="" hidden>
+                  <span class="site-header-user-avatar-initials" id="siteHeaderUserAvatarInitials">CL</span>
+                </span>
+              </button>
+              <div class="site-user-menu" id="siteUserMenu" hidden role="menu" aria-label="Меню пользователя">
+                <div class="site-user-menu-notice" id="siteUserMenuNotice" hidden>
+                  <button type="button" class="site-user-menu-notice-close" id="siteUserMenuNoticeClose" aria-label="Закрыть уведомление">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                  <span class="site-user-menu-notice-badge">Демонстрация регистрации для клиентов</span>
+                  <p class="site-user-menu-notice-title">Регистрация клиентов на сайте</p>
+                  <p class="site-user-menu-notice-text">Эта система создана как часть портфолио — она показывает работу с onboarding, подтверждением email и профилем клиента. Зарегистрируйтесь, чтобы увидеть полный сценарий.</p>
+                  <button type="button" class="site-user-menu-notice-cta" id="siteUserMenuNoticeRegister">Перейти к регистрации</button>
+                </div>
+                <div class="site-user-menu-head">
+                  <div class="site-user-menu-avatar" id="siteUserMenuAvatar" data-has-image="false">
+                    <img class="site-user-menu-avatar-img" id="siteUserMenuAvatarImg" alt="" hidden>
+                    <span class="site-user-menu-avatar-initials" id="siteUserMenuAvatarInitials">CL</span>
+                  </div>
+                  <div class="site-user-menu-meta">
+                    <span class="site-user-menu-name" id="siteUserMenuName">Demo</span>
+                    <span class="site-user-menu-email" id="siteUserMenuEmail">demo@portfolio.local</span>
+                    <span class="site-user-menu-badge" id="siteUserMenuBadge" data-variant="demo">Demo</span>
+                  </div>
+                </div>
+                <div class="site-user-menu-divider" aria-hidden="true"></div>
+                <div class="site-user-menu-actions">
+                  <button type="button" class="site-user-menu-item" id="siteUserMenuProfile" role="menuitem">
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>О пользователе</strong>
+                      <small>Профиль, контакты и активность</small>
+                    </span>
+                  </button>
+                  <a href="/cart.html" class="site-user-menu-item site-user-menu-item--link" id="siteUserMenuCart" role="menuitem">
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>Корзина</strong>
+                      <small>Товары, добавленные на сайте</small>
+                    </span>
+                    <span class="site-user-menu-item-badge" id="siteUserMenuCartBadge" hidden>0</span>
+                  </a>
+                  <a href="/orders.html" class="site-user-menu-item site-user-menu-item--link" id="siteUserMenuOrders" role="menuitem">
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>Заказы</strong>
+                      <small>История заявок и заказов</small>
+                    </span>
+                  </a>
+                  <button type="button" class="site-user-menu-item site-user-menu-item--accent" id="siteUserMenuLogin" role="menuitem" hidden>
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>Войти</strong>
+                      <small>Вход в аккаунт клиента</small>
+                    </span>
+                  </button>
+                  <button type="button" class="site-user-menu-item site-user-menu-item--accent" id="siteUserMenuRegister" role="menuitem" hidden>
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>Регистрация</strong>
+                      <small>Создать аккаунт клиента с email</small>
+                    </span>
+                  </button>
+                  <div class="site-user-menu-divider site-user-menu-divider--inline" id="siteUserMenuLogoutDivider" aria-hidden="true" hidden></div>
+                  <button type="button" class="site-user-menu-item site-user-menu-item--logout" id="siteUserMenuLogout" role="menuitem" hidden>
+                    <span class="site-user-menu-item-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </span>
+                    <span class="site-user-menu-item-text">
+                      <strong>Выйти из аккаунта</strong>
+                      <small>Завершить текущую сессию клиента</small>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button class="admin-btn" id="adminBtn" aria-label="Панель администратора" title="Панель администратора">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="14" y="14" width="7" height="7" rx="1"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </header>
+
+    <div class="site-user-register-notice" id="siteUserRegisterNotice" hidden role="status" aria-live="polite">
+      <div class="site-user-register-notice-card">
+        <button type="button" class="site-user-register-notice-close" id="siteUserRegisterNoticeClose" aria-label="Закрыть уведомление">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <span class="site-user-register-notice-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </span>
+        <div class="site-user-register-notice-content">
+          <span class="site-user-register-notice-label">Демонстрация регистрации для клиентов</span>
+          <p class="site-user-register-notice-title">Система регистрации клиентов</p>
+          <p class="site-user-register-notice-text">Регистрация на публичном сайте — демонстрация UX и backend: подтверждение email, профиль клиента и сохранение данных. Создайте аккаунт, чтобы протестировать полный сценарий.</p>
+          <button type="button" class="site-user-register-notice-cta" id="siteUserRegisterNoticeAction">Зарегистрироваться</button>
+        </div>
+      </div>
+    </div>
 
     <div class="nav-overlay" id="navOverlay"></div>
 
@@ -481,6 +620,369 @@
       </div>
     </footer>
 
+    <!-- Site user: welcome gate -->
+    <div class="site-user-overlay admin-overlay" id="siteUserGate" hidden>
+      <div class="admin-gate-shell" role="dialog" aria-labelledby="siteUserGateTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Добро пожаловать">
+                <span class="nav-link active" id="siteUserGateTitle">Добро пожаловать</span>
+              </nav>
+            </div>
+          </div>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Публичный сайт</div>
+            <p class="admin-gate-lead">Зарегистрируйтесь как клиент или выберите предварительный просмотр, чтобы пользоваться сайтом.</p>
+
+            <div class="card admin-gate-card">
+              <div class="card-header">
+                <h2>Начало работы</h2>
+              </div>
+              <div class="quick-links admin-gate-links">
+                <button type="button" class="quick-link admin-gate-link" id="siteUserChooseRegister">
+                  <span class="quick-link-icon quick-link-icon--register" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <line x1="19" y1="8" x2="19" y2="14"/>
+                      <line x1="22" y1="11" x2="16" y2="11"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Регистрация</strong>
+                    <small>Создайте аккаунт клиента с подтверждением email</small>
+                  </div>
+                </button>
+                <button type="button" class="quick-link admin-gate-link admin-gate-link--preview" id="siteUserChoosePreview">
+                  <span class="quick-link-icon quick-link-icon--preview" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <strong>Предварительный просмотр</strong>
+                    <small>Посмотреть сайт без регистрации</small>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Site user: registration -->
+    <div class="site-user-overlay admin-overlay" id="siteUserRegister" hidden>
+      <div class="admin-gate-shell admin-gate-shell--register" role="dialog" aria-labelledby="siteUserRegisterTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Регистрация клиента">
+                <span class="nav-link active" id="siteUserRegisterTitle">Регистрация</span>
+              </nav>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="admin-btn admin-gate-close" id="siteUserRegisterClose" aria-label="Назад" title="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Регистрация клиента</div>
+            <p class="admin-gate-lead">Создайте аккаунт клиента. После подтверждения email вы получите доступ к сайту.</p>
+
+            <div class="admin-register-progress" aria-label="Шаги регистрации">
+              <div class="admin-register-progress-item is-active" data-site-register-step-indicator="1">
+                <span class="admin-register-progress-num">1</span>
+                <span class="admin-register-progress-label">Данные</span>
+              </div>
+              <div class="admin-register-progress-line" aria-hidden="true"></div>
+              <div class="admin-register-progress-item" data-site-register-step-indicator="2">
+                <span class="admin-register-progress-num">2</span>
+                <span class="admin-register-progress-label">Подтверждение</span>
+              </div>
+            </div>
+
+            <div class="card admin-gate-card admin-register-card">
+              <form class="admin-form admin-gate-form admin-register-form" id="siteUserRegisterForm" novalidate>
+                <div class="admin-register-step" id="siteUserRegisterStepCredentials">
+                  <div class="card-header">
+                    <h2>Данные клиента</h2>
+                  </div>
+
+                  <label class="admin-field">
+                    <span>Имя</span>
+                    <input type="text" name="name" id="siteUserRegisterName" placeholder="Ваше имя" autocomplete="name" required>
+                  </label>
+
+                  <label class="admin-field">
+                    <span>Email</span>
+                    <input type="email" name="registerEmail" id="siteUserRegisterEmail" placeholder="email@example.com" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="email" required>
+                    <small class="admin-field-hint">Только латиница: example@gmail.com, name@mail.ru</small>
+                  </label>
+
+                  <label class="admin-field admin-field--password">
+                    <span>Пароль</span>
+                    <div class="admin-password-wrap">
+                      <input type="password" name="password" id="siteUserRegisterPassword" placeholder="Минимум 8 символов" autocomplete="new-password" required>
+                      <button type="button" class="admin-password-toggle" id="siteUserRegisterTogglePassword" aria-label="Показать пароль" aria-pressed="false">
+                        <svg class="admin-password-toggle-icon admin-password-toggle-icon--show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.18Z"/>
+                          <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                        <svg class="admin-password-toggle-icon admin-password-toggle-icon--hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </label>
+
+                  <div class="admin-password-strength" aria-live="polite">
+                    <div class="admin-password-strength-track">
+                      <div class="admin-password-strength-bar" id="siteUserRegisterStrengthBar"></div>
+                    </div>
+                    <span class="admin-password-strength-label" id="siteUserRegisterStrengthLabel">Надёжность пароля</span>
+                  </div>
+
+                  <ul class="admin-password-rules" aria-label="Требования к паролю">
+                    <li class="admin-password-rule" data-site-password-rule="minLength">Минимум 8 символов</li>
+                    <li class="admin-password-rule" data-site-password-rule="upper">Заглавная буква (A–Z)</li>
+                    <li class="admin-password-rule" data-site-password-rule="lower">Строчная буква (a–z)</li>
+                    <li class="admin-password-rule" data-site-password-rule="digit">Цифра (0–9)</li>
+                    <li class="admin-password-rule" data-site-password-rule="english">Только латиница</li>
+                  </ul>
+
+                  <label class="admin-field">
+                    <span>Повторите пароль</span>
+                    <input type="password" name="passwordConfirm" id="siteUserRegisterPasswordConfirm" placeholder="Ещё раз, как выше" autocomplete="new-password" required>
+                  </label>
+
+                  <div class="admin-form-actions admin-form-actions--register">
+                    <button type="button" class="btn btn-primary" id="siteUserRegisterSendCode">Получить код</button>
+                  </div>
+
+                  <p class="admin-auth-switch">
+                    У вас уже есть аккаунт?
+                    <button type="button" class="admin-auth-switch-link" id="siteUserShowLogin">Войти</button>
+                  </p>
+                </div>
+
+                <div class="admin-register-step" id="siteUserRegisterStepVerify" hidden>
+                  <div class="card-header">
+                    <h2>Подтверждение email</h2>
+                  </div>
+
+                  <p class="admin-register-verify-text" id="siteUserRegisterVerifyIntro">Введите 6-значный код подтверждения.</p>
+                  <p class="admin-register-verify-email" id="siteUserRegisterVerifyEmailWrap" hidden>
+                    Email: <strong id="siteUserRegisterVerifyEmail"></strong>
+                  </p>
+
+                  <p class="admin-register-demo-hint" id="siteUserRegisterDemoHint" hidden>
+                    Код подтверждения:
+                    <strong class="admin-register-email-code" id="siteUserRegisterDemoCodeValue"></strong>
+                  </p>
+
+                  <label class="admin-field">
+                    <span>Код подтверждения</span>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="siteUserRegisterEmailCode" placeholder="000000" autocomplete="one-time-code">
+                  </label>
+
+                  <div class="admin-form-actions admin-form-actions--split">
+                    <button type="button" class="btn btn-ghost" id="siteUserRegisterBackToCredentials">← Назад</button>
+                    <div class="admin-form-actions-group">
+                      <button type="button" class="btn btn-ghost" id="siteUserRegisterResendCode">Отправить код снова</button>
+                      <button type="button" class="btn btn-primary" id="siteUserRegisterVerify">Подтвердить</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Site user: login -->
+    <div class="site-user-overlay admin-overlay" id="siteUserLogin" hidden>
+      <div class="admin-gate-shell admin-gate-shell--register" role="dialog" aria-labelledby="siteUserLoginTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Вход клиента">
+                <span class="nav-link active" id="siteUserLoginTitle">Вход</span>
+              </nav>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="admin-btn admin-gate-close" id="siteUserLoginClose" aria-label="Назад" title="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Вход клиента</div>
+            <p class="admin-gate-lead">Войдите по email и паролю, чтобы открыть профиль клиента на сайте.</p>
+
+            <div class="card admin-gate-card admin-register-card">
+              <form class="admin-form admin-gate-form admin-login-form" id="siteUserLoginForm" novalidate>
+                <div class="card-header">
+                  <h2>Данные для входа</h2>
+                </div>
+
+                <label class="admin-field">
+                  <span>Email</span>
+                  <input type="email" id="siteUserLoginEmail" name="loginEmail" placeholder="email@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" inputmode="email" required>
+                </label>
+
+                <label class="admin-field admin-field--password">
+                  <span>Пароль</span>
+                  <div class="admin-password-wrap">
+                    <input type="password" id="siteUserLoginPassword" name="loginPassword" placeholder="Ваш пароль" autocomplete="current-password" required>
+                    <button type="button" class="admin-password-toggle" id="siteUserLoginTogglePassword" aria-label="Показать пароль" aria-pressed="false">
+                      <svg class="admin-password-toggle-icon admin-password-toggle-icon--show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.18Z"/>
+                        <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                      </svg>
+                      <svg class="admin-password-toggle-icon admin-password-toggle-icon--hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
+                      </svg>
+                    </button>
+                  </div>
+                </label>
+
+                <div class="admin-form-actions admin-form-actions--login">
+                  <button type="submit" class="btn btn-primary" id="siteUserLoginSubmit">Войти</button>
+                </div>
+
+                <p class="admin-auth-switch">
+                  Нет аккаунта?
+                  <button type="button" class="admin-auth-switch-link" id="siteUserShowRegister">Зарегистрироваться</button>
+                </p>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Site user: profile panel -->
+    <div class="site-user-profile-overlay" id="siteUserProfileOverlay" hidden>
+      <div class="site-user-profile-shell" role="dialog" aria-labelledby="siteUserProfileTitle">
+        <header class="site-user-profile-header">
+          <h2 id="siteUserProfileTitle">О пользователе</h2>
+          <button type="button" class="admin-btn admin-gate-close" id="siteUserProfileClose" aria-label="Закрыть" title="Закрыть">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </header>
+        <main class="site-user-profile-main">
+          <div class="site-user-profile-page admin-profile-page">
+            <div class="admin-profile-hero card">
+              <div class="admin-profile-hero-main">
+                <div class="admin-profile-avatar-wrap">
+                  <div class="admin-profile-avatar" id="siteUserProfileAvatar" aria-hidden="true">
+                    <img class="admin-profile-avatar-img" id="siteUserProfileAvatarImg" alt="" hidden>
+                    <span class="admin-profile-avatar-initials" id="siteUserProfileAvatarInitials">CL</span>
+                  </div>
+                </div>
+                <div class="admin-profile-hero-info">
+                  <div class="admin-profile-hero-top">
+                    <h3 class="admin-profile-name" id="siteUserProfileName">Demo</h3>
+                    <span class="admin-profile-badge" id="siteUserProfileBadge" data-variant="demo">Demo</span>
+                  </div>
+                  <p class="admin-profile-email" id="siteUserProfileEmail">demo@portfolio.local</p>
+                  <p class="admin-profile-bio" id="siteUserProfileBio">—</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-profile-grid">
+              <div class="card admin-profile-card">
+                <div class="card-header"><h3>Основная информация</h3></div>
+                <dl class="admin-profile-details">
+                  <div class="admin-profile-detail">
+                    <dt>Роль</dt>
+                    <dd id="siteUserProfileRole">Клиент</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Способ входа</dt>
+                    <dd id="siteUserProfileEntry">—</dd>
+                  </div>
+                </dl>
+                <form class="admin-profile-contact-form admin-profile-contact-form--inline" id="siteUserProfileContactForm">
+                  <label class="admin-field">
+                    <span>Локация <small class="admin-profile-optional">(необязательно)</small></span>
+                    <input type="text" id="siteUserProfileLocationInput" name="location" placeholder="Например: Москва, Россия" maxlength="128">
+                  </label>
+                  <label class="admin-field">
+                    <span>Телефон <small class="admin-profile-optional">(необязательно)</small></span>
+                    <input type="tel" id="siteUserProfilePhoneInput" name="phone" placeholder="+7 (999) 000-00-00" maxlength="32">
+                  </label>
+                  <div class="admin-profile-contact-actions">
+                    <button type="submit" class="btn btn-primary" id="siteUserProfileContactSave">Сохранить контакты</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="card admin-profile-card">
+                <div class="card-header"><h3>Активность</h3></div>
+                <dl class="admin-profile-details">
+                  <div class="admin-profile-detail">
+                    <dt>ID пользователя</dt>
+                    <dd id="siteUserProfileUserId">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Дата регистрации</dt>
+                    <dd id="siteUserProfileRegistered">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Последний вход</dt>
+                    <dd id="siteUserProfileLastLogin">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Сессий в браузере</dt>
+                    <dd id="siteUserProfileSessions">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Статус</dt>
+                    <dd><span class="admin-profile-status" id="siteUserProfileStatus" data-variant="demo">—</span></dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Подтверждение email</dt>
+                    <dd id="siteUserProfileEmailVerified">—</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
     <!-- Admin: выбор входа -->
     <div class="admin-overlay" id="adminGate" hidden>
       <div class="admin-gate-shell" role="dialog" aria-labelledby="adminGateTitle">
@@ -611,7 +1113,15 @@
                     <span>Пароль</span>
                     <div class="admin-password-wrap">
                       <input type="password" name="password" id="adminRegisterPassword" placeholder="Минимум 8 символов" autocomplete="new-password" autocapitalize="off" spellcheck="false" required>
-                      <button type="button" class="admin-password-toggle" id="adminRegisterTogglePassword" aria-label="Показать пароль">Показать</button>
+                      <button type="button" class="admin-password-toggle" id="adminRegisterTogglePassword" aria-label="Показать пароль" aria-pressed="false">
+                        <svg class="admin-password-toggle-icon admin-password-toggle-icon--show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.18Z"/>
+                          <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                        </svg>
+                        <svg class="admin-password-toggle-icon admin-password-toggle-icon--hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
+                        </svg>
+                      </button>
                     </div>
                   </label>
 
@@ -637,18 +1147,18 @@
 
                   <label class="admin-field admin-field--auth-code">
                     <span>Код аутентификации</span>
-                    <input type="text" id="adminRegisterAuthCode" name="authCode" placeholder="Введите код" autocomplete="off" autocapitalize="off" spellcheck="false">
-                    <small class="admin-field-hint">Код для быстрого входа заказчика — отдельно от 6-значного кода из email.</small>
+                    <input type="text" id="adminRegisterAuthCode" name="registerAuthCode" placeholder="admin" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+                    <small class="admin-field-hint">Код для регистрации администратора: <code>admin</code></small>
                   </label>
 
-                  <div class="admin-form-actions">
-                    <button type="button" class="btn btn-ghost" id="adminRegisterSkip">Пропустить и войти</button>
+                  <div class="admin-form-actions admin-form-actions--register">
                     <button type="button" class="btn btn-primary" id="adminRegisterSendCode">Получить код</button>
                   </div>
 
-                  <div class="admin-register-auth-action">
-                    <button type="button" class="btn btn-primary admin-register-auth-btn" id="adminRegisterLogin" disabled>Войти</button>
-                  </div>
+                  <p class="admin-auth-switch">
+                    У вас уже есть аккаунт?
+                    <button type="button" class="admin-auth-switch-link" id="adminShowLogin">Войти</button>
+                  </p>
                 </div>
 
                 <div class="admin-register-step" id="adminRegisterStepVerify" hidden>
@@ -687,9 +1197,83 @@
         </main>
       </div>
     </div>
-  </div>
 
-  <!-- Admin: панель управления (полноэкранная) -->
+    <!-- Admin: вход -->
+    <div class="admin-overlay" id="adminLogin" hidden>
+      <div class="admin-gate-shell admin-gate-shell--register" role="dialog" aria-labelledby="adminLoginTitle">
+        <header class="site-header admin-gate-header">
+          <div class="header-inner">
+            <div class="header-left">
+              <span class="logo" aria-hidden="true">
+                <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+              </span>
+              <nav class="top-nav admin-gate-nav" aria-label="Вход">
+                <span class="nav-link active" id="adminLoginTitle">Вход</span>
+              </nav>
+            </div>
+            <div class="header-actions">
+              <button type="button" class="admin-btn admin-gate-close" id="adminLoginClose" aria-label="Назад" title="Назад">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main class="admin-gate-main">
+          <div class="content admin-gate-content">
+            <div class="admin-panel-badge">Вход в аккаунт</div>
+            <p class="admin-gate-lead">Войдите по email, паролю и коду аутентификации.</p>
+
+            <div class="card admin-gate-card admin-register-card">
+              <form class="admin-form admin-gate-form admin-login-form" id="adminLoginForm" novalidate>
+                <div class="card-header">
+                  <h2>Данные для входа</h2>
+                </div>
+
+                <label class="admin-field">
+                  <span>Email</span>
+                  <input type="email" id="adminLoginEmail" name="loginEmail" placeholder="email@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" inputmode="email" required>
+                </label>
+
+                <label class="admin-field admin-field--password">
+                  <span>Пароль</span>
+                  <div class="admin-password-wrap">
+                    <input type="password" id="adminLoginPassword" name="loginPassword" placeholder="Ваш пароль" autocomplete="current-password" autocapitalize="off" spellcheck="false" required>
+                    <button type="button" class="admin-password-toggle" id="adminLoginTogglePassword" aria-label="Показать пароль" aria-pressed="false">
+                      <svg class="admin-password-toggle-icon admin-password-toggle-icon--show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.964-7.18Z"/>
+                        <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                      </svg>
+                      <svg class="admin-password-toggle-icon admin-password-toggle-icon--hide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88"/>
+                      </svg>
+                    </button>
+                  </div>
+                </label>
+
+                <label class="admin-field admin-field--auth-code">
+                  <span>Код аутентификации</span>
+                  <input type="text" id="adminLoginAuthCode" name="loginAuthCode" placeholder="admin" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+                </label>
+
+                <div class="admin-form-actions admin-form-actions--login">
+                  <button type="submit" class="btn btn-primary" id="adminLoginSubmit">Войти</button>
+                </div>
+
+                <p class="admin-auth-switch">
+                  Нет аккаунта?
+                  <button type="button" class="admin-auth-switch-link" id="adminShowRegister">Зарегистрироваться</button>
+                </p>
+              </form>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Admin: панель управления (полноэкранная) -->
   <div class="admin-page" id="adminPanel" hidden>
     <header class="site-header admin-page-header">
       <div class="header-inner">
@@ -706,7 +1290,13 @@
           </nav>
         </div>
 
-        <div class="header-actions">
+        <div class="header-actions admin-page-header-actions">
+          <button type="button" class="admin-btn admin-profile-btn" id="adminProfileBtn" aria-label="Профиль пользователя" title="Профиль">
+            <span class="admin-profile-btn-avatar" id="adminProfileBtnAvatar">
+              <img class="admin-profile-btn-avatar-img" id="adminProfileBtnAvatarImg" alt="" hidden>
+              <span class="admin-profile-btn-avatar-initials" id="adminProfileBtnAvatarInitials">DM</span>
+            </span>
+          </button>
           <button type="button" class="admin-btn" id="adminPanelClose" aria-label="Выйти на сайт" title="Выйти на сайт">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -1949,6 +2539,97 @@
           </div>
         </section>
 
+        <section class="admin-section admin-section-profile" id="adminSectionProfile" aria-labelledby="adminProfileName">
+          <div class="admin-profile-page">
+            <div class="admin-profile-hero card">
+              <div class="admin-profile-hero-main">
+                <div class="admin-profile-avatar-wrap">
+                  <div class="admin-profile-avatar" id="adminProfileAvatar" aria-hidden="true">
+                    <img class="admin-profile-avatar-img" id="adminProfileAvatarImg" alt="" hidden>
+                    <span class="admin-profile-avatar-initials" id="adminProfileAvatarInitials">DM</span>
+                  </div>
+                  <div class="admin-profile-avatar-actions">
+                    <button type="button" class="btn btn-ghost admin-profile-change-avatar" id="adminProfileChangeAvatar">Изменить фото</button>
+                    <button type="button" class="btn btn-ghost admin-profile-remove-avatar" id="adminProfileRemoveAvatar" hidden>Удалить фото</button>
+                  </div>
+                  <input type="file" id="adminProfileAvatarInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+                </div>
+                <div class="admin-profile-hero-info">
+                  <div class="admin-profile-hero-top">
+                    <h2 class="admin-profile-name" id="adminProfileName">Demo</h2>
+                    <span class="admin-profile-badge" id="adminProfileBadge" data-variant="demo">Demo</span>
+                  </div>
+                  <p class="admin-profile-email" id="adminProfileEmail">demo@portfolio.local</p>
+                  <p class="admin-profile-bio" id="adminProfileBio">Демонстрационный доступ к панели Portfolio.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-profile-grid">
+              <div class="card admin-profile-card">
+                <div class="card-header">
+                  <h3>Основная информация</h3>
+                </div>
+                <dl class="admin-profile-details">
+                  <div class="admin-profile-detail">
+                    <dt>Роль</dt>
+                    <dd id="adminProfileRole">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Способ входа</dt>
+                    <dd id="adminProfileEntry">—</dd>
+                  </div>
+                </dl>
+                <form class="admin-profile-contact-form admin-profile-contact-form--inline" id="adminProfileContactForm">
+                  <label class="admin-field">
+                    <span>Локация <small class="admin-profile-optional">(необязательно)</small></span>
+                    <input type="text" id="adminProfileLocationInput" name="location" placeholder="Например: Москва, Россия" maxlength="128" autocomplete="address-level2">
+                  </label>
+                  <label class="admin-field">
+                    <span>Телефон <small class="admin-profile-optional">(необязательно)</small></span>
+                    <input type="tel" id="adminProfilePhoneInput" name="phone" placeholder="+7 (999) 000-00-00" maxlength="32" autocomplete="tel">
+                  </label>
+                  <div class="admin-profile-contact-actions">
+                    <button type="submit" class="btn btn-primary" id="adminProfileContactSave">Сохранить контакты</button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="card admin-profile-card">
+                <div class="card-header">
+                  <h3>Активность и безопасность</h3>
+                </div>
+                <dl class="admin-profile-details">
+                  <div class="admin-profile-detail">
+                    <dt>ID пользователя</dt>
+                    <dd id="adminProfileUserId">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Дата регистрации</dt>
+                    <dd id="adminProfileRegistered">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Последний вход</dt>
+                    <dd id="adminProfileLastLogin">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Сессий в браузере</dt>
+                    <dd id="adminProfileSessions" title="Сколько раз вы входили в панель с этого браузера">—</dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Статус</dt>
+                    <dd><span class="admin-profile-status" id="adminProfileStatus" data-variant="demo">—</span></dd>
+                  </div>
+                  <div class="admin-profile-detail">
+                    <dt>Подтверждение email</dt>
+                    <dd id="adminProfileEmailVerified">—</dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="admin-section admin-section-about" id="adminSectionAbout" aria-labelledby="adminAboutTitle">
           <div class="admin-about-content about-content">
             <div class="about-page-intro">
@@ -2260,10 +2941,21 @@
   <script src="admin-orders.js"></script>
   <script src="about-page.js"></script>
   <script src="admin-site-about.js"></script>
+  <script src="admin-user-session.js"></script>
+  <script src="admin-email-utils.js"></script>
+  <script src="admin-password-toggle.js"></script>
   <script src="admin-register.js"></script>
+  <script src="admin-login.js"></script>
+  <script src="admin-profile.js"></script>
   <script src="admin.js"></script>
   <script src="site-cart.js"></script>
   <script src="site-orders.js"></script>
+  <script src="site-user-session.js"></script>
+  <script src="site-user-register.js"></script>
+  <script src="site-user-login.js"></script>
+  <script src="site-user-gate.js"></script>
+  <script src="site-user-menu.js"></script>
+  <script src="site-user-profile.js"></script>
   <script src="site-float-actions.js"></script>
 </body>
 </html>

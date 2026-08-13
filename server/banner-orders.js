@@ -5,6 +5,8 @@ const BANNER_CATEGORIES = {
   pictures: 'Картинки'
 };
 
+const { parseOrderScopeBody } = require('./order-scope');
+
 async function ensureBannerOrdersTable(pool) {
   const [rows] = await pool.query(
     `SELECT COUNT(*) AS cnt
@@ -22,6 +24,9 @@ async function ensureBannerOrdersTable(pool) {
       phone VARCHAR(32) NULL,
       category VARCHAR(32) NULL,
       message TEXT NOT NULL,
+      is_demo TINYINT(1) NOT NULL DEFAULT 0,
+      site_user_id INT NULL,
+      client_scope VARCHAR(255) NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `);
@@ -44,7 +49,10 @@ function serializeBannerOrder(row) {
     phone: row.phone || '',
     quantity: null,
     message: row.message || '',
-    created_at: row.created_at
+    created_at: row.created_at,
+    is_demo: Boolean(row.is_demo),
+    site_user_id: row.site_user_id ?? null,
+    client_scope: row.client_scope || null
   };
 }
 
@@ -77,15 +85,19 @@ function registerBannerOrderRoutes(app, getPool) {
 
     try {
       const pool = getPool();
+      const scope = parseOrderScopeBody(req.body);
       const [result] = await pool.query(
-        `INSERT INTO banner_orders (customer_name, email, phone, category, message)
-         VALUES (?, ?, ?, ?, ?)`,
+        `INSERT INTO banner_orders (customer_name, email, phone, category, message, is_demo, site_user_id, client_scope)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           String(customerName).trim(),
           String(email).trim(),
           phone ? String(phone).trim() : null,
           normalizedCategory,
-          String(message).trim()
+          String(message).trim(),
+          scope.isDemo ? 1 : 0,
+          scope.siteUserId,
+          scope.clientScope || null
         ]
       );
 
@@ -103,7 +115,8 @@ function registerBannerOrderRoutes(app, getPool) {
     try {
       const pool = getPool();
       const [rows] = await pool.query(
-        `SELECT id, customer_name, email, phone, category, message, created_at
+        `SELECT id, customer_name, email, phone, category, message, created_at,
+                is_demo, site_user_id, client_scope
          FROM banner_orders
          ORDER BY created_at DESC, id DESC`
       );

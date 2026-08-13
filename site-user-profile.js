@@ -1,4 +1,16 @@
 (function initSiteUserProfile() {
+  const CONTACT_SAVED_MESSAGE = 'Контактная информация изменена и сохранена в системе';
+  const AVATAR_UPDATED_MESSAGE = 'Фото профиля обновлено';
+  const AVATAR_REMOVED_MESSAGE = 'Фото профиля удалено';
+
+  function showProfileToast(message, type = 'success') {
+    if (typeof window.showAdminToast === 'function') {
+      window.showAdminToast(message, type);
+    }
+  }
+
+  const pageRoot = document.getElementById('siteUserProfilePage');
+  const isPageMode = Boolean(pageRoot);
   const overlay = document.getElementById('siteUserProfileOverlay');
   const closeBtn = document.getElementById('siteUserProfileClose');
   const changeAvatarBtn = document.getElementById('siteUserProfileChangeAvatar');
@@ -8,12 +20,55 @@
   const locationInput = document.getElementById('siteUserProfileLocationInput');
   const phoneInput = document.getElementById('siteUserProfilePhoneInput');
   const contactSaveBtn = document.getElementById('siteUserProfileContactSave');
-  const headerBtn = document.getElementById('siteUserHeaderBtn');
+  const pageDescEl = document.getElementById('siteUserProfilePageDesc');
   const headerAvatar = document.getElementById('siteHeaderUserAvatar');
   const headerAvatarImg = document.getElementById('siteHeaderUserAvatarImg');
   const headerAvatarInitials = document.getElementById('siteHeaderUserAvatarInitials');
 
-  if (!overlay) return;
+  if (!isPageMode && !overlay) {
+    async function refreshSiteUserProfileUi() {
+      let profile = typeof window.getSiteSessionUser === 'function'
+        ? window.getSiteSessionUser()
+        : null;
+
+      if (profile && !profile.isDemo && profile.email) {
+        try {
+          const params = new URLSearchParams({
+            email: profile.email,
+            entryType: profile.entryType || 'register'
+          });
+          const response = await fetch(`/api/site/register/profile?${params.toString()}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data.user && typeof window.setSiteSessionUser === 'function') {
+              profile = window.setSiteSessionUser(data.user, profile.entryType || 'register');
+            }
+          }
+        } catch {
+          // keep cached profile
+        }
+      }
+
+      window.refreshSiteUserMenu?.(profile);
+      return profile;
+    }
+
+    window.openSiteUserProfile = function openSiteUserProfile() {
+      if (typeof window.isSiteGateUnlocked === 'function' && !window.isSiteGateUnlocked()) {
+        window.showSiteUserGateIfNeeded?.();
+        return;
+      }
+      window.location.href = '/profile.html';
+    };
+    window.closeSiteUserProfile = function closeSiteUserProfile() {};
+    window.refreshSiteUserProfileUi = refreshSiteUserProfileUi;
+
+    window.addEventListener('site-user-session-changed', refreshSiteUserProfileUi);
+    if (typeof window.isSiteGateUnlocked === 'function' && window.isSiteGateUnlocked()) {
+      refreshSiteUserProfileUi();
+    }
+    return;
+  }
 
   const els = {
     avatar: document.getElementById('siteUserProfileAvatar'),
@@ -46,6 +101,17 @@
     });
   }
 
+  function updatePageDescription(profile) {
+    if (!pageDescEl || !profile) return;
+
+    if (profile.isDemo) {
+      pageDescEl.textContent = 'Демо-профиль клиента: данные сохраняются в текущем сеансе браузера. Зарегистрируйтесь, чтобы закрепить профиль за аккаунтом.';
+      return;
+    }
+
+    pageDescEl.textContent = 'Профиль зарегистрированного клиента: контакты, активность и настройки аккаунта на сайте.';
+  }
+
   function renderAvatar(profile) {
     const initials = profile.avatarInitials || 'CL';
     const avatarUrl = profile.avatarUrl || null;
@@ -63,6 +129,7 @@
     if (els.avatarInitials) {
       els.avatarInitials.textContent = initials;
       els.avatarInitials.hidden = hasImage;
+      els.avatarInitials.setAttribute('aria-hidden', hasImage ? 'true' : 'false');
     }
     if (els.avatar) {
       els.avatar.dataset.hasImage = hasImage ? 'true' : 'false';
@@ -99,6 +166,7 @@
 
     renderAvatar(profile);
     renderContactFields(profile);
+    updatePageDescription(profile);
 
     if (els.name) els.name.textContent = profile.name || 'Клиент';
     if (els.email) els.email.textContent = profile.email || '—';
@@ -125,6 +193,7 @@
     }
     if (els.sessions) {
       els.sessions.textContent = String(profile.sessionsCount || 1);
+      els.sessions.title = 'Сколько раз вы заходили на сайт с этого браузера';
     }
   }
 
@@ -161,22 +230,147 @@
     return profile;
   }
 
-  function openProfileOverlay() {
+  function openProfile() {
     if (typeof window.isSiteGateUnlocked === 'function' && !window.isSiteGateUnlocked()) {
       window.showSiteUserGateIfNeeded?.();
       return;
     }
-    refreshSiteUserProfileUi();
-    overlay.hidden = false;
-    document.body.classList.add('site-profile-open');
-    document.body.style.overflow = 'hidden';
+
+    if (isPageMode) {
+      refreshSiteUserProfileUi();
+      return;
+    }
+
+    window.location.href = '/profile.html';
   }
 
   function closeProfileOverlay() {
+    if (isPageMode) return;
+    if (!overlay) return;
     overlay.hidden = true;
     document.body.classList.remove('site-profile-open');
     if (!document.body.classList.contains('site-gate-open') && !document.body.classList.contains('admin-panel-open')) {
       document.body.style.overflow = '';
+    }
+  }
+
+  function cropImageToSquare(dataUrl) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const size = 256;
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Не удалось обработать изображение'));
+          return;
+        }
+
+        const cropSize = Math.min(img.width, img.height);
+        const sx = (img.width - cropSize) / 2;
+        const sy = (img.height - cropSize) / 2;
+
+        ctx.drawImage(img, sx, sy, cropSize, cropSize, 0, 0, size, size);
+        resolve(canvas.toDataURL('image/jpeg', 0.9));
+      };
+      img.onerror = () => reject(new Error('Не удалось прочитать изображение'));
+      img.src = dataUrl;
+    });
+  }
+
+  function readImageFile(file) {
+    return new Promise((resolve, reject) => {
+      if (!file || !file.type.startsWith('image/')) {
+        reject(new Error('Выберите файл изображения'));
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        reject(new Error('Файл слишком большой. Максимум 5 МБ.'));
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const cropped = await cropImageToSquare(String(reader.result || ''));
+          resolve(cropped);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function saveAvatar(avatarData) {
+    const profile = typeof window.getSiteSessionUser === 'function'
+      ? window.getSiteSessionUser()
+      : null;
+
+    if (!profile) throw new Error('Сессия не найдена');
+
+    if (profile.isDemo) {
+      const updated = typeof window.updateSiteSessionAvatar === 'function'
+        ? window.updateSiteSessionAvatar(avatarData)
+        : null;
+      if (updated) renderProfile(updated);
+      showProfileToast(avatarData ? AVATAR_UPDATED_MESSAGE : AVATAR_REMOVED_MESSAGE, 'success');
+      window.refreshSiteUserMenu?.(updated);
+      return updated;
+    }
+
+    if (!profile.email) throw new Error('Email пользователя не найден');
+
+    const response = await fetch('/api/site/register/profile/avatar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: profile.email,
+        avatarData: avatarData ?? null,
+        entryType: profile.entryType || 'register'
+      })
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Не удалось сохранить аватар');
+
+    const updated = typeof window.setSiteSessionUser === 'function'
+      ? window.setSiteSessionUser(data.user, profile.entryType || 'register')
+      : data.user;
+
+    if (updated) renderProfile(updated);
+    showProfileToast(
+      data.message || (avatarData ? AVATAR_UPDATED_MESSAGE : AVATAR_REMOVED_MESSAGE),
+      'success'
+    );
+    window.refreshSiteUserMenu?.(updated);
+    return updated;
+  }
+
+  async function removeAvatar() {
+    const profile = typeof window.getSiteSessionUser === 'function'
+      ? window.getSiteSessionUser()
+      : null;
+
+    if (!profile?.avatarUrl) return;
+
+    if (removeAvatarBtn) {
+      removeAvatarBtn.disabled = true;
+      removeAvatarBtn.dataset.loading = 'true';
+    }
+
+    try {
+      await saveAvatar(null);
+    } catch (error) {
+      showProfileToast(error.message || 'Не удалось удалить фото', 'error');
+    } finally {
+      if (removeAvatarBtn) {
+        removeAvatarBtn.disabled = false;
+        delete removeAvatarBtn.dataset.loading;
+      }
     }
   }
 
@@ -194,7 +388,7 @@
         ? window.updateSiteSessionProfile({ location: normalizedLocation, phone: normalizedPhone })
         : null;
       if (updated) renderProfile(updated);
-      window.showAdminToast?.('Контактная информация сохранена', 'success');
+      showProfileToast(CONTACT_SAVED_MESSAGE, 'success');
       return updated;
     }
 
@@ -215,14 +409,54 @@
       ? window.setSiteSessionUser(data.user, profile.entryType || 'register')
       : data.user;
     if (updated) renderProfile(updated);
-    window.showAdminToast?.(data.message || 'Контактная информация сохранена', 'success');
+    showProfileToast(data.message || CONTACT_SAVED_MESSAGE, 'success');
     return updated;
   }
 
+  async function handleAvatarSelected(event) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    if (changeAvatarBtn) {
+      changeAvatarBtn.disabled = true;
+      changeAvatarBtn.dataset.loading = 'true';
+    }
+
+    try {
+      const avatarData = await readImageFile(file);
+      await saveAvatar(avatarData);
+    } catch (error) {
+      showProfileToast(error.message || 'Не удалось загрузить фото', 'error');
+    } finally {
+      if (changeAvatarBtn) {
+        changeAvatarBtn.disabled = false;
+        delete changeAvatarBtn.dataset.loading;
+      }
+    }
+  }
+
+  function initPageAccess() {
+    if (!isPageMode) return true;
+
+    if (typeof window.isSiteGateUnlocked === 'function' && !window.isSiteGateUnlocked()) {
+      window.location.replace('/');
+      return false;
+    }
+
+    window.ensureSiteClientSession?.();
+    return true;
+  }
+
   closeBtn?.addEventListener('click', closeProfileOverlay);
-  overlay.addEventListener('click', (event) => {
+  overlay?.addEventListener('click', (event) => {
     if (event.target === overlay) closeProfileOverlay();
   });
+
+  changeAvatarBtn?.addEventListener('click', () => avatarInput?.click());
+  removeAvatarBtn?.addEventListener('click', removeAvatar);
+  els.avatar?.addEventListener('click', () => avatarInput?.click());
+  avatarInput?.addEventListener('change', handleAvatarSelected);
 
   contactForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -233,7 +467,7 @@
     try {
       await saveContactInfo(locationInput?.value || '', phoneInput?.value || '');
     } catch (error) {
-      window.showAdminToast?.(error.message || 'Не удалось сохранить контакты', 'error');
+      showProfileToast(error.message || 'Не удалось сохранить контакты', 'error');
     } finally {
       if (contactSaveBtn) {
         contactSaveBtn.disabled = false;
@@ -242,13 +476,13 @@
     }
   });
 
-  window.openSiteUserProfile = openProfileOverlay;
+  window.openSiteUserProfile = openProfile;
   window.closeSiteUserProfile = closeProfileOverlay;
   window.refreshSiteUserProfileUi = refreshSiteUserProfileUi;
 
   window.addEventListener('site-user-session-changed', refreshSiteUserProfileUi);
 
-  if (typeof window.isSiteGateUnlocked === 'function' && window.isSiteGateUnlocked()) {
+  if (initPageAccess()) {
     refreshSiteUserProfileUi();
   }
 })();

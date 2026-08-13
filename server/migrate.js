@@ -116,6 +116,14 @@ async function ensureProductTables(pool) {
     if (ratingColumn[0]?.Null === 'NO') {
       await pool.query('ALTER TABLE work_reviews MODIFY rating TINYINT NULL');
     }
+    if (!(await columnExists(pool, 'work_reviews', 'author_avatar_url'))) {
+      await pool.query('ALTER TABLE work_reviews ADD COLUMN author_avatar_url MEDIUMTEXT NULL');
+      console.log('Колонка work_reviews.author_avatar_url добавлена');
+    }
+    if (!(await columnExists(pool, 'work_reviews', 'author_avatar_initials'))) {
+      await pool.query('ALTER TABLE work_reviews ADD COLUMN author_avatar_initials VARCHAR(8) NULL');
+      console.log('Колонка work_reviews.author_avatar_initials добавлена');
+    }
   }
 
   if (!(await tableExists(pool, 'work_orders'))) {
@@ -128,6 +136,9 @@ async function ensureProductTables(pool) {
         phone VARCHAR(32),
         quantity INT NOT NULL DEFAULT 1,
         message TEXT,
+        is_demo TINYINT(1) NOT NULL DEFAULT 0,
+        site_user_id INT NULL,
+        client_scope VARCHAR(255) NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT fk_orders_work
           FOREIGN KEY (work_id) REFERENCES works(id)
@@ -136,6 +147,40 @@ async function ensureProductTables(pool) {
     `);
     await pool.query('CREATE INDEX idx_work_orders_work_id ON work_orders(work_id)');
     console.log('Таблица work_orders создана');
+  }
+}
+
+async function ensureOrderScopeColumns(pool) {
+  for (const table of ['work_orders', 'banner_orders']) {
+    if (!(await tableExists(pool, table))) continue;
+
+    if (!(await columnExists(pool, table, 'is_demo'))) {
+      await pool.query(`ALTER TABLE ${table} ADD COLUMN is_demo TINYINT(1) NOT NULL DEFAULT 0`);
+      console.log(`Колонка ${table}.is_demo добавлена`);
+    }
+
+    if (!(await columnExists(pool, table, 'site_user_id'))) {
+      await pool.query(`ALTER TABLE ${table} ADD COLUMN site_user_id INT NULL`);
+      console.log(`Колонка ${table}.site_user_id добавлена`);
+    }
+
+    if (!(await columnExists(pool, table, 'client_scope'))) {
+      await pool.query(`ALTER TABLE ${table} ADD COLUMN client_scope VARCHAR(255) NULL`);
+      console.log(`Колонка ${table}.client_scope добавлена`);
+    }
+  }
+}
+
+async function backfillDemoOrders(pool) {
+  for (const table of ['work_orders', 'banner_orders']) {
+    if (!(await tableExists(pool, table))) continue;
+
+    await pool.query(
+      `UPDATE ${table}
+       SET is_demo = 1,
+           client_scope = 'demo:shared'
+       WHERE site_user_id IS NULL`
+    );
   }
 }
 
@@ -326,6 +371,20 @@ async function runMigrations(pool) {
   await ensureClothingCatalogPromoTable(pool);
   const { ensureBannerOrdersTable } = require('./banner-orders');
   await ensureBannerOrdersTable(pool);
+  await ensureOrderScopeColumns(pool);
+
+  if (!(await hasMigration(pool, '2026-site-demo-orders-backfill-v1'))) {
+    await backfillDemoOrders(pool);
+    await markMigration(pool, '2026-site-demo-orders-backfill-v1');
+    console.log('Demo-заказы помечены и перенесены в demo:shared');
+  }
+
+  if (!(await hasMigration(pool, '2026-site-demo-orders-backfill-v2'))) {
+    await backfillDemoOrders(pool);
+    await markMigration(pool, '2026-site-demo-orders-backfill-v2');
+    console.log('Все заказы без site_user_id помечены как demo');
+  }
+
   const { ensureBannerWorkLikesTable } = require('./banner-likes');
   await ensureBannerWorkLikesTable(pool);
 

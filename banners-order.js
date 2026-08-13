@@ -23,6 +23,7 @@ function initBannerOrderForm() {
   if (!form) return;
 
   applyCategoryFromUrl();
+  window.applySiteCustomerToForms?.(form);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -48,13 +49,13 @@ function initBannerOrderForm() {
       const response = await fetch('/api/banner-orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: JSON.stringify(window.appendSiteOrderFields({
           customer_name: formData.get('customer_name'),
           email: formData.get('email'),
           phone: formData.get('phone'),
           category: category || null,
           message: formData.get('message')
-        })
+        }))
       });
 
       const payload = await response.json();

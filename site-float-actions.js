@@ -51,6 +51,7 @@
   window.addEventListener('site-cart-changed', updateBadge);
   window.addEventListener('site-user-session-changed', () => {
     mount();
+    updateBadge();
   });
 
   document.addEventListener('DOMContentLoaded', mount);

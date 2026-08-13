@@ -5,7 +5,6 @@
   const menuNotice = document.getElementById('siteUserMenuNotice');
   const menuNoticeClose = document.getElementById('siteUserMenuNoticeClose');
   const menuNoticeRegister = document.getElementById('siteUserMenuNoticeRegister');
-  const menuProfile = document.getElementById('siteUserMenuProfile');
   const menuRegisterBtn = document.getElementById('siteUserMenuRegister');
   const menuLoginBtn = document.getElementById('siteUserMenuLogin');
   const menuLogoutBtn = document.getElementById('siteUserMenuLogout');
@@ -80,6 +79,27 @@
     }
     if (menuEls.avatar) {
       menuEls.avatar.dataset.hasImage = hasImage ? 'true' : 'false';
+    }
+
+    const headerAvatar = document.getElementById('siteHeaderUserAvatar');
+    const headerAvatarImg = document.getElementById('siteHeaderUserAvatarImg');
+    const headerAvatarInitials = document.getElementById('siteHeaderUserAvatarInitials');
+
+    if (headerAvatarImg) {
+      if (hasImage) {
+        headerAvatarImg.src = avatarUrl;
+        headerAvatarImg.hidden = false;
+      } else {
+        headerAvatarImg.removeAttribute('src');
+        headerAvatarImg.hidden = true;
+      }
+    }
+    if (headerAvatarInitials) {
+      headerAvatarInitials.textContent = initials;
+      headerAvatarInitials.hidden = hasImage;
+    }
+    if (headerAvatar) {
+      headerAvatar.dataset.hasImage = hasImage ? 'true' : 'false';
     }
   }
 
@@ -196,11 +216,6 @@
     }, 0);
   }
 
-  function openProfileFlow() {
-    closeMenu();
-    window.openSiteUserProfile?.();
-  }
-
   function logoutFlow() {
     closeMenu();
     if (typeof window.logoutSiteUser === 'function') {
@@ -219,9 +234,8 @@
     toggleMenu();
   });
 
-  menuProfile?.addEventListener('click', (event) => {
-    event.preventDefault();
-    openProfileFlow();
+  document.getElementById('siteUserMenuProfile')?.addEventListener('click', () => {
+    closeMenu();
   });
 
   menuRegisterBtn?.addEventListener('click', (event) => {
@@ -280,6 +294,7 @@
 
   window.addEventListener('site-user-session-changed', () => {
     renderMenu(getProfile());
+    updateCartBadge();
     updateFloatingNotice();
   });
 

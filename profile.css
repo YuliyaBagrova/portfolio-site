@@ -1,0 +1,71 @@
+.site-profile-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  font-family: var(--home-font-body);
+}
+
+.profile-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.profile-main {
+  flex: 1;
+}
+
+.profile-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px 120px;
+}
+
+.profile-page-intro {
+  margin-bottom: 24px;
+}
+
+.profile-page-title {
+  margin: 0 0 8px;
+  font-family: var(--home-font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+}
+
+.profile-page-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.site-user-profile-page.admin-profile-page {
+  gap: 20px;
+}
+
+.site-user-profile-page .admin-profile-hero,
+.site-user-profile-page .admin-profile-grid {
+  margin-top: 0;
+}
+
+.site-user-profile-page .admin-profile-hero {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.site-user-profile-page .admin-profile-card {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 720px) {
+  .profile-content {
+    padding: 24px 16px 100px;
+  }
+}

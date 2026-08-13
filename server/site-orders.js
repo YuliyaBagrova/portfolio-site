@@ -1,4 +1,5 @@
 const { serializeBannerOrder } = require('./banner-orders');
+const { parseOrderScopeQuery, buildSiteOrdersWhere, filterOrdersForScope } = require('./order-scope');
 
 const SECTION_LABELS = {
   supplements: 'Фитнес-индустрия',
@@ -62,35 +63,46 @@ function serializeWorkOrder(row) {
     image: imageData?.image || null,
     gradient: row.gradient || '',
     placeholder_text: row.placeholder_text || row.work_title || '',
-    created_at: row.created_at
+    created_at: row.created_at,
+    is_demo: Boolean(row.is_demo),
+    site_user_id: row.site_user_id ?? null,
+    client_scope: row.client_scope || null
   };
 }
 
 function registerSiteOrderRoutes(app, getPool) {
-  app.get('/api/site/orders', async (_req, res) => {
+  app.get('/api/site/orders', async (req, res) => {
     try {
+      const scope = parseOrderScopeQuery(req.query);
+      const where = buildSiteOrdersWhere(scope);
       const pool = getPool();
 
       const [workRows] = await pool.query(
         `SELECT o.id, o.work_id, o.customer_name, o.email, o.phone,
-                o.quantity, o.message, o.created_at,
+                o.quantity, o.message, o.created_at, o.is_demo, o.site_user_id,
+                o.client_scope,
                 w.title AS work_title, w.section_id, w.image_data,
                 w.gradient, w.placeholder_text
          FROM work_orders o
          JOIN works w ON w.id = o.work_id
-         ORDER BY o.created_at DESC, o.id DESC`
+         WHERE ${where.clause}
+         ORDER BY o.created_at DESC, o.id DESC`,
+        where.params
       );
 
       const [bannerRows] = await pool.query(
-        `SELECT id, customer_name, email, phone, category, message, created_at
+        `SELECT id, customer_name, email, phone, category, message, created_at,
+                is_demo, site_user_id, client_scope
          FROM banner_orders
-         ORDER BY created_at DESC, id DESC`
+         WHERE ${where.clause}
+         ORDER BY created_at DESC, id DESC`,
+        where.params
       );
 
-      const orders = [
+      const orders = filterOrdersForScope([
         ...workRows.map(serializeWorkOrder),
         ...bannerRows.map(serializeBannerOrder)
-      ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      ], scope).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       res.json(orders);
     } catch (error) {

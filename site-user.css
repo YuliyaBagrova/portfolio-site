@@ -16,25 +16,22 @@
   display: none;
 }
 
-body.site-gate-open .app > :not(.site-user-overlay):not(.site-user-profile-overlay) {
+body.site-gate-open .app > :not(.site-user-overlay) {
   pointer-events: none;
   user-select: none;
 }
 
 body.site-gate-open .site-user-overlay,
-body.site-gate-open .site-user-profile-overlay,
 html.site-gate-pending .site-user-overlay {
   pointer-events: auto;
 }
 
-.site-user-overlay,
-.site-user-profile-overlay {
+.site-user-overlay {
   pointer-events: auto;
 }
 
 .site-user-overlay .admin-gate-shell,
-.site-user-overlay .admin-gate-link,
-.site-user-profile-overlay .site-user-profile-shell {
+.site-user-overlay .admin-gate-link {
   pointer-events: auto;
 }
 
@@ -54,7 +51,7 @@ html.site-gate-pending body {
   overflow: hidden;
 }
 
-html.site-gate-pending .app > :not(.site-user-overlay):not(.site-user-profile-overlay) {
+html.site-gate-pending .app > :not(.site-user-overlay) {
   pointer-events: none;
   filter: blur(8px);
 }
@@ -63,62 +60,8 @@ html.site-gate-pending .site-float-actions {
   display: none;
 }
 
-.site-user-profile-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 195;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(8px);
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  overflow-y: auto;
-}
-
-.site-user-profile-overlay[hidden] {
+body.site-profile-open .site-float-actions {
   display: none;
-}
-
-.site-user-profile-shell {
-  width: 100%;
-  max-width: 920px;
-  max-height: min(92vh, 860px);
-  display: flex;
-  flex-direction: column;
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
-  animation: adminModalIn 0.32s ease;
-}
-
-.site-user-profile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(15, 17, 23, 0.92);
-}
-
-.site-user-profile-header h2 {
-  margin: 0;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.site-user-profile-main {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.site-user-profile-page .admin-profile-hero,
-.site-user-profile-page .admin-profile-grid {
-  margin-top: 0;
 }
 
 .site-header-user-avatar {
@@ -152,7 +95,7 @@ html.site-gate-pending .site-float-actions {
   height: var(--header-profile-size);
   padding: 0;
   overflow: hidden;
-  align-self: center;
+  flex-shrink: 0;
 }
 
 .site-user-header-btn.is-menu-open {
@@ -543,14 +486,25 @@ html.site-gate-pending .site-float-actions {
   min-width: 160px;
 }
 
+#siteUserLogin .admin-form-actions--login,
+#siteUserRegister .admin-form-actions--register {
+  margin-bottom: 0;
+}
+
+#siteUserLogin .admin-auth-switch,
+#siteUserRegister .admin-auth-switch {
+  margin: 8px 0 0;
+  padding-top: 0;
+  border-top: none;
+}
+
 body.site-gate-open .site-user-register-notice,
 body.site-gate-open .site-user-menu {
   display: none !important;
 }
 
 @media (max-width: 640px) {
-  .site-user-overlay,
-  .site-user-profile-overlay {
+  .site-user-overlay {
     padding: 12px;
   }
 

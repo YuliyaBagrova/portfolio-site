@@ -87,8 +87,11 @@
         <p class="clothing-product-reviews-count" id="clothingReviewsCount"></p>
       </div>
 
-      <form class="clothing-product-form clothing-product-review-form" id="clothingReviewForm">
-        <h3>Оставить отзыв</h3>
+      <form class="clothing-product-form clothing-product-review-form" id="clothingReviewForm" data-review-form>
+        <div class="clothing-product-review-form-head">
+          <span class="clothing-product-review-avatar site-review-avatar" data-review-avatar aria-hidden="true">?</span>
+          <h3>Оставить отзыв</h3>
+        </div>
         <label class="clothing-product-field">
           <span>Ваша оценка</span>
           <div class="clothing-star-picker" id="clothingStarPicker" role="radiogroup" aria-label="Оценка от 1 до 5">
@@ -117,6 +120,8 @@
     </section>
   </main>
 
+  <script src="site-user-session.js"></script>
+  <script src="site-review-avatar.js"></script>
   <script src="site-cart.js"></script>
   <script src="site-orders.js"></script>
   <script src="site-float-actions.js"></script>

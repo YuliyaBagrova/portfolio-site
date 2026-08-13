@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>О пользователе — Портфолио</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="site-float-actions.css">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body class="site-profile-page">
+  <div class="app profile-app">
+    <header class="site-header profile-page-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <a href="/" class="logo">
+            <span class="logo-top">Порт</span><span class="logo-bottom">фолио</span>
+          </a>
+        </div>
+        <div class="header-actions">
+          <a href="/" class="btn btn-ghost profile-page-back">← На главную</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="profile-main">
+      <div class="profile-content content" id="siteUserProfilePage">
+        <header class="profile-page-intro">
+          <h1 class="profile-page-title">О пользователе</h1>
+          <p class="profile-page-desc" id="siteUserProfilePageDesc">Профиль клиента, контактные данные и активность на сайте.</p>
+        </header>
+
+        <div class="admin-profile-page site-user-profile-page">
+          <div class="admin-profile-hero card">
+            <div class="admin-profile-hero-main">
+              <div class="admin-profile-avatar-wrap">
+                <div class="admin-profile-avatar" id="siteUserProfileAvatar" aria-hidden="true">
+                  <img class="admin-profile-avatar-img" id="siteUserProfileAvatarImg" alt="" hidden>
+                  <span class="admin-profile-avatar-initials" id="siteUserProfileAvatarInitials">CL</span>
+                </div>
+                <div class="admin-profile-avatar-actions">
+                  <button type="button" class="btn btn-ghost admin-profile-change-avatar" id="siteUserProfileChangeAvatar">Изменить фото</button>
+                  <button type="button" class="btn btn-ghost admin-profile-remove-avatar" id="siteUserProfileRemoveAvatar" hidden>Удалить фото</button>
+                </div>
+                <input type="file" id="siteUserProfileAvatarInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+              </div>
+              <div class="admin-profile-hero-info">
+                <div class="admin-profile-hero-top">
+                  <h2 class="admin-profile-name" id="siteUserProfileName">Demo</h2>
+                  <span class="admin-profile-badge" id="siteUserProfileBadge" data-variant="demo">Demo</span>
+                </div>
+                <p class="admin-profile-email" id="siteUserProfileEmail">demo@portfolio.local</p>
+                <p class="admin-profile-bio" id="siteUserProfileBio">—</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-profile-grid">
+            <div class="card admin-profile-card">
+              <div class="card-header">
+                <h3>Основная информация</h3>
+              </div>
+              <dl class="admin-profile-details">
+                <div class="admin-profile-detail">
+                  <dt>Роль</dt>
+                  <dd id="siteUserProfileRole">Клиент</dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Способ входа</dt>
+                  <dd id="siteUserProfileEntry">—</dd>
+                </div>
+              </dl>
+              <form class="admin-profile-contact-form admin-profile-contact-form--inline" id="siteUserProfileContactForm">
+                <label class="admin-field">
+                  <span>Локация <small class="admin-profile-optional">(необязательно)</small></span>
+                  <input type="text" id="siteUserProfileLocationInput" name="location" placeholder="Например: Москва, Россия" maxlength="128" autocomplete="address-level2">
+                </label>
+                <label class="admin-field">
+                  <span>Телефон <small class="admin-profile-optional">(необязательно)</small></span>
+                  <input type="tel" id="siteUserProfilePhoneInput" name="phone" placeholder="+7 (999) 000-00-00" maxlength="32" autocomplete="tel">
+                </label>
+                <div class="admin-profile-contact-actions">
+                  <button type="submit" class="btn btn-primary" id="siteUserProfileContactSave">Сохранить контакты</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card admin-profile-card">
+              <div class="card-header">
+                <h3>Активность и безопасность</h3>
+              </div>
+              <dl class="admin-profile-details">
+                <div class="admin-profile-detail">
+                  <dt>ID пользователя</dt>
+                  <dd id="siteUserProfileUserId">—</dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Дата регистрации</dt>
+                  <dd id="siteUserProfileRegistered">—</dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Последний вход</dt>
+                  <dd id="siteUserProfileLastLogin">—</dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Сессий в браузере</dt>
+                  <dd id="siteUserProfileSessions" title="Сколько раз вы заходили на сайт с этого браузера">—</dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Статус</dt>
+                  <dd><span class="admin-profile-status" id="siteUserProfileStatus" data-variant="demo">—</span></dd>
+                </div>
+                <div class="admin-profile-detail">
+                  <dt>Подтверждение email</dt>
+                  <dd id="siteUserProfileEmailVerified">—</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="admin-toast" id="adminToast" hidden role="status" aria-live="polite">
+    <div class="admin-toast-card">
+      <span class="admin-toast-icon" aria-hidden="true"></span>
+      <div class="admin-toast-content">
+        <span class="admin-toast-label">Готово</span>
+        <p class="admin-toast-message"></p>
+      </div>
+      <button type="button" class="admin-toast-close" aria-label="Закрыть уведомление">✕</button>
+      <span class="admin-toast-progress" aria-hidden="true"></span>
+    </div>
+  </div>
+
+  <script src="site-user-session.js"></script>
+  <script src="admin-toast.js"></script>
+  <script src="site-user-profile.js"></script>
+  <script src="site-float-actions.js"></script>
+</body>
+</html>

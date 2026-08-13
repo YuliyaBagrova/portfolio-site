@@ -9,6 +9,7 @@ const BANNER_CATEGORIES = new Set(['preview', 'illustrations', 'logos', 'picture
 const CLOTHING_PROMO_TYPES = new Set(['sale', 'new', 'limited', 'hot']);
 const { logClothingActivity } = require('./clothing-activity');
 const { enrichBannerWorksWithLikes } = require('./banner-likes');
+const { parseOrderScopeBody } = require('./order-scope');
 
 function createWorksStorage(rootDir) {
   const uploadsDir = path.join(rootDir, 'uploads', 'works');
@@ -198,6 +199,39 @@ function createWorksStorage(rootDir) {
     };
   }
 
+  function deriveReviewInitials(authorName) {
+    const trimmed = String(authorName || '').trim();
+    if (!trimmed) return '?';
+    const parts = trimmed.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return trimmed.slice(0, 2).toUpperCase();
+  }
+
+  function normalizeReviewAvatarFields(body, authorName) {
+    let avatarUrl = body?.author_avatar_url;
+    if (avatarUrl != null && typeof avatarUrl === 'string') {
+      avatarUrl = avatarUrl.trim() || null;
+      if (avatarUrl && avatarUrl.length > 500000) avatarUrl = null;
+    } else {
+      avatarUrl = null;
+    }
+
+    let avatarInitials = body?.author_avatar_initials;
+    if (avatarInitials != null && typeof avatarInitials === 'string') {
+      avatarInitials = avatarInitials.trim().slice(0, 8).toUpperCase() || null;
+    } else {
+      avatarInitials = null;
+    }
+
+    if (!avatarInitials) {
+      avatarInitials = deriveReviewInitials(authorName);
+    }
+
+    return { avatarUrl, avatarInitials };
+  }
+
   function serializeReview(row) {
     return {
       id: row.id,
@@ -205,6 +239,8 @@ function createWorksStorage(rootDir) {
       work_title: row.work_title || null,
       section_id: row.section_id || null,
       author_name: row.author_name,
+      author_avatar_url: row.author_avatar_url || null,
+      author_avatar_initials: row.author_avatar_initials || null,
       rating: row.rating != null && row.rating !== '' ? Number(row.rating) : null,
       review_text: row.review_text || '',
       admin_reply: row.admin_reply || '',
@@ -227,12 +263,15 @@ function createWorksStorage(rootDir) {
       phone: row.phone || '',
       quantity: Number(row.quantity),
       message: row.message || '',
-      created_at: row.created_at
+      created_at: row.created_at,
+      is_demo: Boolean(row.is_demo),
+      site_user_id: row.site_user_id ?? null
     };
   }
 
   const REVIEW_SELECT = `
-    id, work_id, author_name, rating, review_text, admin_reply, admin_reply_at, created_at
+    id, work_id, author_name, author_avatar_url, author_avatar_initials,
+    rating, review_text, admin_reply, admin_reply_at, created_at
   `;
 
   const WORKS_SELECT = `
@@ -424,12 +463,14 @@ function createWorksStorage(rootDir) {
     app.post('/api/works/:id/reviews', async (req, res) => {
       const workId = Number(req.params.id);
       const { author_name: authorName, rating, review_text: reviewText } = req.body || {};
+      const trimmedAuthorName = authorName ? String(authorName).trim() : '';
+      const { avatarUrl, avatarInitials } = normalizeReviewAvatarFields(req.body || {}, trimmedAuthorName);
 
       if (!Number.isInteger(workId) || workId <= 0) {
         return res.status(400).json({ error: 'Неверный ID товара' });
       }
 
-      if (!authorName || !String(authorName).trim()) {
+      if (!trimmedAuthorName) {
         return res.status(400).json({ error: 'Укажите имя' });
       }
 
@@ -456,11 +497,13 @@ function createWorksStorage(rootDir) {
         }
 
         const [result] = await pool.query(
-          `INSERT INTO work_reviews (work_id, author_name, rating, review_text)
-           VALUES (?, ?, ?, ?)`,
+          `INSERT INTO work_reviews (work_id, author_name, author_avatar_url, author_avatar_initials, rating, review_text)
+           VALUES (?, ?, ?, ?, ?, ?)`,
           [
             workId,
-            String(authorName).trim(),
+            trimmedAuthorName,
+            avatarUrl,
+            avatarInitials,
             parsedRating,
             reviewText ? String(reviewText).trim() : null
           ]
@@ -515,16 +558,20 @@ function createWorksStorage(rootDir) {
           return res.status(404).json({ error: 'Товар не найден' });
         }
 
+        const scope = parseOrderScopeBody(req.body);
         const [result] = await pool.query(
-          `INSERT INTO work_orders (work_id, customer_name, email, phone, quantity, message)
-           VALUES (?, ?, ?, ?, ?, ?)`,
+          `INSERT INTO work_orders (work_id, customer_name, email, phone, quantity, message, is_demo, site_user_id, client_scope)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             workId,
             String(customerName).trim(),
             String(email).trim(),
             phone ? String(phone).trim() : null,
             parsedQuantity,
-            message ? String(message).trim() : null
+            message ? String(message).trim() : null,
+            scope.isDemo ? 1 : 0,
+            scope.siteUserId,
+            scope.clientScope || null
           ]
         );
 
@@ -561,7 +608,7 @@ function createWorksStorage(rootDir) {
         const pool = getPool();
         const [rows] = await pool.query(
           `SELECT o.id, o.work_id, o.customer_name, o.email, o.phone,
-                  o.quantity, o.message, o.created_at,
+                  o.quantity, o.message, o.created_at, o.is_demo, o.site_user_id,
                   w.title AS work_title, w.section_id
            FROM work_orders o
            JOIN works w ON w.id = o.work_id

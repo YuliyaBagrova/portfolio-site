@@ -77,8 +77,11 @@
         <p class="product-reviews-count" id="reviewsCount"></p>
       </div>
 
-      <form class="product-form product-review-form" id="reviewForm">
-        <h3>Оставить отзыв</h3>
+      <form class="product-form product-review-form" id="reviewForm" data-review-form>
+        <div class="product-review-form-head">
+          <span class="product-review-avatar site-review-avatar" data-review-avatar aria-hidden="true">?</span>
+          <h3>Оставить отзыв</h3>
+        </div>
         <label class="product-field">
           <span>Ваша оценка</span>
           <div class="star-picker" id="starPicker" role="radiogroup" aria-label="Оценка от 1 до 5">
@@ -107,6 +110,8 @@
     </section>
   </main>
 
+  <script src="site-user-session.js"></script>
+  <script src="site-review-avatar.js"></script>
   <script src="site-cart.js"></script>
   <script src="site-orders.js"></script>
   <script src="site-float-actions.js"></script>

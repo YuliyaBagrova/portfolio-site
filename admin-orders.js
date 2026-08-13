@@ -76,11 +76,15 @@
   }
 
   function renderOrderListStatus(order) {
+    const demoBadge = order.is_demo
+      ? '<span class="admin-orders-item-status is-demo">Demo</span> · '
+      : '';
+
     if (isOrderNew(order)) {
-      return '<span class="admin-orders-item-status is-new">Новый</span> · ';
+      return `${demoBadge}<span class="admin-orders-item-status is-new">Новый</span> · `;
     }
 
-    return '';
+    return demoBadge;
   }
 
   function setLoading(state) {
@@ -304,7 +308,7 @@
     detailContent.hidden = false;
     detailContent.innerHTML = `
       <div class="admin-orders-detail-meta">
-        <span class="admin-orders-detail-id">${isBannerOrder ? 'Заявка' : 'Заказ'} #${order.id}</span>
+        <span class="admin-orders-detail-id">${isBannerOrder ? 'Заявка' : 'Заказ'} #${order.id}${order.is_demo ? ' · Demo' : ''}</span>
         <time datetime="${order.created_at}">${formatDate(order.created_at)}</time>
       </div>
 

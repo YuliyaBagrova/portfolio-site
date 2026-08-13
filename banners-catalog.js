@@ -91,7 +91,50 @@ function getLayoutClass(width, height) {
 }
 
 function getCommentAuthorName() {
+  const profile = typeof window.getSiteSessionUser === 'function' ? window.getSiteSessionUser() : null;
+  if (profile && !profile.isDemo && profile.name) {
+    return profile.name;
+  }
   return localStorage.getItem(COMMENT_NAME_STORAGE) || '';
+}
+
+function isRegisteredSiteCommentAuthor() {
+  const profile = typeof window.getSiteSessionUser === 'function' ? window.getSiteSessionUser() : null;
+  if (!profile || profile.isDemo) return false;
+  return typeof window.isRealSiteUser === 'function' ? window.isRealSiteUser(profile) : Boolean(profile.email);
+}
+
+function getRegisteredCommentAuthorName(profile) {
+  if (!profile) return '';
+  const name = String(profile.name || '').trim();
+  if (name) return name;
+  const email = String(profile.email || '').trim();
+  if (email.includes('@')) return email.split('@')[0];
+  return 'Клиент';
+}
+
+function applyCommentAuthorFieldState() {
+  if (!bannersViewerCommentName) return;
+
+  const profile = typeof window.getSiteSessionUser === 'function' ? window.getSiteSessionUser() : null;
+  const isRegistered = isRegisteredSiteCommentAuthor();
+
+  if (isRegistered) {
+    bannersViewerCommentName.value = getRegisteredCommentAuthorName(profile);
+    bannersViewerCommentName.readOnly = true;
+    bannersViewerCommentName.classList.add('is-locked');
+    bannersViewerCommentName.setAttribute('aria-readonly', 'true');
+    bannersViewerCommentName.title = 'Имя берётся из профиля зарегистрированного клиента';
+    return;
+  }
+
+  bannersViewerCommentName.readOnly = false;
+  bannersViewerCommentName.classList.remove('is-locked');
+  bannersViewerCommentName.removeAttribute('aria-readonly');
+  bannersViewerCommentName.removeAttribute('title');
+  if (!bannersViewerCommentName.value.trim()) {
+    bannersViewerCommentName.value = getCommentAuthorName();
+  }
 }
 
 function saveCommentAuthorName(name) {
@@ -154,7 +197,12 @@ function updateCommentComposeState() {
   const name = bannersViewerCommentName?.value.trim() || '';
   const text = bannersViewerCommentText?.value.trim() || '';
   if (bannersViewerCommentAvatar) {
-    bannersViewerCommentAvatar.textContent = getAvatarInitial(name);
+    const payload = window.getSiteReviewAvatarPayload?.(name) || {};
+    window.applySiteReviewAvatarToElement?.(bannersViewerCommentAvatar, {
+      avatarUrl: payload.author_avatar_url,
+      initials: payload.author_avatar_initials,
+      name
+    });
   }
   if (bannersViewerCommentSend) {
     bannersViewerCommentSend.disabled = !(name && text);
@@ -166,9 +214,7 @@ function resetCommentCompose() {
     bannersViewerCommentText.value = '';
     bannersViewerCommentText.style.height = 'auto';
   }
-  if (bannersViewerCommentName) {
-    bannersViewerCommentName.value = getCommentAuthorName();
-  }
+  applyCommentAuthorFieldState();
   setCommentStatus('');
   updateCommentComposeState();
 }
@@ -200,7 +246,8 @@ function renderViewerComments(comments) {
 
   bannersViewerCommentsList.querySelectorAll('.banners-viewer-comment-item').forEach((item) => item.remove());
   bannersViewerCommentsList.insertAdjacentHTML('beforeend', comments.map((comment) => {
-    const initial = getAvatarInitial(comment.author_name);
+    const avatarHtml = window.renderSiteReviewAvatarHtml?.(comment, 'banners-viewer-comment-avatar site-review-avatar')
+      || `<span class="banners-viewer-comment-avatar" aria-hidden="true">${escapeHtml(getAvatarInitial(comment.author_name))}</span>`;
     const timeLabel = formatCommentTime(comment.created_at);
     const replyBlock = comment.admin_reply
       ? `
@@ -213,7 +260,7 @@ function renderViewerComments(comments) {
 
     return `
       <article class="banners-viewer-comment-item">
-        <span class="banners-viewer-comment-avatar" aria-hidden="true">${escapeHtml(initial)}</span>
+        ${avatarHtml}
         <div class="banners-viewer-comment-bubble">
           <div class="banners-viewer-comment-meta">
             <strong class="banners-viewer-comment-author">${escapeHtml(comment.author_name)}</strong>
@@ -246,7 +293,10 @@ async function loadViewerComments(workId) {
 }
 
 async function submitViewerComment(workId) {
-  const authorName = bannersViewerCommentName?.value.trim() || '';
+  const profile = typeof window.getSiteSessionUser === 'function' ? window.getSiteSessionUser() : null;
+  const authorName = isRegisteredSiteCommentAuthor()
+    ? getRegisteredCommentAuthorName(profile)
+    : (bannersViewerCommentName?.value.trim() || '');
   const reviewText = bannersViewerCommentText?.value.trim() || '';
 
   if (!authorName || !reviewText) {
@@ -261,7 +311,10 @@ async function submitViewerComment(workId) {
     const response = await fetch(`/api/works/${workId}/reviews`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+      body: JSON.stringify(window.appendSiteReviewFields?.({
+        author_name: authorName,
+        review_text: reviewText
+      }) || {
         author_name: authorName,
         review_text: reviewText
       })
@@ -270,7 +323,9 @@ async function submitViewerComment(workId) {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || 'Не удалось отправить отзыв');
 
-    saveCommentAuthorName(authorName);
+    if (!isRegisteredSiteCommentAuthor()) {
+      saveCommentAuthorName(authorName);
+    }
     viewerComments = [payload, ...viewerComments];
     renderViewerComments(viewerComments);
 
@@ -300,7 +355,7 @@ async function submitViewerComment(workId) {
 
 function initBannerComments() {
   if (bannersViewerCommentName) {
-    bannersViewerCommentName.value = getCommentAuthorName();
+    applyCommentAuthorFieldState();
     bannersViewerCommentName.addEventListener('input', updateCommentComposeState);
   }
 
@@ -320,6 +375,10 @@ function initBannerComments() {
   }
 
   updateCommentComposeState();
+  window.addEventListener('site-user-session-changed', () => {
+    applyCommentAuthorFieldState();
+    updateCommentComposeState();
+  });
 }
 
 function renderLikeButton(workId, likeCount, liked, extraClass = '') {

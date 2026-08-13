@@ -237,19 +237,22 @@ function renderReviews(reviews, product) {
   empty.hidden = true;
   list.innerHTML = reviews.map((review) => `
     <article class="clothing-product-review-item">
-      <div class="clothing-product-review-head">
-        <strong>${escapeHtml(review.author_name)}</strong>
-        ${renderStars(review.rating, { size: 'sm', label: false })}
-        <time datetime="${review.created_at}">${formatDate(review.created_at)}</time>
-      </div>
-      ${review.review_text ? `<p>${escapeHtml(review.review_text)}</p>` : ''}
-      ${review.admin_reply ? `
-        <div class="clothing-product-review-admin-reply">
-          <span class="clothing-product-review-admin-label">Ответ магазина</span>
-          <p>${escapeHtml(review.admin_reply)}</p>
-          ${review.admin_reply_at ? `<time datetime="${review.admin_reply_at}">${formatDate(review.admin_reply_at)}</time>` : ''}
+      ${window.renderSiteReviewAvatarHtml?.(review, 'clothing-product-review-avatar site-review-avatar') || ''}
+      <div class="clothing-product-review-body">
+        <div class="clothing-product-review-head">
+          <strong>${escapeHtml(review.author_name)}</strong>
+          ${renderStars(review.rating, { size: 'sm', label: false })}
+          <time datetime="${review.created_at}">${formatDate(review.created_at)}</time>
         </div>
-      ` : ''}
+        ${review.review_text ? `<p>${escapeHtml(review.review_text)}</p>` : ''}
+        ${review.admin_reply ? `
+          <div class="clothing-product-review-admin-reply">
+            <span class="clothing-product-review-admin-label">Ответ магазина</span>
+            <p>${escapeHtml(review.admin_reply)}</p>
+            ${review.admin_reply_at ? `<time datetime="${review.admin_reply_at}">${formatDate(review.admin_reply_at)}</time>` : ''}
+          </div>
+        ` : ''}
+      </div>
     </article>
   `).join('');
 }
@@ -373,6 +376,9 @@ async function loadClothingProductPage() {
     initStarPicker();
     initAddToCart(product);
 
+    window.applySiteCustomerToForms?.();
+    window.applySiteReviewAuthorToForms?.();
+
     const orderForm = document.getElementById('clothingOrderForm');
     const reviewForm = document.getElementById('clothingReviewForm');
 
@@ -400,13 +406,13 @@ async function loadClothingProductPage() {
         const response = await fetch(`/api/works/${productId}/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: JSON.stringify(window.appendSiteOrderFields({
             customer_name: formData.get('customer_name'),
             email: formData.get('email'),
             phone: formData.get('phone'),
             quantity: formData.get('quantity'),
             message: formData.get('message')
-          })
+          }))
         });
 
         const payload = await response.json();
@@ -439,7 +445,11 @@ async function loadClothingProductPage() {
         const response = await fetch(`/api/works/${productId}/reviews`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          body: JSON.stringify(window.appendSiteReviewFields?.({
+            author_name: formData.get('author_name'),
+            rating: formData.get('rating'),
+            review_text: formData.get('review_text')
+          }) || {
             author_name: formData.get('author_name'),
             rating: formData.get('rating'),
             review_text: formData.get('review_text')
@@ -463,6 +473,7 @@ async function loadClothingProductPage() {
         reviewForm.reset();
         document.getElementById('clothingReviewRating').value = '5';
         initStarPicker();
+        window.applySiteReviewAuthorToForm?.(reviewForm);
         setFormStatus(status, 'Спасибо! Отзыв опубликован.', false);
       } catch (error) {
         setFormStatus(status, error.message, true);

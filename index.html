@@ -105,7 +105,7 @@
                 </div>
                 <div class="site-user-menu-divider" aria-hidden="true"></div>
                 <div class="site-user-menu-actions">
-                  <button type="button" class="site-user-menu-item" id="siteUserMenuProfile" role="menuitem">
+                  <a href="/profile.html" class="site-user-menu-item site-user-menu-item--link" id="siteUserMenuProfile" role="menuitem">
                     <span class="site-user-menu-item-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     </span>
@@ -113,7 +113,7 @@
                       <strong>О пользователе</strong>
                       <small>Профиль, контакты и активность</small>
                     </span>
-                  </button>
+                  </a>
                   <a href="/cart.html" class="site-user-menu-item site-user-menu-item--link" id="siteUserMenuCart" role="menuitem">
                     <span class="site-user-menu-item-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h2l2.4 12.4a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.76L21 7H6"/></svg>
@@ -882,101 +882,6 @@
                   <button type="button" class="admin-auth-switch-link" id="siteUserShowRegister">Зарегистрироваться</button>
                 </p>
               </form>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-
-    <!-- Site user: profile panel -->
-    <div class="site-user-profile-overlay" id="siteUserProfileOverlay" hidden>
-      <div class="site-user-profile-shell" role="dialog" aria-labelledby="siteUserProfileTitle">
-        <header class="site-user-profile-header">
-          <h2 id="siteUserProfileTitle">О пользователе</h2>
-          <button type="button" class="admin-btn admin-gate-close" id="siteUserProfileClose" aria-label="Закрыть" title="Закрыть">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M18 6L6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        </header>
-        <main class="site-user-profile-main">
-          <div class="site-user-profile-page admin-profile-page">
-            <div class="admin-profile-hero card">
-              <div class="admin-profile-hero-main">
-                <div class="admin-profile-avatar-wrap">
-                  <div class="admin-profile-avatar" id="siteUserProfileAvatar" aria-hidden="true">
-                    <img class="admin-profile-avatar-img" id="siteUserProfileAvatarImg" alt="" hidden>
-                    <span class="admin-profile-avatar-initials" id="siteUserProfileAvatarInitials">CL</span>
-                  </div>
-                </div>
-                <div class="admin-profile-hero-info">
-                  <div class="admin-profile-hero-top">
-                    <h3 class="admin-profile-name" id="siteUserProfileName">Demo</h3>
-                    <span class="admin-profile-badge" id="siteUserProfileBadge" data-variant="demo">Demo</span>
-                  </div>
-                  <p class="admin-profile-email" id="siteUserProfileEmail">demo@portfolio.local</p>
-                  <p class="admin-profile-bio" id="siteUserProfileBio">—</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="admin-profile-grid">
-              <div class="card admin-profile-card">
-                <div class="card-header"><h3>Основная информация</h3></div>
-                <dl class="admin-profile-details">
-                  <div class="admin-profile-detail">
-                    <dt>Роль</dt>
-                    <dd id="siteUserProfileRole">Клиент</dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Способ входа</dt>
-                    <dd id="siteUserProfileEntry">—</dd>
-                  </div>
-                </dl>
-                <form class="admin-profile-contact-form admin-profile-contact-form--inline" id="siteUserProfileContactForm">
-                  <label class="admin-field">
-                    <span>Локация <small class="admin-profile-optional">(необязательно)</small></span>
-                    <input type="text" id="siteUserProfileLocationInput" name="location" placeholder="Например: Москва, Россия" maxlength="128">
-                  </label>
-                  <label class="admin-field">
-                    <span>Телефон <small class="admin-profile-optional">(необязательно)</small></span>
-                    <input type="tel" id="siteUserProfilePhoneInput" name="phone" placeholder="+7 (999) 000-00-00" maxlength="32">
-                  </label>
-                  <div class="admin-profile-contact-actions">
-                    <button type="submit" class="btn btn-primary" id="siteUserProfileContactSave">Сохранить контакты</button>
-                  </div>
-                </form>
-              </div>
-
-              <div class="card admin-profile-card">
-                <div class="card-header"><h3>Активность</h3></div>
-                <dl class="admin-profile-details">
-                  <div class="admin-profile-detail">
-                    <dt>ID пользователя</dt>
-                    <dd id="siteUserProfileUserId">—</dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Дата регистрации</dt>
-                    <dd id="siteUserProfileRegistered">—</dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Последний вход</dt>
-                    <dd id="siteUserProfileLastLogin">—</dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Сессий в браузере</dt>
-                    <dd id="siteUserProfileSessions">—</dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Статус</dt>
-                    <dd><span class="admin-profile-status" id="siteUserProfileStatus" data-variant="demo">—</span></dd>
-                  </div>
-                  <div class="admin-profile-detail">
-                    <dt>Подтверждение email</dt>
-                    <dd id="siteUserProfileEmailVerified">—</dd>
-                  </div>
-                </dl>
-              </div>
             </div>
           </div>
         </main>
@@ -2911,6 +2816,8 @@
   <script src="fitness-catalog.js"></script>
   <script src="fitness-filter.js"></script>
   <script src="banners-filter.js"></script>
+  <script src="site-user-session.js"></script>
+  <script src="site-review-avatar.js"></script>
   <script src="banners-catalog.js"></script>
   <script src="api.js"></script>
   <script src="search.js"></script>
@@ -2950,7 +2857,6 @@
   <script src="admin.js"></script>
   <script src="site-cart.js"></script>
   <script src="site-orders.js"></script>
-  <script src="site-user-session.js"></script>
   <script src="site-user-register.js"></script>
   <script src="site-user-login.js"></script>
   <script src="site-user-gate.js"></script>

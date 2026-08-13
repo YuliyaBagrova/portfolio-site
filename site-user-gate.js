@@ -136,7 +136,11 @@
 
     if (typeof window.unlockSiteGate === 'function') {
 
-      window.unlockSiteGate();
+      window.unlockSiteGate(entryType === 'preview' ? 'demo' : 'user');
+
+    } else if (typeof window.setSiteGateMode === 'function') {
+
+      window.setSiteGateMode(entryType === 'preview' ? 'demo' : 'user');
 
     }
 
@@ -210,11 +214,15 @@
 
     if (isGateUnlocked()) {
 
+      window.ensureSiteClientSession?.();
+
       hideAllSiteUserOverlays();
 
       window.applySiteCustomerToForms?.();
 
       window.refreshSiteUserProfileUi?.();
+
+      window.refreshSiteUserMenu?.();
 
       return;
 

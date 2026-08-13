@@ -1,6 +1,6 @@
 (function initSiteOrders() {
-  const STORAGE_KEY = 'portfolio_orders_v1';
-  const EMAIL_STORAGE_KEY = 'portfolio_customer_email';
+  const STORAGE_PREFIX = 'portfolio_orders_v1__';
+  const EMAIL_PREFIX = 'portfolio_customer_email__';
 
   const SECTION_LABELS = {
     supplements: 'Фитнес-индустрия',
@@ -15,9 +15,29 @@
     pictures: 'Картинки'
   };
 
+  function getScopeKey() {
+    if (typeof window.getSiteOrderScopeKey === 'function') {
+      return window.getSiteOrderScopeKey();
+    }
+    if (typeof window.isSiteDemoClientMode === 'function' && window.isSiteDemoClientMode()) {
+      return 'demo:shared';
+    }
+    return typeof window.getSiteDataScopeKey === 'function'
+      ? window.getSiteDataScopeKey()
+      : 'guest';
+  }
+
+  function getStorageKey() {
+    return `${STORAGE_PREFIX}${getScopeKey()}`;
+  }
+
+  function getEmailStorageKey() {
+    return `${EMAIL_PREFIX}${getScopeKey()}`;
+  }
+
   function readOrders() {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(getStorageKey());
       const parsed = raw ? JSON.parse(raw) : [];
       return Array.isArray(parsed) ? parsed : [];
     } catch {
@@ -26,18 +46,24 @@
   }
 
   function writeOrders(orders) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+    localStorage.setItem(getStorageKey(), JSON.stringify(orders));
     window.dispatchEvent(new CustomEvent('site-orders-changed'));
   }
 
   function rememberCustomerEmail(email) {
     const normalized = String(email || '').trim().toLowerCase();
     if (!normalized) return;
-    localStorage.setItem(EMAIL_STORAGE_KEY, normalized);
+    localStorage.setItem(getEmailStorageKey(), normalized);
   }
 
   function getCustomerEmail() {
-    const stored = localStorage.getItem(EMAIL_STORAGE_KEY);
+    const ctx = typeof window.getSiteOrderContext === 'function'
+      ? window.getSiteOrderContext()
+      : null;
+
+    if (ctx?.email) return ctx.email;
+
+    const stored = localStorage.getItem(getEmailStorageKey());
     if (stored) return stored;
 
     const fromOrders = readOrders().find((order) => order.email)?.email;
@@ -50,6 +76,10 @@
   }
 
   function addOrder(entry) {
+    const ctx = typeof window.getSiteOrderContext === 'function'
+      ? window.getSiteOrderContext()
+      : { is_demo: 0, site_user_id: null };
+
     const order = {
       id: entry.id || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       type: entry.type || 'work',
@@ -63,7 +93,12 @@
       message: entry.message ? String(entry.message).trim() : '',
       category: entry.category ? String(entry.category).trim() : '',
       createdAt: entry.createdAt || new Date().toISOString(),
-      serverOrderId: entry.serverOrderId != null ? Number(entry.serverOrderId) : null
+      serverOrderId: entry.serverOrderId != null ? Number(entry.serverOrderId) : null,
+      is_demo: entry.is_demo != null ? Number(entry.is_demo) : ctx.is_demo,
+      site_user_id: entry.site_user_id != null ? entry.site_user_id : ctx.site_user_id,
+      client_scope: entry.client_scope || (typeof window.getSiteOrderScopeKey === 'function'
+        ? window.getSiteOrderScopeKey()
+        : (typeof window.getSiteDataScopeKey === 'function' ? window.getSiteDataScopeKey() : 'guest'))
     };
 
     rememberCustomerEmail(order.email);
@@ -88,7 +123,11 @@
   }
 
   async function fetchServerOrders() {
-    const response = await fetch('/api/site/orders');
+    const params = typeof window.getSiteOrderQueryParams === 'function'
+      ? window.getSiteOrderQueryParams()
+      : { is_demo: '0' };
+    const query = new URLSearchParams(params);
+    const response = await fetch(`/api/site/orders?${query}`);
     const payload = await response.json().catch(() => ({}));
 
     if (!response.ok) {

@@ -5,6 +5,7 @@
   const errorEl = document.getElementById('ordersError');
   const statsEl = document.getElementById('ordersStats');
   const countEl = document.getElementById('ordersCount');
+  const pageDescEl = document.getElementById('ordersPageDesc');
 
   if (!listEl || !emptyEl || !window.SiteOrders) return;
 
@@ -18,6 +19,26 @@
     supplements: 'linear-gradient(145deg, #ea580c 0%, #9a3412 55%, #1c1410 100%)',
     clothing: 'linear-gradient(160deg, #6b5b73 0%, #a8929f 100%)'
   };
+
+  function updateOrdersPageCopy() {
+    const ctx = typeof window.getSiteOrderContext === 'function'
+      ? window.getSiteOrderContext()
+      : null;
+
+    if (!pageDescEl) return;
+
+    if (ctx?.isDemo) {
+      pageDescEl.textContent = 'Ваши демо-заявки: они видны только в этом demo-сеансе и в панели администратора. Зарегистрированные клиенты их не видят.';
+      return;
+    }
+
+    if (ctx?.email || ctx?.site_user_id) {
+      pageDescEl.textContent = 'Ваши заявки как зарегистрированного клиента. Демо-заявки других посетителей здесь не отображаются.';
+      return;
+    }
+
+    pageDescEl.textContent = 'Войдите или пройдите demo-доступ на главной, чтобы увидеть свои заявки.';
+  }
 
   function escapeHtml(value) {
     return String(value)
@@ -276,14 +297,36 @@
     applySectionIcons();
   }
 
+  function filterOrdersForSession(orders) {
+    const ctx = typeof window.getSiteOrderContext === 'function'
+      ? window.getSiteOrderContext()
+      : null;
+
+    if (!ctx) return [];
+
+    if (ctx.isDemo) {
+      const isDemoOrder = typeof window.isSiteDemoOrder === 'function'
+        ? window.isSiteDemoOrder
+        : () => false;
+      return orders.filter((order) => isDemoOrder(order));
+    }
+
+    const belongsToUser = typeof window.belongsToRegisteredSiteOrder === 'function'
+      ? window.belongsToRegisteredSiteOrder
+      : () => false;
+
+    return orders.filter((order) => belongsToUser(order));
+  }
+
   async function loadOrders() {
     setError('');
     setLoading(true);
     emptyEl.hidden = true;
     listEl.innerHTML = '';
+    updateOrdersPageCopy();
 
     try {
-      const orders = await window.SiteOrders.fetchServerOrders();
+      const orders = filterOrdersForSession(await window.SiteOrders.fetchServerOrders());
       const enrichedOrders = await enrichOrdersWithImages(orders);
       renderOrders(enrichedOrders);
     } catch (error) {

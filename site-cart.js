@@ -1,10 +1,28 @@
 (function initSiteCart() {
-  const STORAGE_KEY = 'portfolio_cart_v1';
-  const ALLOWED_SECTIONS = new Set(['supplements', 'clothing']);
+  const STORAGE_PREFIX = 'portfolio_cart_v1__';
+  const LEGACY_STORAGE_KEY = 'portfolio_cart_v1';
+  const DEMO_SHARED_SCOPE = 'demo:shared';
+  const MIGRATION_FLAG = 'portfolio_cart_demo_shared_migrated';
 
-  function readCart() {
+  function getScopeKey() {
+    if (typeof window.getSiteCartScopeKey === 'function') {
+      return window.getSiteCartScopeKey();
+    }
+    if (typeof window.isSiteDemoClientMode === 'function' && window.isSiteDemoClientMode()) {
+      return DEMO_SHARED_SCOPE;
+    }
+    return typeof window.getSiteDataScopeKey === 'function'
+      ? window.getSiteDataScopeKey()
+      : 'guest';
+  }
+
+  function getStorageKey(scope = getScopeKey()) {
+    return `${STORAGE_PREFIX}${scope}`;
+  }
+
+  function readRawCart(key) {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(key);
       const parsed = raw ? JSON.parse(raw) : [];
       return Array.isArray(parsed) ? parsed : [];
     } catch {
@@ -12,9 +30,73 @@
     }
   }
 
+  function mergeCartItems(targetItems, sourceItems) {
+    const merged = targetItems
+      .map((item) => normalizeItem(item))
+      .filter(Boolean);
+
+    sourceItems.forEach((rawItem) => {
+      const base = normalizeItem(rawItem);
+      if (!base) return;
+
+      const index = merged.findIndex((item) => item.key === base.key);
+      if (index >= 0) {
+        merged[index] = {
+          ...merged[index],
+          ...base,
+          quantity: Math.min(99, Math.max(merged[index].quantity, base.quantity))
+        };
+      } else {
+        merged.push(base);
+      }
+    });
+
+    return merged;
+  }
+
+  function migrateLegacyDemoCart(sharedKey) {
+    if (localStorage.getItem(MIGRATION_FLAG) === '1') return;
+
+    let merged = readRawCart(sharedKey);
+    const legacyItems = readRawCart(LEGACY_STORAGE_KEY);
+    if (legacyItems.length) {
+      merged = mergeCartItems([], legacyItems);
+    }
+
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (!key || !key.startsWith(STORAGE_PREFIX)) continue;
+      if (key === sharedKey || key === `${STORAGE_PREFIX}guest`) continue;
+
+      const scope = key.slice(STORAGE_PREFIX.length);
+      if (!scope.startsWith('demo:') || scope === DEMO_SHARED_SCOPE) continue;
+
+      merged = mergeCartItems(merged, readRawCart(key));
+    }
+
+    if (merged.length) {
+      localStorage.setItem(sharedKey, JSON.stringify(merged));
+    }
+
+    localStorage.setItem(MIGRATION_FLAG, '1');
+  }
+
+  function readCart() {
+    const scope = getScopeKey();
+    const storageKey = getStorageKey(scope);
+
+    if (scope === DEMO_SHARED_SCOPE) {
+      migrateLegacyDemoCart(storageKey);
+    }
+
+    return readRawCart(storageKey);
+  }
+
+  const ALLOWED_SECTIONS = new Set(['supplements', 'clothing']);
+
   function writeCart(items) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      localStorage.setItem(getStorageKey(), JSON.stringify(items));
       window.dispatchEvent(new CustomEvent('site-cart-changed', { detail: { count: getCount() } }));
       return true;
     } catch (error) {

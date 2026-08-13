@@ -3,6 +3,8 @@
   const SESSION_COUNT_PREFIX = 'portfolio_site_browser_visits_';
   const SESSION_ACTIVE_PREFIX = 'portfolio_site_tab_active_';
   const GATE_KEY = 'site_gate_unlocked';
+  const GATE_MODE_KEY = 'site_gate_mode';
+  const DEMO_SHARED_SCOPE = 'demo:shared';
 
   const DEMO_LOCATIONS = ['Москва, Россия', 'Санкт-Петербург, Россия', 'Казань, Россия', 'Новосибирск, Россия'];
   const DEMO_BIOS = [
@@ -212,12 +214,63 @@
     return localStorage.getItem(GATE_KEY) === '1';
   }
 
-  function unlockSiteGate() {
+  function getSiteGateMode() {
+    return localStorage.getItem(GATE_MODE_KEY) || '';
+  }
+
+  function setSiteGateMode(mode) {
+    if (mode) {
+      localStorage.setItem(GATE_MODE_KEY, mode);
+    } else {
+      localStorage.removeItem(GATE_MODE_KEY);
+    }
+  }
+
+  function unlockSiteGate(mode) {
     localStorage.setItem(GATE_KEY, '1');
+    if (mode === 'demo' || mode === 'user') {
+      setSiteGateMode(mode);
+    }
   }
 
   function lockSiteGate() {
     localStorage.removeItem(GATE_KEY);
+    localStorage.removeItem(GATE_MODE_KEY);
+  }
+
+  function isSiteDemoClientMode() {
+    const profile = readSession();
+    if (profile?.isDemo) return true;
+    if (profile && isRealSiteUser(profile)) return false;
+    if (!isSiteGateUnlocked()) return false;
+
+    const mode = getSiteGateMode();
+    if (mode === 'demo') return true;
+    if (mode === 'user') return false;
+
+    // Старые сессии до site_gate_mode: считаем demo, если нет профиля зарегистрированного клиента.
+    return true;
+  }
+
+  function ensureSiteClientSession() {
+    if (!isSiteGateUnlocked()) return readSession();
+
+    const profile = readSession();
+    if (profile?.isDemo) return profile;
+    if (profile && isRealSiteUser(profile)) return profile;
+
+    if (isSiteDemoClientMode()) {
+      if (getSiteGateMode() !== 'demo') {
+        setSiteGateMode('demo');
+      }
+      const restored = setSiteDemoSession('preview');
+      if (!profile && restored) {
+        window.dispatchEvent(new CustomEvent('site-user-session-changed'));
+      }
+      return restored;
+    }
+
+    return profile;
   }
 
   function updateSiteSessionAvatar(avatarUrl) {
@@ -250,6 +303,126 @@
   window.updateSiteSessionAvatar = updateSiteSessionAvatar;
   window.updateSiteSessionProfile = updateSiteSessionProfile;
   window.getSiteBrowserSessionsCount = getBrowserSessionsCount;
+  function getSiteDataScopeKey() {
+    const profile = readSession();
+    if (!profile) return 'guest';
+    if (profile.isDemo) {
+      const email = String(profile.email || '').trim().toLowerCase();
+      return email ? `demo:${email}` : `demo:${profile.entryType || 'preview'}`;
+    }
+    if (profile.id != null) return `user:${profile.id}`;
+    const email = String(profile.email || '').trim().toLowerCase();
+    return email ? `user-email:${email}` : 'guest';
+  }
+
+  function getSiteCartScopeKey() {
+    ensureSiteClientSession();
+    const profile = readSession();
+    if (!profile) {
+      if (isSiteDemoClientMode()) return DEMO_SHARED_SCOPE;
+      return 'guest';
+    }
+    if (profile.isDemo) return DEMO_SHARED_SCOPE;
+    if (profile.id != null) return `user:${profile.id}`;
+    const email = String(profile.email || '').trim().toLowerCase();
+    return email ? `user-email:${email}` : 'guest';
+  }
+
+  function getSiteOrderScopeKey() {
+    ensureSiteClientSession();
+    const profile = readSession();
+    if (!profile) {
+      if (isSiteDemoClientMode()) return DEMO_SHARED_SCOPE;
+      return 'guest';
+    }
+    if (profile.isDemo) return DEMO_SHARED_SCOPE;
+    if (profile.id != null) return `user:${profile.id}`;
+    const email = String(profile.email || '').trim().toLowerCase();
+    return email ? `user-email:${email}` : 'guest';
+  }
+
+  function isSiteDemoOrder(order) {
+    if (!order) return false;
+    if (order.is_demo === true || order.is_demo === 1 || order.is_demo === '1') return true;
+
+    if (order.site_user_id == null || order.site_user_id === '') return true;
+
+    const email = String(order.email || '').trim().toLowerCase();
+    if (email.endsWith('@portfolio.local')) return true;
+
+    const scope = String(order.client_scope || '').trim();
+    if (scope.startsWith('demo:')) return true;
+
+    return false;
+  }
+
+  function belongsToRegisteredSiteOrder(order) {
+    const profile = readSession();
+    if (!profile || profile.isDemo) return false;
+    if (isSiteDemoOrder(order)) return false;
+
+    const scope = getSiteOrderScopeKey();
+    if (order.client_scope === scope) return true;
+    if (profile.id != null && Number(order.site_user_id) === Number(profile.id)) return true;
+
+    return false;
+  }
+
+  function getSiteOrderContext() {
+    ensureSiteClientSession();
+    const profile = readSession();
+
+    if (!profile) {
+      if (isSiteDemoClientMode()) {
+        return {
+          isDemo: true,
+          is_demo: 1,
+          site_user_id: null,
+          email: ''
+        };
+      }
+
+      return {
+        isDemo: false,
+        is_demo: 0,
+        site_user_id: null,
+        email: ''
+      };
+    }
+
+    if (profile.isDemo) {
+      return {
+        isDemo: true,
+        is_demo: 1,
+        site_user_id: null,
+        email: String(profile.email || '').trim().toLowerCase()
+      };
+    }
+
+    return {
+      isDemo: false,
+      is_demo: 0,
+      site_user_id: profile.id ?? null,
+      email: String(profile.email || '').trim().toLowerCase()
+    };
+  }
+
+  function getSiteOrderQueryParams() {
+    return {
+      client_scope: getSiteOrderScopeKey()
+    };
+  }
+
+  function appendSiteOrderFields(payload) {
+    const ctx = getSiteOrderContext();
+    return {
+      ...payload,
+      is_demo: ctx.is_demo,
+      site_user_id: ctx.site_user_id,
+      client_scope: getSiteOrderScopeKey()
+    };
+  }
+
   function getSiteCustomerContext() {
     const profile = readSession();
     if (!profile) {
@@ -312,9 +485,23 @@
   }
 
   window.getSiteCustomerContext = getSiteCustomerContext;
+  window.getSiteDataScopeKey = getSiteDataScopeKey;
+  window.getSiteCartScopeKey = getSiteCartScopeKey;
+  window.getSiteOrderScopeKey = getSiteOrderScopeKey;
+  window.isSiteDemoClientMode = isSiteDemoClientMode;
+  window.ensureSiteClientSession = ensureSiteClientSession;
+  window.getSiteGateMode = getSiteGateMode;
+  window.setSiteGateMode = setSiteGateMode;
+  window.isSiteDemoOrder = isSiteDemoOrder;
+  window.belongsToRegisteredSiteOrder = belongsToRegisteredSiteOrder;
+  window.getSiteOrderContext = getSiteOrderContext;
+  window.getSiteOrderQueryParams = getSiteOrderQueryParams;
+  window.appendSiteOrderFields = appendSiteOrderFields;
   window.applySiteCustomerToForm = applySiteCustomerToForm;
   window.applySiteCustomerToForms = applySiteCustomerToForms;
   window.isSiteGateUnlocked = isSiteGateUnlocked;
   window.unlockSiteGate = unlockSiteGate;
   window.lockSiteGate = lockSiteGate;
+
+  ensureSiteClientSession();
 })();

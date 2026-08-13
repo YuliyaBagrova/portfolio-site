@@ -218,7 +218,11 @@ CREATE TABLE IF NOT EXISTS work_reviews (
 
   author_name VARCHAR(128) NOT NULL,
 
-  rating TINYINT NOT NULL,
+  author_avatar_url MEDIUMTEXT NULL,
+
+  author_avatar_initials VARCHAR(8) NULL,
+
+  rating TINYINT NULL,
 
   review_text TEXT,
 
@@ -253,6 +257,12 @@ CREATE TABLE IF NOT EXISTS work_orders (
   quantity INT NOT NULL DEFAULT 1,
 
   message TEXT,
+
+  is_demo TINYINT(1) NOT NULL DEFAULT 0,
+
+  site_user_id INT NULL,
+
+  client_scope VARCHAR(255) NULL,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 

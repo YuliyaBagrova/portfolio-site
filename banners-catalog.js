@@ -86,8 +86,114 @@ function formatPublishedAt(value) {
 function getLayoutClass(width, height) {
   if (!width || !height) return '';
   const ratio = width / height;
-  if (ratio >= 2.2) return 'wide';
-  return '';
+  if (ratio >= 2.1) return 'wide';
+  if (ratio <= 0.78) return 'is-portrait';
+  if (ratio >= 1.35) return 'is-landscape';
+  return 'is-square';
+}
+
+function applyBannerMediaSize(img) {
+  const width = img.naturalWidth;
+  const height = img.naturalHeight;
+  if (!width || !height) return;
+
+  const media = img.closest('.banners-work-media');
+  const card = img.closest('.banners-card');
+  if (!media || !card) return;
+
+  media.style.setProperty('--work-aspect', `${width} / ${height}`);
+  img.setAttribute('width', String(width));
+  img.setAttribute('height', String(height));
+
+  card.classList.remove('wide', 'is-portrait', 'is-landscape', 'is-square');
+  const layoutClass = getLayoutClass(width, height);
+  if (layoutClass) card.classList.add(layoutClass);
+  scheduleBannerMasonry(card.closest('.banners-grid'));
+}
+
+function bindBannerMediaSizes(grid) {
+  if (!grid) return;
+
+  grid.querySelectorAll('.banners-work-image').forEach((img) => {
+    const apply = () => applyBannerMediaSize(img);
+    if (img.complete && img.naturalWidth) {
+      apply();
+      return;
+    }
+    img.addEventListener('load', apply, { once: true });
+  });
+}
+
+let masonryFrame = 0;
+let masonryObserver = null;
+
+function scheduleBannerMasonry(grid) {
+  const target = grid || document.getElementById('bannersGrid');
+  if (!target) return;
+  cancelAnimationFrame(masonryFrame);
+  masonryFrame = requestAnimationFrame(() => layoutBannersMasonry(target));
+}
+
+function resetBannerCardPosition(card) {
+  card.style.position = '';
+  card.style.left = '';
+  card.style.top = '';
+  card.style.width = '';
+}
+
+function layoutBannersMasonry(grid) {
+  const target = grid || document.getElementById('bannersGrid');
+  if (!target) return;
+
+  const cards = Array.prototype.slice.call(target.querySelectorAll('.banners-card'));
+  const visible = cards.filter((card) => !card.classList.contains('is-hidden'));
+  const gap = 24;
+  const minWidth = 260;
+  const width = target.clientWidth;
+
+  cards.forEach((card) => {
+    if (card.classList.contains('is-hidden')) resetBannerCardPosition(card);
+  });
+
+  if (!visible.length || width <= 0) {
+    target.classList.remove('is-masonry');
+    target.style.height = '';
+    visible.forEach(resetBannerCardPosition);
+    return;
+  }
+
+  const columnCount = Math.max(1, Math.floor((width + gap) / (minWidth + gap)));
+  const columnWidth = (width - gap * (columnCount - 1)) / columnCount;
+  const heights = new Array(columnCount).fill(0);
+
+  target.classList.add('is-masonry');
+
+  visible.forEach((card) => {
+    card.style.position = 'absolute';
+    card.style.width = `${columnWidth}px`;
+    card.style.margin = '0';
+
+    const col = heights.indexOf(Math.min.apply(null, heights));
+    card.style.left = `${col * (columnWidth + gap)}px`;
+    card.style.top = `${heights[col]}px`;
+    heights[col] += card.offsetHeight + gap;
+  });
+
+  const maxHeight = Math.max.apply(null, heights);
+  target.style.height = `${maxHeight > gap ? maxHeight - gap : 0}px`;
+}
+
+function bindBannerMasonry(grid) {
+  if (!grid || grid.dataset.masonryBound === '1') return;
+  grid.dataset.masonryBound = '1';
+
+  const host = grid.parentElement || grid;
+  if (typeof ResizeObserver === 'function') {
+    masonryObserver = new ResizeObserver(() => scheduleBannerMasonry(grid));
+    masonryObserver.observe(host);
+  } else {
+    window.addEventListener('resize', () => scheduleBannerMasonry(grid));
+  }
 }
 
 function getCommentAuthorName() {
@@ -704,6 +810,9 @@ async function loadBannersCatalog() {
     if (emptyState) emptyState.hidden = true;
     grid.insertAdjacentHTML('beforeend', catalogItems.map(renderBannerCard).join(''));
     bindBannerViewer(grid);
+    bindBannerMasonry(grid);
+    bindBannerMediaSizes(grid);
+    scheduleBannerMasonry(grid);
     tryOpenPendingBannerWork();
     window.dispatchEvent(new CustomEvent('banners-catalog-updated', { detail: { items: catalogItems } }));
     return catalogItems;
@@ -724,6 +833,7 @@ window.addEventListener('banners-catalog-changed', loadBannersCatalog);
 window.BannersCatalog = {
   CATEGORIES: BANNER_CATEGORIES,
   load: loadBannersCatalog,
+  layoutMasonry: scheduleBannerMasonry,
   openViewer: openBannersViewer,
   openViewerById: openBannersViewerById,
   closeViewer: closeBannersViewer,

@@ -51,6 +51,71 @@ const FITNESS_CART_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentC
 
 let fitnessCatalogItems = [];
 
+function createSeededRandom(seed) {
+  let t = (Number(seed) || 1) + 0x6D2B79F5;
+  return function random() {
+    t += 0x6D2B79F5;
+    let r = t;
+    r = Math.imul(r ^ (r >>> 15), r | 1);
+    r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffleArray(items, random) {
+  const next = items.slice();
+  for (let i = next.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    const tmp = next[i];
+    next[i] = next[j];
+    next[j] = tmp;
+  }
+  return next;
+}
+
+function spreadFitnessItems(items) {
+  if (!Array.isArray(items) || items.length < 2) return Array.isArray(items) ? items.slice() : [];
+
+  const groups = new Map();
+  items.forEach((item) => {
+    const key = item.category || 'all';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  });
+
+  if (groups.size < 2) return items.slice();
+
+  const seed = items.reduce((acc, item) => acc + (Number(item.id) || 0), 0);
+  const random = createSeededRandom(seed);
+  const queues = shuffleArray([...groups.keys()], random).map((key) => ({
+    key,
+    items: shuffleArray(groups.get(key), random)
+  }));
+
+  const result = [];
+  let lastKey = null;
+
+  while (result.length < items.length) {
+    const available = queues.filter((queue) => queue.items.length > 0);
+    if (!available.length) break;
+
+    let candidates = available.filter((queue) => queue.key !== lastKey);
+    if (!candidates.length) candidates = available;
+
+    candidates.sort((a, b) => {
+      const byCount = b.items.length - a.items.length;
+      if (byCount !== 0) return byCount;
+      return a.key.localeCompare(b.key);
+    });
+
+    const picked = candidates[0];
+    result.push(picked.items.shift());
+    lastKey = picked.key;
+  }
+
+  return result;
+}
+
 function buildFitnessCartItem(item, quantity = 1) {
   const gradient = item.gradient || FITNESS_DEFAULT_GRADIENTS[item.category] || FITNESS_DEFAULT_GRADIENTS.protein;
 
@@ -144,7 +209,7 @@ async function loadFitnessCatalog() {
     const response = await fetch('/api/works?section=supplements');
     if (!response.ok) throw new Error('Не удалось загрузить каталог');
 
-    const items = await response.json();
+    const items = spreadFitnessItems(await response.json());
     fitnessCatalogItems = items;
     grid.querySelectorAll('.fitness-card').forEach((card) => card.remove());
 

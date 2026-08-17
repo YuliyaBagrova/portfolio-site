@@ -88,11 +88,64 @@
   }
 
   function isProductOrder(order) {
-    if (order.order_type === 'banner') return false;
+    if (order.order_type === 'banner' || order.type === 'banner') return false;
     if (order.order_type === 'product') return true;
-    if (order.work_id != null) return true;
+    if (order.work_id != null || order.workId != null) return true;
     const sectionId = order.section_id || order.sectionId;
     return sectionId === 'supplements' || sectionId === 'clothing';
+  }
+
+  function getOrderIdentity(order) {
+    if (order.serverOrderId != null) {
+      return `${order.type === 'banner' || order.order_type === 'banner' ? 'banner' : 'product'}:${order.serverOrderId}`;
+    }
+    if (order.id != null && (order.order_type || order.created_at)) {
+      return `${order.order_type || 'product'}:${order.id}`;
+    }
+    return `local:${order.id || order.createdAt || ''}`;
+  }
+
+  function normalizeLocalOrder(order) {
+    if (!order) return null;
+    if (order.order_type) return order;
+
+    const isBanner = order.type === 'banner' || order.sectionId === 'banners';
+    return {
+      order_type: isBanner ? 'banner' : 'product',
+      id: order.serverOrderId || order.id,
+      work_id: order.workId != null ? order.workId : order.work_id,
+      work_title: order.title || order.work_title,
+      section_id: order.sectionId || order.section_id || (isBanner ? 'banners' : 'supplements'),
+      category: order.category || null,
+      category_label: order.category_label || null,
+      customer_name: order.customer_name,
+      email: order.email,
+      phone: order.phone || '',
+      quantity: order.quantity != null ? Number(order.quantity) : null,
+      message: order.message || '',
+      created_at: order.created_at || order.createdAt,
+      is_demo: order.is_demo != null ? order.is_demo : 1,
+      site_user_id: order.site_user_id ?? null,
+      client_scope: order.client_scope || 'demo:shared',
+      image: order.image || null
+    };
+  }
+
+  function mergeOrderLists(serverOrders, localOrders) {
+    const merged = [];
+    const seen = new Set();
+
+    [...(Array.isArray(serverOrders) ? serverOrders : []), ...(Array.isArray(localOrders) ? localOrders : [])]
+      .map((order) => normalizeLocalOrder(order))
+      .filter(Boolean)
+      .forEach((order) => {
+        const key = getOrderIdentity(order);
+        if (seen.has(key)) return;
+        seen.add(key);
+        merged.push(order);
+      });
+
+    return merged.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
   }
 
   function getProductImageUrl(order) {
@@ -298,24 +351,25 @@
   }
 
   function filterOrdersForSession(orders) {
-    const ctx = typeof window.getSiteOrderContext === 'function'
-      ? window.getSiteOrderContext()
+    const list = Array.isArray(orders) ? orders : [];
+    const profile = typeof window.getSiteSessionUser === 'function'
+      ? window.getSiteSessionUser()
       : null;
+    const isRegistered = Boolean(
+      profile
+      && !profile.isDemo
+      && (typeof window.isRealSiteUser !== 'function' || window.isRealSiteUser(profile))
+    );
 
-    if (!ctx) return [];
-
-    if (ctx.isDemo) {
-      const isDemoOrder = typeof window.isSiteDemoOrder === 'function'
-        ? window.isSiteDemoOrder
-        : () => false;
-      return orders.filter((order) => isDemoOrder(order));
+    if (!isRegistered) {
+      return list;
     }
 
     const belongsToUser = typeof window.belongsToRegisteredSiteOrder === 'function'
       ? window.belongsToRegisteredSiteOrder
       : () => false;
 
-    return orders.filter((order) => belongsToUser(order));
+    return list.filter((order) => belongsToUser(order));
   }
 
   async function loadOrders() {
@@ -326,10 +380,28 @@
     updateOrdersPageCopy();
 
     try {
-      const orders = filterOrdersForSession(await window.SiteOrders.fetchServerOrders());
+      const serverOrders = await window.SiteOrders.fetchServerOrders();
+      const localOrders = typeof window.SiteOrders.getOrders === 'function'
+        ? window.SiteOrders.getOrders()
+        : [];
+      const merged = mergeOrderLists(serverOrders, localOrders);
+      const orders = filterOrdersForSession(merged);
       const enrichedOrders = await enrichOrdersWithImages(orders);
       renderOrders(enrichedOrders);
     } catch (error) {
+      try {
+        const localOrders = typeof window.SiteOrders.getOrders === 'function'
+          ? window.SiteOrders.getOrders()
+          : [];
+        const fallback = filterOrdersForSession(localOrders);
+        if (fallback.length) {
+          setError('');
+          renderOrders(await enrichOrdersWithImages(fallback));
+          return;
+        }
+      } catch {
+        // keep original error
+      }
       listEl.innerHTML = '';
       emptyEl.hidden = true;
       if (statsEl) statsEl.hidden = true;

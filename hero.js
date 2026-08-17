@@ -7,7 +7,8 @@ if (hero && heroSlidesRoot && heroDotsRoot && window.HeroBanners) {
     SLIDE_GRADIENTS,
     load: loadSlideData,
     applyFitToImg,
-    getFilledSlideEntries
+    getFilledSlideEntries,
+    withDefaultHeroSlides
   } = window.HeroBanners;
 
   let activeSlide = 0;
@@ -142,20 +143,20 @@ if (hero && heroSlidesRoot && heroDotsRoot && window.HeroBanners) {
   });
 
   async function initHero() {
-    slideData = await loadSlideData();
+    slideData = withDefaultHeroSlides(await loadSlideData());
     refreshSlides();
     window.dispatchEvent(new CustomEvent('hero-ready'));
   }
 
   window.addEventListener('hero-banners-updated', async () => {
-    slideData = await loadSlideData();
+    slideData = withDefaultHeroSlides(await loadSlideData());
     refreshSlides();
     window.dispatchEvent(new CustomEvent('hero-ready'));
   });
 
   window.addEventListener('storage', async (e) => {
     if (e.key === window.HeroBanners.HERO_STORAGE_KEY) {
-      slideData = await loadSlideData();
+      slideData = withDefaultHeroSlides(await loadSlideData());
       refreshSlides();
     }
   });

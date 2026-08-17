@@ -5,6 +5,12 @@ const CLOTHING_RECOMMENDED = { width: 1600, height: 1440 };
 const CLOTHING_SLIDE_COUNT = 4;
 const MAX_FILE_SIZE = 25 * 1024 * 1024;
 const DEFAULT_FIT = { scale: 1, x: 50, y: 50 };
+const DEFAULT_CLOTHING_SLIDES = [
+  { image: '/assets/clothing-hero/slide-0.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/clothing-hero/slide-1.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/clothing-hero/slide-2.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/clothing-hero/slide-3.png', fit: { ...DEFAULT_FIT } }
+];
 const MIN_FIT_SCALE = 1;
 const MAX_FIT_SCALE = 3;
 
@@ -48,6 +54,15 @@ function getFilledSlideEntries(slides) {
   return slides
     .map((slide, index) => (slide ? { index, slide } : null))
     .filter(Boolean);
+}
+
+function getDefaultClothingSlides() {
+  return DEFAULT_CLOTHING_SLIDES.map((slide) => normalizeSlide(slide));
+}
+
+function withDefaultClothingSlides(slides) {
+  if (getFilledSlideEntries(slides).length) return slides;
+  return getDefaultClothingSlides();
 }
 
 function getNextFreeIndex(slides) {
@@ -244,6 +259,8 @@ window.ClothingBanners = {
   MAX_FILE_SIZE,
   SLIDE_GRADIENTS,
   DEFAULT_FIT,
+  DEFAULT_SLIDES: DEFAULT_CLOTHING_SLIDES,
+  withDefaultClothingSlides,
   MIN_FIT_SCALE,
   MAX_FIT_SCALE,
   load: loadSlideData,

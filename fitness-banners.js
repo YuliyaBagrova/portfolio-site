@@ -5,6 +5,12 @@ const FITNESS_SLIDE_COUNT = 4;
 const FITNESS_MAX_SLIDES = 10;
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 const DEFAULT_FIT = { scale: 1, x: 50, y: 50 };
+const DEFAULT_FITNESS_SLIDES = [
+  { image: '/assets/fitness-hero/slide-0.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/fitness-hero/slide-1.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/fitness-hero/slide-2.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/fitness-hero/slide-3.png', fit: { ...DEFAULT_FIT } }
+];
 const MIN_FIT_SCALE = 1;
 const MAX_FIT_SCALE = 3;
 
@@ -58,6 +64,15 @@ function getFilledSlideEntries(slides) {
   return slides
     .map((slide, index) => (slide ? { index, slide } : null))
     .filter(Boolean);
+}
+
+function getDefaultFitnessSlides() {
+  return DEFAULT_FITNESS_SLIDES.map((slide) => normalizeSlide(slide));
+}
+
+function withDefaultFitnessSlides(slides) {
+  if (getFilledSlideEntries(slides).length) return slides;
+  return getDefaultFitnessSlides();
 }
 
 function getNextFreeIndex(slides) {
@@ -256,10 +271,12 @@ window.FitnessBanners = {
   FITNESS_MAX_SLIDES,
   SLIDE_GRADIENTS,
   DEFAULT_FIT,
+  DEFAULT_SLIDES: DEFAULT_FITNESS_SLIDES,
   MIN_FIT_SCALE,
   MAX_FIT_SCALE,
   MAX_FILE_SIZE,
   load: loadSlideData,
+  withDefaultFitnessSlides,
   upload: uploadSlide,
   saveFit: saveSlideFit,
   remove: removeSlide,

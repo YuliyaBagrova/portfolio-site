@@ -11,12 +11,17 @@ function parseOrderScopeQuery(query = {}) {
 }
 
 function parseOrderScopeBody(body = {}) {
-  const clientScope = String(body.client_scope || '').trim();
-  const isDemo = body.is_demo === true
+  let clientScope = String(body.client_scope || '').trim();
+  let isDemo = body.is_demo === true
     || body.is_demo === 1
     || String(body.is_demo || '0') === '1';
   const siteUserId = Number.parseInt(String(body.site_user_id || ''), 10);
   const siteUserIdValid = Number.isInteger(siteUserId) && siteUserId > 0 ? siteUserId : null;
+
+  if (!isRegisteredScope(clientScope) && !siteUserIdValid) {
+    isDemo = true;
+    clientScope = DEMO_SHARED_SCOPE;
+  }
 
   return {
     clientScope: isDemo ? (clientScope || DEMO_SHARED_SCOPE) : clientScope,
@@ -26,11 +31,13 @@ function parseOrderScopeBody(body = {}) {
 }
 
 function isRegisteredScope(clientScope) {
-  return clientScope.startsWith('user:') || clientScope.startsWith('user-email:');
+  return Boolean(clientScope) && (clientScope.startsWith('user:') || clientScope.startsWith('user-email:'));
 }
 
 function isDemoScope(clientScope) {
-  return clientScope === DEMO_SHARED_SCOPE || clientScope.startsWith('demo:');
+  return clientScope === DEMO_SHARED_SCOPE
+    || clientScope === 'guest'
+    || (Boolean(clientScope) && clientScope.startsWith('demo:'));
 }
 
 function getRegisteredUserId(clientScope) {
@@ -43,21 +50,23 @@ function isDemoOrderRecord(order) {
   if (!order) return false;
   if (Number(order.is_demo) === 1 || order.is_demo === true) return true;
 
+  const scope = String(order.client_scope || '').trim();
+  if (isDemoScope(scope) || !scope) {
+    if (order.site_user_id == null || order.site_user_id === '') return true;
+  }
+
   if (order.site_user_id == null || order.site_user_id === '') {
-    return true;
+    if (!isRegisteredScope(scope)) return true;
   }
 
   const email = String(order.email || '').trim().toLowerCase();
   if (email.endsWith('@portfolio.local')) return true;
 
-  const scope = String(order.client_scope || '').trim();
-  if (scope.startsWith('demo:')) return true;
-
   return false;
 }
 
 function belongsToRegisteredScope(order, scope) {
-  if (!order || !scope?.clientScope || !isRegisteredScope(scope.clientScope)) return false;
+  if (!order || !scope || !scope.clientScope || !isRegisteredScope(scope.clientScope)) return false;
   if (isDemoOrderRecord(order)) return false;
   if (Number(order.is_demo) === 1) return false;
 
@@ -69,6 +78,21 @@ function belongsToRegisteredScope(order, scope) {
 }
 
 function buildSiteOrdersWhere(scope) {
+  if (scope.isDemo || isDemoScope(scope.clientScope)) {
+    return {
+      clause: `(
+        is_demo = 1
+        OR client_scope = ?
+        OR client_scope LIKE 'demo:%'
+        OR (
+          site_user_id IS NULL
+          AND (client_scope IS NULL OR client_scope = '' OR client_scope = 'guest')
+        )
+      )`,
+      params: [DEMO_SHARED_SCOPE]
+    };
+  }
+
   if (!scope.clientScope) {
     return { clause: '1 = 0', params: [] };
   }
@@ -89,13 +113,6 @@ function buildSiteOrdersWhere(scope) {
     };
   }
 
-  if (isDemoScope(scope.clientScope)) {
-    return {
-      clause: 'is_demo = 1',
-      params: []
-    };
-  }
-
   return {
     clause: 'client_scope = ?',
     params: [scope.clientScope]
@@ -105,17 +122,19 @@ function buildSiteOrdersWhere(scope) {
 function filterOrdersForScope(orders, scope) {
   const list = Array.isArray(orders) ? orders : [];
 
-  if (!scope?.clientScope) return [];
+  const clientScope = scope && scope.clientScope ? scope.clientScope : '';
 
-  if (isRegisteredScope(scope.clientScope)) {
-    return list.filter((order) => belongsToRegisteredScope(order, scope));
-  }
-
-  if (isDemoScope(scope.clientScope)) {
+  if ((scope && scope.isDemo) || isDemoScope(clientScope)) {
     return list.filter((order) => isDemoOrderRecord(order));
   }
 
-  return list.filter((order) => order.client_scope === scope.clientScope);
+  if (!clientScope) return [];
+
+  if (isRegisteredScope(clientScope)) {
+    return list.filter((order) => belongsToRegisteredScope(order, scope));
+  }
+
+  return list.filter((order) => order.client_scope === clientScope);
 }
 
 module.exports = {

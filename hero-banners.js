@@ -6,6 +6,12 @@ const HERO_SLIDE_COUNT = 4;
 const HERO_MAX_SLIDES = 10;
 const MAX_FILE_SIZE = 15 * 1024 * 1024;
 const DEFAULT_FIT = { scale: 1, x: 50, y: 50 };
+const DEFAULT_HERO_SLIDES = [
+  { image: '/assets/hero/slide-0.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/hero/slide-1.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/hero/slide-2.png', fit: { ...DEFAULT_FIT } },
+  { image: '/assets/hero/slide-3.png', fit: { ...DEFAULT_FIT } }
+];
 const MIN_FIT_SCALE = 1;
 const MAX_FIT_SCALE = 3;
 
@@ -59,6 +65,15 @@ function getFilledSlideEntries(slides) {
   return slides
     .map((slide, index) => (slide ? { index, slide } : null))
     .filter(Boolean);
+}
+
+function getDefaultHeroSlides() {
+  return DEFAULT_HERO_SLIDES.map((slide) => normalizeSlide(slide));
+}
+
+function withDefaultHeroSlides(slides) {
+  if (getFilledSlideEntries(slides).length) return slides;
+  return getDefaultHeroSlides();
 }
 
 function getNextFreeIndex(slides) {
@@ -281,9 +296,11 @@ window.HeroBanners = {
   HERO_MAX_SLIDES,
   SLIDE_GRADIENTS,
   DEFAULT_FIT,
+  DEFAULT_SLIDES: DEFAULT_HERO_SLIDES,
   MIN_FIT_SCALE,
   MAX_FIT_SCALE,
   load: loadSlideData,
+  withDefaultHeroSlides,
   upload: uploadSlide,
   saveFit: saveSlideFit,
   remove: removeSlide,

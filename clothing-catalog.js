@@ -127,18 +127,20 @@ function parseUsd(value) {
 }
 
 function renderPriceBlock(item) {
-  const price = parseUsd(item.price_usd);
-  const compare = parseUsd(item.compare_price_usd);
+  let price = parseUsd(item.price_usd);
+  let compare = parseUsd(item.compare_price_usd);
+  if (price == null && compare != null) {
+    price = compare;
+    compare = null;
+  }
   const discount = getDiscountPercent(price, compare);
 
   if (price == null) {
     return '<div class="clothing-card-price-row"><span class="clothing-card-price-current clothing-card-price-current--muted">Цена по запросу</span></div>';
   }
 
-  const currentHtml = price != null
-    ? `<span class="clothing-card-price-current${compare != null && compare > price ? ' clothing-card-price-current--sale' : ''}">${formatPriceUsd(price)}</span>`
-    : '';
-  const compareHtml = compare != null && price != null && compare > price
+  const currentHtml = `<span class="clothing-card-price-current${compare != null && compare > price ? ' clothing-card-price-current--sale' : ''}">${formatPriceUsd(price)}</span>`;
+  const compareHtml = compare != null && compare > price
     ? `<span class="clothing-card-price-compare">${formatPriceUsd(compare)}</span>`
     : '';
   const discountHtml = discount

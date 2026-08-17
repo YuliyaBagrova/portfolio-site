@@ -11,7 +11,8 @@ if (clothingHero && window.ClothingBanners) {
     SLIDE_GRADIENTS,
     load: loadSlideData,
     applyFitToImg,
-    getFilledSlideEntries
+    getFilledSlideEntries,
+    withDefaultClothingSlides
   } = window.ClothingBanners;
 
   let activeSlide = 0;
@@ -309,13 +310,13 @@ if (clothingHero && window.ClothingBanners) {
   }
 
   async function initClothingHero() {
-    slideData = await loadSlideData();
+    slideData = withDefaultClothingSlides(await loadSlideData());
     refreshSlides({ resetActive: true });
     startAutoplay();
   }
 
   window.addEventListener('clothing-banners-updated', async () => {
-    slideData = await loadSlideData();
+    slideData = withDefaultClothingSlides(await loadSlideData());
     refreshSlides({ resetActive: true });
     startAutoplay();
   });

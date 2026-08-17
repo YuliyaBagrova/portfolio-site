@@ -206,16 +206,24 @@
     let price = parseOptionalNumber(field('price_usd')?.value);
     let compare = parseOptionalNumber(field('compare_price_usd')?.value);
     const discount = parseOptionalNumber(field('discount_percent')?.value);
+    const hasDiscount = discount != null && discount > 0 && discount < 100;
 
-    if (discount != null && discount > 0 && discount < 100) {
+    if (hasDiscount) {
       if (price != null && compare == null) {
         compare = Math.round((price / (1 - discount / 100)) * 100) / 100;
       } else if (compare != null && price == null) {
         price = Math.round(compare * (1 - discount / 100) * 100) / 100;
       }
+    } else if (price == null && compare != null) {
+      price = compare;
+      compare = null;
     }
 
-    return { price, compare, discount };
+    if (compare != null && price != null && compare <= price) {
+      compare = null;
+    }
+
+    return { price, compare, discount: hasDiscount ? discount : null };
   }
 
   function syncDiscountPreview() {
@@ -267,6 +275,22 @@
     return `<div class="admin-fitness-product-thumb admin-fitness-product-thumb--placeholder admin-clothing-catalog-thumb" style="background:${gradient}"><span>${label}</span></div>`;
   }
 
+  function formatListPrice(item) {
+    let price = item.price_usd != null ? Number(item.price_usd) : NaN;
+    let compare = item.compare_price_usd != null ? Number(item.compare_price_usd) : NaN;
+    if (!Number.isFinite(price)) price = null;
+    if (!Number.isFinite(compare)) compare = null;
+    if (price == null && compare != null) {
+      price = compare;
+      compare = null;
+    }
+    if (price == null) return '';
+    const oldPrice = compare != null && compare > price
+      ? `<s>$${compare.toFixed(2)}</s> `
+      : '';
+    return `<span class="admin-clothing-product-price">${oldPrice}$${price.toFixed(2)}</span>`;
+  }
+
   function renderList() {
     if (countEl) countEl.textContent = formatCount(products.length);
 
@@ -290,7 +314,7 @@
             <span class="admin-clothing-product-badge admin-clothing-product-badge--${escapeHtml(item.category || 'casual')}">${escapeHtml(LINE_LABELS[item.category] || item.category || 'Без категории')}</span>
             ${renderCatalogBadges(item)}
             ${item.promo_type ? `<span class="admin-clothing-product-badge admin-clothing-product-badge--promo admin-clothing-product-badge--${escapeHtml(item.promo_type)}">${escapeHtml(item.promo_label || PROMO_LABELS[item.promo_type] || item.promo_type)}</span>` : ''}
-            ${item.price_usd != null ? `<span class="admin-clothing-product-price">${item.compare_price_usd != null && item.compare_price_usd > item.price_usd ? `<s>$${Number(item.compare_price_usd).toFixed(2)}</s> ` : ''}$${Number(item.price_usd).toFixed(2)}</span>` : ''}
+            ${formatListPrice(item)}
           </div>
         </div>
         <div class="admin-fitness-product-actions">
@@ -384,7 +408,7 @@
     const resolved = resolveDiscountPrices();
 
     if (resolved.compare != null && resolved.price != null && resolved.compare <= resolved.price) {
-      showToast('Цена без скидки должна быть выше цены со скидкой', 'error');
+      showToast('Старая цена должна быть выше текущей', 'error');
       field('compare_price_usd')?.focus();
       return;
     }

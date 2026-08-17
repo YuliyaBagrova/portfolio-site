@@ -385,6 +385,26 @@ async function runMigrations(pool) {
     console.log('Все заказы без site_user_id помечены как demo');
   }
 
+  if (!(await hasMigration(pool, '2026-site-demo-orders-backfill-v3'))) {
+    for (const table of ['work_orders', 'banner_orders']) {
+      if (!(await tableExists(pool, table))) continue;
+      await pool.query(
+        `UPDATE ${table}
+         SET is_demo = 1,
+             client_scope = 'demo:shared'
+         WHERE site_user_id IS NULL
+           AND (
+             is_demo = 0
+             OR client_scope IS NULL
+             OR client_scope = ''
+             OR client_scope = 'guest'
+           )`
+      );
+    }
+    await markMigration(pool, '2026-site-demo-orders-backfill-v3');
+    console.log('Гостевые заявки без аккаунта перенесены в demo:shared');
+  }
+
   const { ensureBannerWorkLikesTable } = require('./banner-likes');
   await ensureBannerWorkLikesTable(pool);
 

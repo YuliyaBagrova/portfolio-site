@@ -6769,17 +6769,17 @@ button.stat-icon:hover {
 #section-supplements .fitness-hero-overlay {
   background: linear-gradient(
     120deg,
-    rgba(15, 17, 23, 0.55) 0%,
-    rgba(154, 52, 18, 0.45) 45%,
-    rgba(15, 17, 23, 0.7) 100%
+    rgba(15, 17, 23, 0.32) 0%,
+    rgba(154, 52, 18, 0.22) 45%,
+    rgba(15, 17, 23, 0.4) 100%
   );
 }
 
 #section-supplements .fitness-hero.has-custom-banner .fitness-hero-overlay {
   background: linear-gradient(
     120deg,
-    rgba(15, 17, 23, 0.5) 0%,
-    rgba(15, 17, 23, 0.65) 100%
+    rgba(15, 17, 23, 0.28) 0%,
+    rgba(15, 17, 23, 0.38) 100%
   );
 }
 
@@ -10071,7 +10071,15 @@ button.stat-icon:hover {
 }
 
 #section-banners .banners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 24px;
+  align-items: start;
+}
+
+#section-banners .banners-grid.is-masonry {
+  display: block;
+  position: relative;
 }
 
 #section-banners .banners-grid.is-empty::after {
@@ -10085,6 +10093,12 @@ button.stat-icon:hover {
 }
 
 #section-banners .banners-card {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  width: 100%;
+  height: auto;
+  margin: 0;
   background: rgba(28, 31, 46, 0.88);
   border: 1px solid var(--banners-line);
   border-radius: 16px;
@@ -10092,8 +10106,20 @@ button.stat-icon:hover {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.35s ease;
 }
 
+#section-banners .banners-grid.is-masonry .banners-card {
+  position: absolute;
+}
+
 #section-banners .banners-card.is-hidden {
   display: none;
+}
+
+#section-banners .banners-card.wide {
+  grid-column: auto;
+}
+
+#section-banners .banners-card.is-portrait {
+  max-width: 100%;
 }
 
 #section-banners .banners-card:hover {
@@ -10105,6 +10131,8 @@ button.stat-icon:hover {
 #section-banners .banners-card .portfolio-image {
   position: relative;
   overflow: hidden;
+  aspect-ratio: var(--work-aspect, 4 / 3);
+  height: auto;
 }
 
 #section-banners .banners-card .portfolio-image::after {
@@ -10206,6 +10234,7 @@ button.stat-icon:hover {
 #section-banners .banners-work-media.has-image {
   display: block;
   line-height: 0;
+  aspect-ratio: var(--work-aspect, auto);
 }
 
 #section-banners .banners-work-media.is-zoomable {
@@ -10218,6 +10247,12 @@ button.stat-icon:hover {
   height: auto;
   object-fit: contain;
   background: rgba(8, 9, 14, 0.55);
+}
+
+@media (max-width: 720px) {
+  #section-banners .banners-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 #section-banners .banners-card-date {

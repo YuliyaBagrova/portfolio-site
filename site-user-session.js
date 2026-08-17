@@ -1,5 +1,6 @@
 (function initSiteUserSession() {
   const STORAGE_KEY = 'portfolio_site_user';
+  const PERSIST_KEY = 'portfolio_site_user_persistent';
   const SESSION_COUNT_PREFIX = 'portfolio_site_browser_visits_';
   const SESSION_ACTIVE_PREFIX = 'portfolio_site_tab_active_';
   const GATE_KEY = 'site_gate_unlocked';
@@ -13,17 +14,38 @@
     'Временный профиль клиента для ознакомления с сайтом.'
   ];
 
-  function readSession() {
+  function readPersistedSession() {
     try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(PERSIST_KEY);
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;
     }
   }
 
+  function readSession() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch {
+      // fall through to persisted session
+    }
+
+    const persisted = readPersistedSession();
+    if (persisted) {
+      try {
+        sessionStorage.setItem(STORAGE_KEY, JSON.stringify(persisted));
+      } catch {
+        // ignore quota / private-mode errors
+      }
+    }
+    return persisted;
+  }
+
   function writeSession(profile) {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+    const payload = JSON.stringify(profile);
+    sessionStorage.setItem(STORAGE_KEY, payload);
+    localStorage.setItem(PERSIST_KEY, payload);
   }
 
   function pickRandom(list) {
@@ -196,6 +218,7 @@
       sessionStorage.removeItem(SESSION_ACTIVE_PREFIX + getSessionUserKey(profile));
     }
     sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PERSIST_KEY);
   }
 
   function logoutSiteUser() {
@@ -331,27 +354,29 @@
   function getSiteOrderScopeKey() {
     ensureSiteClientSession();
     const profile = readSession();
-    if (!profile) {
-      if (isSiteDemoClientMode()) return DEMO_SHARED_SCOPE;
-      return 'guest';
+    if (profile && isRealSiteUser(profile) && !profile.isDemo) {
+      if (profile.id != null) return `user:${profile.id}`;
+      const email = String(profile.email || '').trim().toLowerCase();
+      return email ? `user-email:${email}` : DEMO_SHARED_SCOPE;
     }
-    if (profile.isDemo) return DEMO_SHARED_SCOPE;
-    if (profile.id != null) return `user:${profile.id}`;
-    const email = String(profile.email || '').trim().toLowerCase();
-    return email ? `user-email:${email}` : 'guest';
+    return DEMO_SHARED_SCOPE;
   }
 
   function isSiteDemoOrder(order) {
     if (!order) return false;
     if (order.is_demo === true || order.is_demo === 1 || order.is_demo === '1') return true;
 
+    const scope = String(order.client_scope || '').trim();
+    if (scope.startsWith('user:') || scope.startsWith('user-email:')) {
+      return false;
+    }
+
     if (order.site_user_id == null || order.site_user_id === '') return true;
 
     const email = String(order.email || '').trim().toLowerCase();
     if (email.endsWith('@portfolio.local')) return true;
 
-    const scope = String(order.client_scope || '').trim();
-    if (scope.startsWith('demo:')) return true;
+    if (scope.startsWith('demo:') || scope === 'guest') return true;
 
     return false;
   }
@@ -372,44 +397,36 @@
     ensureSiteClientSession();
     const profile = readSession();
 
-    if (!profile) {
-      if (isSiteDemoClientMode()) {
-        return {
-          isDemo: true,
-          is_demo: 1,
-          site_user_id: null,
-          email: ''
-        };
-      }
-
+    if (profile && isRealSiteUser(profile) && !profile.isDemo) {
       return {
         isDemo: false,
         is_demo: 0,
-        site_user_id: null,
-        email: ''
-      };
-    }
-
-    if (profile.isDemo) {
-      return {
-        isDemo: true,
-        is_demo: 1,
-        site_user_id: null,
+        site_user_id: profile.id ?? null,
         email: String(profile.email || '').trim().toLowerCase()
       };
     }
 
     return {
-      isDemo: false,
-      is_demo: 0,
-      site_user_id: profile.id ?? null,
-      email: String(profile.email || '').trim().toLowerCase()
+      isDemo: true,
+      is_demo: 1,
+      site_user_id: null,
+      email: profile?.isDemo ? String(profile.email || '').trim().toLowerCase() : ''
     };
   }
 
   function getSiteOrderQueryParams() {
+    const ctx = getSiteOrderContext();
+    if (ctx.isDemo) {
+      return {
+        client_scope: DEMO_SHARED_SCOPE,
+        is_demo: '1'
+      };
+    }
     return {
-      client_scope: getSiteOrderScopeKey()
+      client_scope: getSiteOrderScopeKey(),
+      is_demo: '0',
+      email: ctx.email || '',
+      site_user_id: ctx.site_user_id != null ? String(ctx.site_user_id) : ''
     };
   }
 

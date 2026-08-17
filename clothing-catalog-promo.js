@@ -17,7 +17,9 @@
     const title = promo.promo_title || '';
     const subtitle = promo.promo_subtitle || '';
     const link = promo.promo_link || '';
-    const imageUrl = promo.image ? promo.image.split('?')[0] : '';
+    const imageUrl = promo.image
+      ? promo.image.split('?')[0]
+      : '/assets/clothing-catalog-promo/default.png';
 
     if (sticker) {
       sticker.textContent = label;

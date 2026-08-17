@@ -127,8 +127,12 @@ function renderProductPrice(product) {
   const compareEl = document.getElementById('clothingProductComparePrice');
   const discountEl = document.getElementById('clothingProductDiscount');
   const promoEl = document.getElementById('clothingProductPromoBadge');
-  const price = parseUsd(product.price_usd);
-  const compare = parseUsd(product.compare_price_usd);
+  let price = parseUsd(product.price_usd);
+  let compare = parseUsd(product.compare_price_usd);
+  if (price == null && compare != null) {
+    price = compare;
+    compare = null;
+  }
   const promo = getPromoBadge(product);
   const discount = getDiscountPercent(price, compare);
 

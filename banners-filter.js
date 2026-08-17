@@ -28,6 +28,10 @@
     if (emptyState) {
       emptyState.hidden = cards.length > 0;
     }
+
+    if (window.BannersCatalog && typeof window.BannersCatalog.layoutMasonry === 'function') {
+      window.BannersCatalog.layoutMasonry(grid);
+    }
   }
 
   filterBar.addEventListener('click', (event) => {

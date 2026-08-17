@@ -7,7 +7,8 @@ if (fitnessHero && fitnessHeroSlidesRoot && fitnessHeroDotsRoot && window.Fitnes
     SLIDE_GRADIENTS,
     load: loadSlideData,
     applyFitToImg,
-    getFilledSlideEntries
+    getFilledSlideEntries,
+    withDefaultFitnessSlides
   } = window.FitnessBanners;
 
   let activeSlide = 0;
@@ -160,12 +161,12 @@ if (fitnessHero && fitnessHeroSlidesRoot && fitnessHeroDotsRoot && window.Fitnes
   }
 
   async function initFitnessHero() {
-    slideData = await loadSlideData();
+    slideData = withDefaultFitnessSlides(await loadSlideData());
     refreshSlides();
   }
 
   window.addEventListener('fitness-banners-updated', async () => {
-    slideData = await loadSlideData();
+    slideData = withDefaultFitnessSlides(await loadSlideData());
     refreshSlides();
   });
 

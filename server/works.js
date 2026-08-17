@@ -163,6 +163,13 @@ function createWorksStorage(rootDir) {
       } else if (compare != null && price == null) {
         price = Math.round(compare * (1 - discountPercent / 100) * 100) / 100;
       }
+    } else if (price == null && compare != null) {
+      price = compare;
+      compare = null;
+    }
+
+    if (compare != null && price != null && compare <= price) {
+      compare = null;
     }
 
     return { priceUsd: price, comparePriceUsd: compare };
@@ -175,6 +182,11 @@ function createWorksStorage(rootDir) {
     if (reviewCount >= 3 && !tags.some((tag) => normalizeTagKey(tag) === 'popular')) {
       tags.push('popular');
     }
+    const storedPrice = row.price_usd != null && row.price_usd !== '' ? Number(row.price_usd) : null;
+    const storedCompare = row.compare_price_usd != null && row.compare_price_usd !== ''
+      ? Number(row.compare_price_usd)
+      : null;
+    const prices = resolveClothingDiscountPrices(storedPrice, storedCompare, null);
     return {
       id: row.id,
       section_id: row.section_id,
@@ -188,8 +200,8 @@ function createWorksStorage(rootDir) {
       image_width: imageData?.width || null,
       image_height: imageData?.height || null,
       created_at: row.created_at,
-      price_usd: row.price_usd != null && row.price_usd !== '' ? Number(row.price_usd) : null,
-      compare_price_usd: row.compare_price_usd != null && row.compare_price_usd !== '' ? Number(row.compare_price_usd) : null,
+      price_usd: prices.priceUsd,
+      compare_price_usd: prices.comparePriceUsd,
       promo_type: row.promo_type || null,
       promo_label: row.promo_label || null,
       avg_rating: row.avg_rating != null ? Number(Number(row.avg_rating).toFixed(1)) : 0,
@@ -265,7 +277,8 @@ function createWorksStorage(rootDir) {
       message: row.message || '',
       created_at: row.created_at,
       is_demo: Boolean(row.is_demo),
-      site_user_id: row.site_user_id ?? null
+      site_user_id: row.site_user_id ?? null,
+      client_scope: row.client_scope || null
     };
   }
 
@@ -609,6 +622,7 @@ function createWorksStorage(rootDir) {
         const [rows] = await pool.query(
           `SELECT o.id, o.work_id, o.customer_name, o.email, o.phone,
                   o.quantity, o.message, o.created_at, o.is_demo, o.site_user_id,
+                  o.client_scope,
                   w.title AS work_title, w.section_id
            FROM work_orders o
            JOIN works w ON w.id = o.work_id
@@ -774,15 +788,13 @@ function createWorksStorage(rootDir) {
       }
 
       if (sectionId === 'clothing') {
-        if (parsedDiscountPercent != null) {
-          const resolved = resolveClothingDiscountPrices(
-            parsedPriceUsd,
-            parsedComparePriceUsd,
-            parsedDiscountPercent
-          );
-          parsedPriceUsd = resolved.priceUsd;
-          parsedComparePriceUsd = resolved.comparePriceUsd;
-        }
+        const resolved = resolveClothingDiscountPrices(
+          parsedPriceUsd,
+          parsedComparePriceUsd,
+          parsedDiscountPercent
+        );
+        parsedPriceUsd = resolved.priceUsd;
+        parsedComparePriceUsd = resolved.comparePriceUsd;
 
         if (
           parsedComparePriceUsd != null
@@ -911,24 +923,20 @@ function createWorksStorage(rootDir) {
         }
 
         if (existing.section_id === 'clothing') {
-          if (parsedDiscountPercent != null) {
-            const resolved = resolveClothingDiscountPrices(
-              priceUsd !== undefined
-                ? nextPriceUsd
-                : (existing.price_usd != null && existing.price_usd !== '' ? Number(existing.price_usd) : null),
-              comparePriceUsd !== undefined
-                ? nextComparePriceUsd
-                : (existing.compare_price_usd != null && existing.compare_price_usd !== ''
-                  ? Number(existing.compare_price_usd)
-                  : null),
-              parsedDiscountPercent
-            );
-            if (priceUsd !== undefined || parsedDiscountPercent != null) {
-              nextPriceUsd = resolved.priceUsd;
-            }
-            if (comparePriceUsd !== undefined || parsedDiscountPercent != null) {
-              nextComparePriceUsd = resolved.comparePriceUsd;
-            }
+          const resolved = resolveClothingDiscountPrices(
+            priceUsd !== undefined
+              ? nextPriceUsd
+              : (existing.price_usd != null && existing.price_usd !== '' ? Number(existing.price_usd) : null),
+            comparePriceUsd !== undefined
+              ? nextComparePriceUsd
+              : (existing.compare_price_usd != null && existing.compare_price_usd !== ''
+                ? Number(existing.compare_price_usd)
+                : null),
+            parsedDiscountPercent
+          );
+          if (priceUsd !== undefined || comparePriceUsd !== undefined || parsedDiscountPercent != null) {
+            nextPriceUsd = resolved.priceUsd;
+            nextComparePriceUsd = resolved.comparePriceUsd;
           }
 
           if (

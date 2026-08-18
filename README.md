@@ -4,7 +4,7 @@
 
 Репозиторий: [github.com/YuliyaBagrova/portfolio-site](https://github.com/YuliyaBagrova/portfolio-site)
 
-Лендинг репозитория (GitHub Pages): [yuliyabagrova.github.io/portfolio-site](https://yuliyabagrova.github.io/portfolio-site/)
+Публичная страница: [yuliyabagrova.github.io/portfolio-site](https://yuliyabagrova.github.io/portfolio-site/)
 
 ## Возможности
 
@@ -82,7 +82,7 @@ npm start
 ├── admin*.js           # Панель администратора
 ├── server/             # API Express + миграции БД
 ├── db/init/            # SQL-схема и seed
-├── docs/               # Лендинг для GitHub Pages
+├── docs/               # Публичная страница GitHub Pages
 └── docker-compose.yml
 ```
 

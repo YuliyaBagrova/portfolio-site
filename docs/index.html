@@ -2,130 +2,229 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio — каталог с админ-панелью</title>
-  <meta name="description" content="Демо-сайт портфолио: каталог, корзина, заказы, панель администратора. Node.js, MySQL, Docker.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Портфолио — креативные работы и дизайн</title>
+  <meta name="description" content="Коллекция баннеров, креативов для фитнес-добавок и fashion-проектов. Все работы собраны в удобных разделах для быстрого просмотра.">
+  <link rel="canonical" href="https://yuliyabagrova.github.io/portfolio-site/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#0f1117">
+  <meta name="application-name" content="Портфолио">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Портфолио">
+  <meta property="og:title" content="Портфолио — креативные работы и дизайн">
+  <meta property="og:description" content="Коллекция баннеров, фитнес-креативов и fashion-проектов.">
+  <meta property="og:url" content="https://yuliyabagrova.github.io/portfolio-site/">
+  <meta property="og:image" content="https://yuliyabagrova.github.io/portfolio-site/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Портфолио — креативные работы и дизайн">
+  <meta name="twitter:description" content="Коллекция баннеров, фитнес-креативов и fashion-проектов.">
+  <meta name="twitter:image" content="https://yuliyabagrova.github.io/portfolio-site/og-image.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      color-scheme: light dark;
-      --bg: #0f172a;
-      --card: #1e293b;
-      --text: #f8fafc;
-      --muted: #94a3b8;
+      --bg: #0f1117;
+      --card: #1c1f2e;
+      --line: #2a2d3a;
+      --text: #f0f2f5;
+      --muted: #9ca3af;
       --accent: #6366f1;
+      --pink: #ff4d9d;
+      --orange: #f97316;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Inter, Segoe UI, Arial, sans-serif;
-      background: radial-gradient(circle at top, #1e293b, var(--bg));
+      font-family: Inter, sans-serif;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-    main {
-      max-width: 720px;
+    a { color: inherit; text-decoration: none; }
+    .header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(15, 17, 23, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner, .wrap {
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 48px 20px 64px;
+      padding: 0 24px;
     }
-    .badge {
-      display: inline-block;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(99, 102, 241, 0.15);
-      color: #a5b4fc;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      line-height: 1.15;
-    }
-    p { color: var(--muted); margin: 0 0 16px; }
-    .card {
-      margin-top: 28px;
-      padding: 24px;
-      border-radius: 16px;
-      background: var(--card);
-      border: 1px solid rgba(148, 163, 184, 0.18);
-    }
-    ul { margin: 0; padding-left: 1.2rem; color: var(--muted); }
-    li + li { margin-top: 8px; }
-    .links {
+    .header-inner {
+      min-height: 64px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
     }
-    a {
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: 0.04em;
+    }
+    .logo span:first-child { color: #818cf8; }
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    nav a {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.04em;
+      padding: 8px 12px;
+      color: var(--muted);
+    }
+    nav a:hover { color: #fff; }
+    .hero {
+      position: relative;
+      min-height: min(72vh, 640px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 72px 24px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(15, 17, 23, 0.35) 0%, rgba(15, 17, 23, 0.82) 100%),
+        url('og-image.png') center / cover no-repeat;
+    }
+    .hero h1 {
+      font-weight: 800;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      letter-spacing: 0.01em;
+      max-width: 16ch;
+      margin: 0 auto 16px;
+      line-height: 1.12;
+    }
+    .hero p {
+      max-width: 560px;
+      margin: 0 auto 28px;
+      color: rgba(240, 242, 245, 0.86);
+      font-size: 1.0625rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
       color: #fff;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 10px;
-      background: var(--accent);
-      font-weight: 600;
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.35);
     }
-    a.secondary {
-      background: transparent;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      color: var(--text);
+    .sections {
+      padding: 64px 0 80px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 280px;
+      padding: 28px 24px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at top right, var(--glow, rgba(99, 102, 241, 0.16)), transparent 48%),
+        var(--card);
+    }
+    .card.fitness { --glow: rgba(249, 115, 22, 0.2); }
+    .card.banners { --glow: rgba(255, 77, 157, 0.2); }
+    .card.clothing { --glow: rgba(201, 168, 108, 0.18); }
+    .card img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 18px;
+    }
+    .card h2 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+    .card p { color: var(--muted); font-size: 0.9375rem; flex: 1; }
+    .card span {
+      margin-top: 18px;
+      color: #a5b4fc;
+      font-weight: 600;
+      font-size: 0.875rem;
     }
     footer {
-      margin-top: 32px;
-      font-size: 0.875rem;
+      border-top: 1px solid var(--line);
+      padding: 28px 24px 40px;
       color: var(--muted);
+      font-size: 0.875rem;
+    }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 800px) {
+      nav { display: none; }
+      .grid { grid-template-columns: 1fr; }
+      .hero { min-height: 420px; padding: 56px 18px; }
     }
   </style>
 </head>
 <body>
-  <main>
-    <span class="badge">Portfolio Demo</span>
-    <h1>Сайт-портфолио с админ-панелью</h1>
-    <p>
-      Демо-портфолио креативных работ: каталог по разделам, корзина, заказы,
-      регистрация клиентов, профиль пользователя и полноэкранная панель администратора.
-    </p>
-
-    <div class="card">
-      <strong>Разделы сайта</strong>
-      <ul>
-        <li>Фитнес-индустрия — каталог и карточки товаров</li>
-        <li>Мои баннеры — галерея, лайки и комментарии</li>
-        <li>Одежда — lookbook и fashion-каталог</li>
-        <li>Demo-режим — общая корзина и заказы для демонстрации</li>
-      </ul>
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="./"><span>Порт</span><span>фолио</span></a>
+      <nav>
+        <a href="#fitness">Фитнес-индустрия</a>
+        <a href="#banners">Мои баннеры</a>
+        <a href="#clothing">Одежда</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="card">
-      <strong>Стек</strong>
-      <ul>
-        <li>Frontend: HTML, CSS, JavaScript</li>
-        <li>Backend: Node.js, Express</li>
-        <li>База данных: MySQL</li>
-        <li>Развёртывание: Docker Compose</li>
-        <li>Почта: Brevo / Google Apps Script / SMTP</li>
-      </ul>
+  <section class="hero">
+    <div>
+      <h1>Портфолио креативных работ и дизайна</h1>
+      <p>Коллекция баннеров, креативов для фитнес-добавок и fashion-проектов. Все работы собраны в удобных разделах для быстрого просмотра.</p>
+      <a class="btn" href="https://github.com/YuliyaBagrova/portfolio-site">Открыть проект</a>
     </div>
+  </section>
 
-    <div class="card">
-      <strong>Запуск локально</strong>
-      <ul>
-        <li><code>git clone</code> → <code>cp .env.example .env</code> → <code>docker compose up -d</code></li>
-        <li>Сайт: <code>http://localhost:3000</code></li>
-        <li>Подробности — в README репозитория</li>
-      </ul>
+  <main class="sections wrap">
+    <div class="grid">
+      <article class="card fitness" id="fitness">
+        <img src="assets/icons/fitness-industry.png" alt="">
+        <h2>Фитнес-индустрия</h2>
+        <p>Каталог добавок и оборудования: карточки товаров, корзина и оформление заказа.</p>
+        <span>Каталог · товары</span>
+      </article>
+      <article class="card banners" id="banners">
+        <img src="assets/icons/banners.png" alt="">
+        <h2>Мои баннеры</h2>
+        <p>Превью, иллюстрации, логотипы и графика — галерея с просмотром, лайками и комментариями.</p>
+        <span>Галерея · заказы</span>
+      </article>
+      <article class="card clothing" id="clothing">
+        <img src="assets/icons/clothing.png" alt="">
+        <h2>Одежда</h2>
+        <p>Lookbook и fashion-каталог: образы, категории и карточки вещей в светлой эстетике.</p>
+        <span>Lookbook · каталог</span>
+      </article>
     </div>
-
-    <div class="links">
-      <a href="https://github.com/YuliyaBagrova/portfolio-site" target="_blank" rel="noopener">Исходный код на GitHub</a>
-      <a class="secondary" href="https://github.com/YuliyaBagrova" target="_blank" rel="noopener">Профиль автора</a>
-    </div>
-
-    <footer>
-      Проект Yuliya Bagrova · демо для портфолио
-    </footer>
   </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Портфолио · креативные работы и дизайн</span>
+      <a href="https://github.com/YuliyaBagrova/portfolio-site">GitHub</a>
+    </div>
+  </footer>
 </body>
 </html>

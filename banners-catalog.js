@@ -147,8 +147,8 @@ function layoutBannersMasonry(grid) {
 
   const cards = Array.prototype.slice.call(target.querySelectorAll('.banners-card'));
   const visible = cards.filter((card) => !card.classList.contains('is-hidden'));
-  const gap = 24;
-  const minWidth = 260;
+  const gap = width < 640 ? 16 : width >= 1600 ? 28 : 24;
+  const minWidth = width < 560 ? width : width < 900 ? 220 : width >= 1600 ? 300 : 260;
   const width = target.clientWidth;
 
   cards.forEach((card) => {

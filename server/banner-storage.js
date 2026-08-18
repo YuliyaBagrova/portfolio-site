@@ -4,6 +4,7 @@ const path = require('path');
 const ALLOWED_EXT = new Set(['jpg', 'png', 'webp']);
 const { logAppearanceActivity } = require('./appearance-activity');
 const { logClothingActivity } = require('./clothing-activity');
+const { resolvePublicImage } = require('./ensure-default-uploads');
 
 function createBannerStorage(rootDir, config) {
   const {
@@ -63,17 +64,18 @@ function createBannerStorage(rootDir, config) {
   }
 
   function parseSlideRow(row) {
-    if (!row?.image_data) return null;
+    if (!row || !row.image_data) return null;
 
     try {
       const slide = JSON.parse(row.image_data);
-      if (slide?.image) {
-        slide.image = slide.image.split('?')[0];
+      if (slide && slide.image) {
+        slide.image = resolvePublicImage(rootDir, slide.image.split('?')[0]);
       }
       return slide;
-    } catch {
+    } catch (error) {
       const image = String(row.image_data).split('?')[0];
-      return { image: row.image_data.startsWith('/') ? image : row.image_data };
+      const normalized = row.image_data.startsWith('/') ? image : row.image_data;
+      return { image: resolvePublicImage(rootDir, normalized) };
     }
   }
 

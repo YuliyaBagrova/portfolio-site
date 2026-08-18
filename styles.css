@@ -19,6 +19,8 @@
   --header-height: 64px;
   --header-control-height: calc(1.125rem + 12px);
   --header-profile-size: calc(1.125rem + 22px);
+  --layout-max: 1280px;
+  --layout-pad: 24px;
   --radius: 12px;
   --radius-sm: 8px;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
@@ -97,6 +99,8 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -158,10 +162,10 @@ input {
 }
 
 .header-inner {
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
   height: var(--header-height);
-  padding: 0 24px;
+  padding: 0 var(--layout-pad);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -5972,9 +5976,9 @@ body.admin-panel-open .app {
 }
 
 .content {
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 32px var(--layout-pad);
 }
 
 /* ===== Home Section Typography ===== */
@@ -6007,8 +6011,8 @@ body.admin-panel-open .app {
 
 /* ===== Home Dashboard (полноразмерный) ===== */
 #section-home .content {
-  max-width: 1280px;
-  padding: 40px 32px 56px;
+  max-width: var(--layout-max);
+  padding: 40px var(--layout-pad) 56px;
 }
 
 #section-home .stats-grid {
@@ -7571,9 +7575,9 @@ button.stat-icon:hover {
   align-items: start;
   justify-content: start;
   gap: 20px;
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
-  padding: 28px 32px 40px;
+  padding: 28px var(--layout-pad) 40px;
 }
 
 #section-clothing .clothing-hero-copy {
@@ -7851,9 +7855,9 @@ button.stat-icon:hover {
 }
 
 #section-clothing .clothing-content {
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
-  padding: 72px 32px 96px;
+  padding: 72px var(--layout-pad) 96px;
 }
 
 #section-clothing .clothing-section-header {
@@ -9792,9 +9796,9 @@ button.stat-icon:hover {
 #section-banners .banners-content {
   position: relative;
   z-index: 1;
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
-  padding: 56px 32px 96px;
+  padding: 56px var(--layout-pad) 96px;
 }
 
 #section-banners .banners-masthead {
@@ -10072,7 +10076,7 @@ button.stat-icon:hover {
 
 #section-banners .banners-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
   gap: 24px;
   align-items: start;
 }
@@ -11407,7 +11411,7 @@ button.stat-icon:hover {
 /* ===== Portfolio Grid ===== */
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
   gap: 20px;
 }
 
@@ -12664,9 +12668,9 @@ button.stat-icon:hover {
 .footer-inner {
   position: relative;
   z-index: 1;
-  max-width: 1280px;
+  max-width: var(--layout-max);
   margin: 0 auto;
-  padding: 56px 24px 28px;
+  padding: 56px var(--layout-pad) 28px;
 }
 
 .footer-grid {

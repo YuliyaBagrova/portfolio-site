@@ -21,6 +21,7 @@ const { registerAboutPageRoutes } = require('./about-page');
 const { registerAdminRegisterRoutes, isRegisterDemoMode, getDeveloperRegisterEmail } = require('./admin-register');
 const { registerSiteRegisterRoutes } = require('./site-register');
 const { verifyMailTransport } = require('./mail');
+const { ensureDefaultUploads } = require('./ensure-default-uploads');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -153,6 +154,7 @@ async function start() {
     await sectionIconsStorage.ensureUploadsDir();
     await clothingCatalogIconsStorage.ensureUploadsDir();
     await clothingCatalogPromoStorage.ensureUploadsDir();
+    await ensureDefaultUploads(rootDir);
     app.listen(PORT, () => {
       console.log(`Сайт и API: http://localhost:${PORT}`);
       console.log('MySQL подключена');

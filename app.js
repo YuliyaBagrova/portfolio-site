@@ -91,14 +91,18 @@ function navigateFromHash() {
 }
 
 function openNav() {
+  if (!topNav) return;
   topNav.classList.add('open');
-  navOverlay.classList.add('open');
+  navOverlay?.classList.add('open');
+  menuToggle?.setAttribute('aria-expanded', 'true');
   document.body.style.overflow = 'hidden';
 }
 
 function closeNav() {
+  if (!topNav) return;
   topNav.classList.remove('open');
-  navOverlay.classList.remove('open');
+  navOverlay?.classList.remove('open');
+  menuToggle?.setAttribute('aria-expanded', 'false');
   document.body.style.overflow = '';
 }
 
@@ -110,8 +114,12 @@ navLinks.forEach(el => {
   });
 });
 
-menuToggle.addEventListener('click', openNav);
-navOverlay.addEventListener('click', closeNav);
+menuToggle?.addEventListener('click', openNav);
+navOverlay?.addEventListener('click', closeNav);
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 1100) closeNav();
+});
 
 document.querySelectorAll('.filter-btn').forEach(btn => {
   if (btn.closest('.fitness-filter-bar') || btn.closest('.clothing-filter-bar')) return;

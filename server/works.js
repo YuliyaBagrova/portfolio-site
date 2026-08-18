@@ -10,6 +10,7 @@ const CLOTHING_PROMO_TYPES = new Set(['sale', 'new', 'limited', 'hot']);
 const { logClothingActivity } = require('./clothing-activity');
 const { enrichBannerWorksWithLikes } = require('./banner-likes');
 const { parseOrderScopeBody } = require('./order-scope');
+const { resolvePublicImage } = require('./ensure-default-uploads');
 
 function createWorksStorage(rootDir) {
   const uploadsDir = path.join(rootDir, 'uploads', 'works');
@@ -196,7 +197,9 @@ function createWorksStorage(rootDir) {
       placeholder_text: row.placeholder_text || '',
       gradient: row.gradient || '',
       tags,
-      image: imageData?.image ? `${imageData.image}?v=${Date.now()}` : null,
+      image: imageData && imageData.image
+        ? `${resolvePublicImage(rootDir, imageData.image)}?v=${Date.now()}`
+        : null,
       image_width: imageData?.width || null,
       image_height: imageData?.height || null,
       created_at: row.created_at,
